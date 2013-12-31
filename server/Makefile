@@ -1,18 +1,18 @@
+#CONFIGURATION
 JFLAGS = -g
 JC = javac
-.SUFFIXES: .java .class
-.java.class:
-        $(JC) $(JFLAGS) $*.java
+BUILD_DIR=build
+SRC_DIR=src
 
-CLASSES = \
-        Foo.java \
-        Blah.java \
-        Library.java \
-        Main.java 
+#AUTOMATION
+JFLAGS:=$(JFLAGS) -cp $(BUILD_DIR) -d $(BUILD_DIR)
+SOURCES = $(wildcard $(SRC_DIR)/*.java)
+CLASSES = $(SOURCES:.java=.class)
 
-default: classes
+all: $(SOURCES) $(CLASSES)
 
-classes: $(CLASSES:.java=.class)
+%.class: %.java
+	$(JC) $(JFLAGS) $<
 
 clean:
-        $(RM) *.class
+	$(RM) $(BUILD_DIR)/*.class
