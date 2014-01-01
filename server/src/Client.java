@@ -4,6 +4,10 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
 public class Client{
     public enum ClientStatus { NOT_AUTHORIZED, AUTHORIZED, DEAD}
 
@@ -33,5 +37,4 @@ public class Client{
     {
         
     }
-
 }
