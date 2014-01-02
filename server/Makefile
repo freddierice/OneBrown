@@ -6,7 +6,7 @@ SRC_DIR=src
 PACKAGE=pack
 
 #AUTOMATION
-JFLAGS:=$(JFLAGS) -cp $(BUILD_DIR) -d $(BUILD_DIR)
+JFLAGS:=$(JFLAGS) -cp $(BUILD_DIR):$(BUILD_DIR)/$(PACKAGE):$(CLASSPATH) -d $(BUILD_DIR)
 SOURCES = $(wildcard $(SRC_DIR)/*.java)
 CLASSES = $(patsubst $(SRC_DIR)/%.java,$(BUILD_DIR)/$(PACKAGE)/%.class,$(SOURCES))
 
