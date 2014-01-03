@@ -115,7 +115,7 @@ public class Client implements Runnable{
                 System.out.println("Making statement");
                 stmt = conn.createStatement();
                 System.out.println("making sql");
-                sql = "SELECT id FROM users WHERE email='" + user + "'";
+                sql = "SELECT * FROM users WHERE email='" + user + "'";
                 System.out.println("Making query");
                 rs = stmt.executeQuery(sql);
                 System.out.println("Getting id");
