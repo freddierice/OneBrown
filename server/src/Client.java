@@ -60,8 +60,8 @@ public class Client implements Runnable{
             System.out.println("SQLException: " + ex.getMessage());
             System.out.println("SQLState: " + ex.getSQLState());
             System.out.println("VendorError: " + ex.getErrorCode());
+            cs = ClientStatus.DEAD;
         }
-        cs = ClientStatus.DEAD;
         System.out.println("done!");
     }
 
@@ -104,7 +104,6 @@ public class Client implements Runnable{
         sendJSONObject(json);    
         
         //get username and password
-        System.out.println(cs);
         while(cs == ClientStatus.NOT_AUTHORIZED){
             json = (JSONObject)getJSONObject();
             user = (String)json.get("user");
