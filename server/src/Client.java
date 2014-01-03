@@ -127,6 +127,7 @@ public class Client implements Runnable{
             md.update(pass.getBytes());
             digest = md.digest();
 
+            json = new JSONObject();
             if(Arrays.equals(hash,digest)){
                 System.out.println("Success!");
                 cs = ClientStatus.AUTHORIZED;
