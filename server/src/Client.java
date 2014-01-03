@@ -118,14 +118,16 @@ public class Client implements Runnable{
                 sql = "SELECT * FROM users WHERE email='" + user + "'";
                 System.out.println("Making query");
                 rs = stmt.executeQuery(sql);
-                System.out.println("Getting id");
-                id = rs.getInt("id");
-                System.out.println("getting email");
-                email = rs.getString("email");
-                System.out.println("getting hash");
-                hash = rs.getBytes("hash");
-                System.out.println("getting salt");
-                salt = rs.getBytes("salt");
+                if(rs.next()){
+                    System.out.println("Getting id");
+                    id = rs.getInt("id");
+                    System.out.println("getting email");
+                    email = rs.getString("email");
+                    System.out.println("getting hash");
+                    hash = rs.getBytes("hash");
+                    System.out.println("getting salt");
+                    salt = rs.getBytes("salt");
+                }
             } catch(SQLException e) {}
             
             System.out.println("Adding salt to password");
