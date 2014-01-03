@@ -53,7 +53,7 @@ public class Client implements Runnable{
             System.out.print("Connecting to database... ");
             String url = "jdbc:mysql://127.0.0.1:3306/onebrown";
             String user = "root";
-            String pass = "";
+            String pass = "df9qfEZVoXl/8MW4";
             conn = DriverManager.getConnection(url,user,pass);
         } catch(SQLException ex) {
             System.out.println("error.");
