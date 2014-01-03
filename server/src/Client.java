@@ -108,7 +108,7 @@ public class Client implements Runnable{
             json = (JSONObject)getJSONObject();
             user = (String)json.get("user");
             pass = (String)json.get("pass");
-            
+
             try{
                 stmt = conn.createStatement();
                 sql = "SELECT id FROM users WHERE email='" + user + "'";
