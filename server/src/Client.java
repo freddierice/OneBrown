@@ -104,7 +104,7 @@ public class Client implements Runnable{
         sendJSONObject(json);    
         
         //get username and password
-        while(cs == ClientStatus.NOT_AUTHORIZED){
+        while(cs.equals( ClientStatus.NOT_AUTHORIZED)){
             json = (JSONObject)getJSONObject();
             user = (String)json.get("user");
             pass = (String)json.get("pass");
