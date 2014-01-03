@@ -3,10 +3,13 @@ package pack;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import java.security.*;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 import org.json.simple.*;
 import org.json.simple.parser.*;
@@ -15,9 +18,13 @@ import org.json.simple.parser.*;
 public class Client implements Runnable{
     public enum ClientStatus { NOT_AUTHORIZED, AUTHORIZED, DEAD}
 
-    private int sessionID;
-    Connection conn = null;
     ClientStatus cs;
+    private int userID;
+    private int sessionID;
+    
+    Connection conn = null;
+    Statement stmt = null;
+
     Socket sock = null;
     PrintWriter out = null;
     BufferedReader in = null;
@@ -76,8 +83,21 @@ public class Client implements Runnable{
     public void authorize()
     {
         JSONObject json = new JSONObject();
+        MessageDigest md = null;
+        ResultSet rs = null;
         String user = "";
         String pass = "";
+        String sql = "";
+        String email = "";
+        byte hash[] = null;
+        byte salt[] = null;
+        byte digest[] = null;
+        int id = 0;
+        
+        //get hashing algorithm 
+        try{
+            md = MessageDigest.getInstance("SHA-256");
+        } catch(NoSuchAlgorithmException e){}
 
         //tell the user to login
         json.put("message","login");
@@ -88,6 +108,25 @@ public class Client implements Runnable{
             json = (JSONObject)getJSONObject();
             user = (String)json.get("user");
             pass = (String)json.get("pass");
+            
+            try{
+                stmt = conn.createStatement();
+                sql = "SELECT id FROM users WHERE email='" + user + "'";
+                rs = stmt.executeQuery(sql);
+                id = rs.getInt("id");
+                email = rs.getString("email");
+                hash = rs.getBytes("hash");
+                salt = rs.getBytes("salt");
+            } catch(SQLException e) {}
+
+            pass += new String(salt);
+            md.update(pass.getBytes());
+            digest = md.digest();
+
+            if(Arrays.equals(hash,digest))
+                System.out.println("Authenticated!");
+            else
+                System.out.println("Failed!");
 
             System.out.println("Username: " + user);
             System.out.println("Password: " + pass);
