@@ -19,8 +19,8 @@ public class Client implements Runnable{
     public enum ClientStatus { NOT_AUTHORIZED, AUTHORIZED, DEAD}
 
     ClientStatus cs;
-    private int userID;
-    private int sessionID;
+    int userID;
+    String sessionID;
     
     Connection conn = null;
     Statement stmt = null;
@@ -101,10 +101,10 @@ public class Client implements Runnable{
 
         //tell the user to login
         json.put("message","login");
-        sendJSONObject(json);
+        sendJSONObject(json);    
         
         //get username and password
-        while(true){
+        while(cs == ClientStatus.NOT_AUTHORIZED){
             json = (JSONObject)getJSONObject();
             user = (String)json.get("user");
             pass = (String)json.get("pass");
@@ -112,37 +112,33 @@ public class Client implements Runnable{
             System.out.println("Username: " + user);
             System.out.println("Password: " + pass);
             try{
-                System.out.println("Making statement");
                 stmt = conn.createStatement();
-                System.out.println("making sql");
                 sql = "SELECT * FROM users WHERE email='" + user + "'";
-                System.out.println("Making query");
                 rs = stmt.executeQuery(sql);
                 if(rs.next()){
-                    System.out.println("Getting id");
                     id = rs.getInt("id");
-                    System.out.println("getting email");
                     email = rs.getString("email");
-                    System.out.println("getting hash");
                     hash = rs.getBytes("hash");
-                    System.out.println("getting salt");
                     salt = rs.getBytes("salt");
                 }
             } catch(SQLException e) {}
             
-            System.out.println("Adding salt to password");
             pass += new String(salt);
-            System.out.println("updating the message digest");
             md.update(pass.getBytes());
-            System.out.println("getting the digest");
             digest = md.digest();
 
-            System.out.println("Checking equality");
-            if(Arrays.equals(hash,digest))
-                System.out.println("Authenticated!");
-            else
+            if(Arrays.equals(hash,digest)){
+                System.out.println("Success!");
+                cs = ClientStatus.AUTHORIZED;
+                userID = id;
+                sessionID = runCommand("openssl rand -base64 12");
+                json.put("message","auth_success");
+                json.put("session",sessionID);
+            }else{
                 System.out.println("Failed!");
-
+                json.put("message","auth_failed");
+            }
+            sendJSONObject(json);
         }
     }
 
@@ -175,5 +171,18 @@ public class Client implements Runnable{
         } catch( ParseException e ){}
 
         return obj;
+    }
+
+    public String runCommand(String cmd)
+    {
+        String str = null;
+        try
+        {
+            Process proc=Runtime.getRuntime().exec(cmd);
+            BufferedReader read=new BufferedReader(new InputStreamReader(proc.getInputStream()));
+
+            str = read.readLine();
+        }catch(IOException e){}
+        return str;
     }
 }
