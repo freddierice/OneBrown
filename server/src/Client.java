@@ -76,8 +76,8 @@ public class Client implements Runnable{
     public void authorize()
     {
         JSONObject json = new JSONObject();
-        String username = "";
-        String password = "";
+        String user = "";
+        String pass = "";
 
         //tell the user to login
         json.put("message","login");
@@ -86,11 +86,11 @@ public class Client implements Runnable{
         //get username and password
         while(true){
             json = (JSONObject)getJSONObject();
-            username = (String)json.get("username");
-            password = (String)json.get("password");
+            user = (String)json.get("user");
+            pass = (String)json.get("pass");
 
-            System.out.println("Username: " + username);
-            System.out.println("Password: " + password);
+            System.out.println("Username: " + user);
+            System.out.println("Password: " + pass);
         }
     }
 

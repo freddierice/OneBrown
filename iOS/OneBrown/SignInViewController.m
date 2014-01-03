@@ -139,7 +139,7 @@
     CFReadStreamRef readStream;
     CFWriteStreamRef writeStream;
     
-    CFStreamCreatePairWithSocketToHost(Nil, (CFStringRef)@"host.com", 4444, &readStream, &writeStream);
+    CFStreamCreatePairWithSocketToHost(Nil, (CFStringRef)@"54.201.226.9", 20000, &readStream, &writeStream);
     
     self.inputStream = (__bridge NSInputStream *)readStream;
     self.outputStream = (__bridge NSOutputStream *)writeStream;
@@ -182,6 +182,7 @@
                         NSLog(@"No buffer");
                     }
                 }
+                
                 
             }
             break;
