@@ -108,28 +108,39 @@ public class Client implements Runnable{
             json = (JSONObject)getJSONObject();
             user = (String)json.get("user");
             pass = (String)json.get("pass");
-
+            
+            System.out.println("Username: " + user);
+            System.out.println("Password: " + pass);
             try{
+                System.out.println("Making statement");
                 stmt = conn.createStatement();
+                System.out.println("making sql");
                 sql = "SELECT id FROM users WHERE email='" + user + "'";
+                System.out.println("Making query");
                 rs = stmt.executeQuery(sql);
+                System.out.println("Getting id");
                 id = rs.getInt("id");
+                System.out.println("getting email");
                 email = rs.getString("email");
+                System.out.println("getting hash");
                 hash = rs.getBytes("hash");
+                System.out.println("getting salt");
                 salt = rs.getBytes("salt");
             } catch(SQLException e) {}
-
+            
+            System.out.println("Adding salt to password");
             pass += new String(salt);
+            System.out.println("updating the message digest");
             md.update(pass.getBytes());
+            System.out.println("getting the digest");
             digest = md.digest();
 
+            System.out.println("Checking equality");
             if(Arrays.equals(hash,digest))
                 System.out.println("Authenticated!");
             else
                 System.out.println("Failed!");
 
-            System.out.println("Username: " + user);
-            System.out.println("Password: " + pass);
         }
     }
 
