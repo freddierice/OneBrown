@@ -95,8 +95,8 @@ public class Client extends Thread {
         JSONObject json = new JSONObject();
         MessageDigest md = null;
         ResultSet rs = null;
-        String user = "";
-        String pass = "";
+        String user = null;
+        String pass = null;
         String sql = "";
         String email = "";
         byte hash[] = null;
