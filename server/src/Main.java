@@ -9,46 +9,74 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class Main {
+public class Main extends Thread {
+    
+    public static void main(String [ ] args)
+    {
+        Main main = new Main();
+        main.runner();
+    }
     
     static final int hostPort = 20000; 
-    public static void main(String [ ] args)
+    List<Client> clients = null;
+    ServerSocket listener = null;
+    
+    Main(){}
+    
+    public void runner()
     {
         System.out.print("Initializing the MySQL Libraries... ");
         loadMySQL();
         System.out.print("done!\nInitializing server... ");
-        List<Thread> clients = new ArrayList<Thread>();
+        clients = new ArrayList<Client>();
+        try{
+            listener = new ServerSocket(hostPort);
+        }catch (IOException e){
+            System.out.print("error. \nThe port 20000 is in use.");
+            System.exit(0);
+        }
+        start();
         System.out.print("done!\n");
+        
+        Client client = null;
+        Socket sock = null;
         while(true)
         {
             /* Attempt to add new clients */
-            ServerSocket listener = null;
-            Socket sock = null;
-            Thread client = null;
             try{
-                    listener = new ServerSocket(hostPort);
-                    System.out.print("Waiting for client to connect... ");
-                    sock = listener.accept();
-                    System.out.println("client connected!");
-                    client = new Thread((Runnable)new Client(sock));
-                    client.start();
-                    clients.add(client);
-            }catch( IOException e ){}
-
-            /* Remove all references to closed clients */
-            for(Thread c : clients){
-                if( !c.isAlive() )
-                    c = null;
+                System.out.print("Waiting for client to connect... ");
+                sock = listener.accept();
+                System.out.println("client connected!");
+                client = new Client(sock);
+                client.start();
+                clients.add(client);
+            }catch( IOException e ){
+                continue;
             }
         }
     }
     
-    public static void loadMySQL()
+    /* Remove dead clients in separate thread */
+    public void run()
+    {
+        for(int i = clients.size()-1; i > 0; --i){
+            Client c = clients.get(i);
+            if( c.isDead() ){
+                c = null;
+                clients.remove(i);
+            }
+        }
+        try{
+            Thread.sleep(100);
+        }catch(InterruptedException e){}
+    }
+    
+    public void loadMySQL()
     {
         try {
                 Class.forName("com.mysql.jdbc.Driver").newInstance();
              } catch (Exception ex) {
-                 System.out.println("The server could not start because MySQL libraries could not load."); 
+                 System.out.println("\nThe server could not start because MySQL libraries could not load."); 
                  System.exit(0);
             }
     }

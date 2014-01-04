@@ -10,8 +10,14 @@ JFLAGS:=$(JFLAGS) -cp $(BUILD_DIR):$(BUILD_DIR)/$(PACKAGE):$(CLASSPATH) -d $(BUI
 SOURCES = $(wildcard $(SRC_DIR)/*.java)
 CLASSES = $(patsubst $(SRC_DIR)/%.java,$(BUILD_DIR)/$(PACKAGE)/%.class,$(SOURCES))
 
+#MAIN
 all: check_dirs $(SOURCES) $(CLASSES)
 
+#DEPENDENCIES
+$(BUILD_DIR)/$(PACKAGE)/Main.class: $(BUILD_DIR)/$(PACKAGE)/Client.class
+$(BUILD_DIR)/$(PACKAGE)/Client.class: $(BUILD_DIR)/$(PACKAGE)/Utility.class $(BUILD_DIR)/$(PACKAGE)/Network.class
+
+#BUILD
 $(BUILD_DIR)/$(PACKAGE)/%.class: $(SRC_DIR)/%.java
 	$(JC) $(JFLAGS) $<
 

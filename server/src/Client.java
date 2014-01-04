@@ -15,7 +15,7 @@ import org.json.simple.*;
 import org.json.simple.parser.*;
 
 @SuppressWarnings("unchecked")
-public class Client implements Runnable{
+public class Client extends Thread {
     public enum ClientStatus { NOT_AUTHORIZED, AUTHORIZED, DEAD}
 
     ClientStatus cs;
@@ -24,10 +24,8 @@ public class Client implements Runnable{
     
     Connection conn = null;
     Statement stmt = null;
-
-    Socket sock = null;
-    PrintWriter out = null;
-    BufferedReader in = null;
+    
+    Network network;
      
     Client()
     {
@@ -35,13 +33,13 @@ public class Client implements Runnable{
     }
 
     Client(Socket sock){
-        this.sock = sock;
         this.cs = ClientStatus.NOT_AUTHORIZED;
+        this.network = new Network(sock);
     }
     
-    public boolean isAlive()
+    public boolean isDead()
     {
-        if(cs != ClientStatus.DEAD)
+        if(cs == ClientStatus.DEAD)
             return true;
         else
             return false;
@@ -68,19 +66,29 @@ public class Client implements Runnable{
     public void run()
     {
         dbLogin();
-        initializeSocket();
         authorize();
-    }
-
-    public void initializeSocket()
-    {
-        try {
-            in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
-            out = new PrintWriter( sock.getOutputStream(), true);
-        }catch( IOException e ){}
+        
+        cs = ClientStatus.DEAD;
     }
 
     public void authorize()
+    {
+        JSONObject json = new JSONObject();
+        String msg = "";
+
+        //tell the user to login
+        json.put("message","login");
+        network.sendJSONObject(json,false);    
+        
+        json = (JSONObject)network.getJSONObject(false);
+        msg = (String)json.get("message");
+        if(msg.equals("register"))
+            register();
+        else if(msg.equals("login"))
+            login();
+    }
+
+    public void login()
     {
         JSONObject json = new JSONObject();
         MessageDigest md = null;
@@ -92,23 +100,20 @@ public class Client implements Runnable{
         byte hash[] = null;
         byte salt[] = null;
         byte digest[] = null;
-        int id = 0;
         
         //get hashing algorithm 
         try{
             md = MessageDigest.getInstance("SHA-256");
         } catch(NoSuchAlgorithmException e){}
-
-        //tell the user to login
-        json.put("message","login");
-        sendJSONObject(json);    
         
-        //get username and password
         while(cs == ClientStatus.NOT_AUTHORIZED){
-            json = (JSONObject)getJSONObject();
+            json = (JSONObject)network.getJSONObject(false);
             user = (String)json.get("user");
             pass = (String)json.get("pass");
             
+            //clean input
+            user = Utility.cleanSQL(user);
+
             System.out.println("Username: " + user);
             System.out.println("Password: " + pass);
             try{
@@ -116,7 +121,7 @@ public class Client implements Runnable{
                 sql = "SELECT * FROM users WHERE email='" + user + "'";
                 rs = stmt.executeQuery(sql);
                 if(rs.next()){
-                    id = rs.getInt("id");
+                    userID = rs.getInt("id");
                     email = rs.getString("email");
                     hash = rs.getBytes("hash");
                     salt = rs.getBytes("salt");
@@ -127,63 +132,28 @@ public class Client implements Runnable{
             md.update(pass.getBytes());
             digest = md.digest();
 
-            json = new JSONObject();
-            if(Arrays.equals(hash,digest)){
-                System.out.println("Success!");
-                cs = ClientStatus.AUTHORIZED;
-                userID = id;
-                sessionID = runCommand("openssl rand -base64 12");
-                json.put("message","auth_success");
-                json.put("session",sessionID);
-            }else{
-                System.out.println("Failed!");
-                json.put("message","auth_failed");
-            }
-            sendJSONObject(json);
+            sendAuth(Arrays.equals(hash,digest));
         }
     }
-
-    public void sendJSONObject(JSONObject json)
+    
+    public void register()
     {
-        try{
-            StringWriter sw = new StringWriter();
-            String str = null;
-
-            json.writeJSONString(sw);
-            str = sw.toString();
-
-            out.println(str);
-        } catch( IOException e ){}
+        
     }
 
-    public Object getJSONObject()
+    public void sendAuth(boolean success)
     {
-        Object obj  = null;
-        String str = "";
-        JSONParser parser = new JSONParser();
-        int length;
-        
-        try{
-            str = in.readLine();
-        } catch( IOException e ){}
-        
-        try{
-            obj = parser.parse(str);
-        } catch( ParseException e ){}
-
-        return obj;
-    }
-
-    public String runCommand(String cmd)
-    {
-        String str = null;
-        try
-        {
-            Process proc=Runtime.getRuntime().exec(cmd);
-            BufferedReader read=new BufferedReader(new InputStreamReader(proc.getInputStream()));
-
-            str = read.readLine();
-        }catch(IOException e){}
-        return str;
+        JSONObject json = new JSONObject();
+        if(success){
+            System.out.println("Success!");
+            cs = ClientStatus.AUTHORIZED;
+            sessionID = Utility.runCommand("openssl rand -base64 12");
+            json.put("message","auth_success");
+            json.put("session",sessionID);
+        }else{
+            System.out.println("Failed!");
+            json.put("message","auth_failed");
+        }
+        network.sendJSONObject(json,false);
     }
 }
