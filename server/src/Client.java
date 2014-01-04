@@ -81,6 +81,8 @@ public class Client extends Thread {
                 network.sendJSONObject(json,false);    
             
                 json = (JSONObject)network.getJSONObject(false);
+                if(json == null)
+                    continue;
                 msg = (String)json.get("message");
             }
             
@@ -113,9 +115,12 @@ public class Client extends Thread {
         while(user == null || pass == null ){
             if(!firstTime){
                 sendAuth(false);
+                return;
             }
             firstTime = false;
             json = (JSONObject)network.getJSONObject(false);
+            if(json == null)
+                continue;
             user = (String)json.get("user");
             pass = (String)json.get("pass");
         }
