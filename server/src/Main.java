@@ -62,6 +62,7 @@ public class Main extends Thread {
         for(int i = clients.size()-1; i > 0; --i){
             Client c = clients.get(i);
             if( c.isDead() ){
+                c.closeConnection();
                 c = null;
                 clients.remove(i);
             }

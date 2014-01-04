@@ -40,6 +40,14 @@ public class Network {
         //initializeSSL();
     }
     
+    public void closeConnections()
+    {
+        if(sock.isClosed())
+            sock.close();
+        //if(sslSock.isClosed())
+            //sslSock.close();
+    }
+    
     public void sendJSONObject(JSONObject json, boolean ssl)
     {
         try{

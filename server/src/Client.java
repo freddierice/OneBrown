@@ -162,4 +162,9 @@ public class Client extends Thread {
         }
         network.sendJSONObject(json,false);
     }
+    
+    public void closeConnection()
+    {
+        network.closeConnections();
+    }
 }
