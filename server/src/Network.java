@@ -42,10 +42,12 @@ public class Network {
     
     public void closeConnections()
     {
-        if(sock.isClosed())
-            sock.close();
-        //if(sslSock.isClosed())
-            //sslSock.close();
+        try{
+            if(sock.isClosed())
+                sock.close();
+            //if(sslSock.isClosed())
+                //sslSock.close();
+        } catch (IOException e) {}
     }
     
     public void sendJSONObject(JSONObject json, boolean ssl)
