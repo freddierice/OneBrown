@@ -74,14 +74,16 @@ public class Client extends Thread {
     public void authorize()
     {
         JSONObject json = new JSONObject();
-        String msg = "";
+        String msg = null;
 
-        //tell the user to login
-        json.put("message","login");
-        network.sendJSONObject(json,false);    
+        while(msg == null){
+            json.put("message","login");
+            network.sendJSONObject(json,false);    
         
-        json = (JSONObject)network.getJSONObject(false);
-        msg = (String)json.get("message");
+            json = (JSONObject)network.getJSONObject(false);
+            msg = (String)json.get("message");
+        }
+        
         if(msg.equals("register"))
             register();
         else if(msg.equals("login"))
@@ -107,9 +109,16 @@ public class Client extends Thread {
         } catch(NoSuchAlgorithmException e){}
         
         while(cs == ClientStatus.NOT_AUTHORIZED){
-            json = (JSONObject)network.getJSONObject(false);
-            user = (String)json.get("user");
-            pass = (String)json.get("pass");
+            while(user == null || pass == null ){
+                static boolean firstTime = true;
+                if(!firstTime){
+                    sendAuth(false);
+                }
+                firstTime = false;
+                json = (JSONObject)network.getJSONObject(false);
+                user = (String)json.get("user");
+                pass = (String)json.get("pass");
+            }
             
             //clean input
             user = Utility.cleanSQL(user);
