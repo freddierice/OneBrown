@@ -59,7 +59,7 @@ public class Main extends Thread {
     /* Remove dead clients in separate thread */
     public void run()
     {
-        for(int i = clients.size()-1; i > 0; --i){
+        for(int i = clients.size()-1; i >= 0; --i){
             Client c = clients.get(i);
             if( c.isDead() ){
                 c.closeConnection();
