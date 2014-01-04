@@ -73,21 +73,22 @@ public class Client extends Thread {
 
     public void authorize()
     {
-        JSONObject json = new JSONObject();
-        String msg = null;
-
-        while(msg == null){
-            json.put("message","login");
-            network.sendJSONObject(json,false);    
-        
-            json = (JSONObject)network.getJSONObject(false);
-            msg = (String)json.get("message");
+        while(cs == ClientStatus.NOT_AUTHORIZED){
+            JSONObject json = new JSONObject();
+            String msg = null;
+            while(msg == null){
+                json.put("message","login");
+                network.sendJSONObject(json,false);    
+            
+                json = (JSONObject)network.getJSONObject(false);
+                msg = (String)json.get("message");
+            }
+            
+            if(msg.equals("register"))
+                register();
+            else if(msg.equals("login"))
+                login();
         }
-        
-        if(msg.equals("register"))
-            register();
-        else if(msg.equals("login"))
-            login();
     }
 
     public void login()
@@ -108,41 +109,37 @@ public class Client extends Thread {
             md = MessageDigest.getInstance("SHA-256");
         } catch(NoSuchAlgorithmException e){}
         
-        while(cs == ClientStatus.NOT_AUTHORIZED){
-            boolean firstTime = true;
-            while(user == null || pass == null ){
-                if(!firstTime){
-                    sendAuth(false);
-                }
-                firstTime = false;
-                json = (JSONObject)network.getJSONObject(false);
-                user = (String)json.get("user");
-                pass = (String)json.get("pass");
+        boolean firstTime = true;
+        while(user == null || pass == null ){
+            if(!firstTime){
+                sendAuth(false);
             }
-            
-            //clean input
-            user = Utility.cleanSQL(user);
-
-            System.out.println("Username: " + user);
-            System.out.println("Password: " + pass);
-            try{
-                stmt = conn.createStatement();
-                sql = "SELECT * FROM users WHERE email='" + user + "'";
-                rs = stmt.executeQuery(sql);
-                if(rs.next()){
-                    userID = rs.getInt("id");
-                    email = rs.getString("email");
-                    hash = rs.getBytes("hash");
-                    salt = rs.getBytes("salt");
-                }
-            } catch(SQLException e) {}
-            
-            pass += new String(salt);
-            md.update(pass.getBytes());
-            digest = md.digest();
-
-            sendAuth(Arrays.equals(hash,digest));
+            firstTime = false;
+            json = (JSONObject)network.getJSONObject(false);
+            user = (String)json.get("user");
+            pass = (String)json.get("pass");
         }
+        
+        //clean input
+        user = Utility.cleanSQL(user); 
+
+        try{
+            stmt = conn.createStatement();
+            sql = "SELECT * FROM users WHERE email='" + user + "'";
+            rs = stmt.executeQuery(sql);
+            if(rs.next()){
+                userID = rs.getInt("id");
+                email = rs.getString("email");
+                hash = rs.getBytes("hash");
+                salt = rs.getBytes("salt");
+            }
+        } catch(SQLException e) {}
+        
+        pass += new String(salt);
+        md.update(pass.getBytes());
+        digest = md.digest();
+
+        sendAuth(Arrays.equals(hash,digest));
     }
     
     public void register()
