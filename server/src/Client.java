@@ -74,9 +74,9 @@ public class Client extends Thread {
     public void authorize()
     {
         while(cs == ClientStatus.NOT_AUTHORIZED){
-            JSONObject json = new JSONObject();
             String msg = null;
             while(msg == null){
+                JSONObject json = new JSONObject();
                 json.put("message","login_or_register");
                 network.sendJSONObject(json,false);    
             
