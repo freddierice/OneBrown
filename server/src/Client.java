@@ -109,8 +109,8 @@ public class Client extends Thread {
         } catch(NoSuchAlgorithmException e){}
         
         while(cs == ClientStatus.NOT_AUTHORIZED){
+            boolean firstTime = true;
             while(user == null || pass == null ){
-                static boolean firstTime = true;
                 if(!firstTime){
                     sendAuth(false);
                 }
