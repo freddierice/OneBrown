@@ -93,47 +93,51 @@
 - (void)createIO {
     
     CFReadStreamRef readStream;
+    CFWriteStreamRef writeStream;
     
-    CFStreamCreatePairWithSocketToHost(Nil, (CFStringRef)@"54.200.186.84", 20000, &readStream, nil);
+    CFStreamCreatePairWithSocketToHost(Nil, (CFStringRef)@"54.200.186.84", 20000, &readStream, &writeStream);
     
+    self.outputStream = (__bridge NSOutputStream *)writeStream;
     self.inputStream = (__bridge NSInputStream *)readStream;
     
     [self.inputStream setDelegate:self];
+    [self.outputStream setDelegate:self];
     
+    [self.outputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
     [self.inputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
     
+    [self.outputStream open];
     [self.inputStream open];
 }
 
 - (void)requestLogin {
-    NSError *e;
     
-    NSDictionary* loginRequest = @{@"message":@"login"};
-
-    NSData *loginData = [NSJSONSerialization dataWithJSONObject:loginRequest options:kNilOptions error:&e];
-    
-    [self.dataToWrite appendData:loginData];
-    
-    [self.dataToWrite appendData:[@"\n" dataUsingEncoding:NSUTF8StringEncoding]];
-
 }
 
 - (void)signIn: (id)sender {
     
-    [self requestLogin];
+    NSError *e;
+    
+    NSDictionary* loginRequest = @{@"message":@"login"};
+    
+    NSData *loginData = [NSJSONSerialization dataWithJSONObject:loginRequest options:kNilOptions error:&e];
+    NSData *newline = [@"\n" dataUsingEncoding:NSUTF8StringEncoding];
+    
+    [self.outputStream write:[loginData bytes] maxLength:[loginData length]];
+    [self.outputStream write:[newline bytes] maxLength:[newline length]];
 
     NSDictionary* JSON = @{@"user" : self.userField.text, @"pass" : self.passField.text};
     
-    NSError *e;
-    
     NSData *JSONData = [NSJSONSerialization dataWithJSONObject:JSON options:kNilOptions error:&e];
-    
+    /*
     [self.dataToWrite appendData: JSONData];
     [self.dataToWrite appendData:[@"\n" dataUsingEncoding:NSUTF8StringEncoding]];
+    */
+    [self.outputStream write:[JSONData bytes] maxLength:[JSONData length]];
+    [self.outputStream write:[newline bytes] maxLength:[newline length]];
 
-    [self sendData];
 }
-
+/*
 - (void)sendData {
     
     CFWriteStreamRef writeStream;
@@ -148,7 +152,7 @@
     
     [self.outputStream open];
 }
-
+*/
 - (void)overlayViewActivated {
     [self.userField resignFirstResponder];
     [self.passField resignFirstResponder];
@@ -213,7 +217,7 @@
         }
         
         case NSStreamEventHasSpaceAvailable: {
-            
+            /*
             NSLog(@"Bytes outgoing");
             uint8_t *readBytes = (uint8_t *)[self.dataToWrite bytes];
             NSLog(@"%s", readBytes);
@@ -227,7 +231,7 @@
             byteIndex += len;
             
             NSLog(@"%u", self.inputStream.hasBytesAvailable);
-            
+            */
             break;
             
         }
@@ -258,6 +262,7 @@
     NSDictionary *JSONdata = [NSJSONSerialization JSONObjectWithData:aData options:NSJSONReadingMutableContainers error:&e];
     
     NSLog(@"%@", JSONdata);
+    self.data = [NSMutableData data];
 }
 
 @end
