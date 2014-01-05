@@ -38,11 +38,14 @@
     gestureRecognizer.numberOfTouchesRequired = 1;
     [self.overlayView addGestureRecognizer:gestureRecognizer];
     
+    self.dataToWrite = [NSMutableData data];
+    self.data = [NSMutableData data];
     self.overlayView.hidden = YES;
     
-    [self.view addSubview:self.overlayView];
-    
     [self configureUsernameAndPassword];
+    [self createIO];
+    
+    [self.view addSubview:self.overlayView];
 }
 
 - (void)configureUsernameAndPassword {
@@ -87,23 +90,63 @@
     
 }
 
+- (void)createIO {
+    
+    CFReadStreamRef readStream;
+    
+    CFStreamCreatePairWithSocketToHost(Nil, (CFStringRef)@"54.200.186.84", 20000, &readStream, nil);
+    
+    self.inputStream = (__bridge NSInputStream *)readStream;
+    
+    [self.inputStream setDelegate:self];
+    
+    [self.inputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+    
+    [self.inputStream open];
+}
+
+- (void)requestLogin {
+    NSError *e;
+    
+    NSDictionary* loginRequest = @{@"message":@"login"};
+
+    NSData *loginData = [NSJSONSerialization dataWithJSONObject:loginRequest options:kNilOptions error:&e];
+    
+    [self.dataToWrite appendData:loginData];
+    
+    [self.dataToWrite appendData:[@"\n" dataUsingEncoding:NSUTF8StringEncoding]];
+
+}
+
 - (void)signIn: (id)sender {
     
-    BOOL valid = [LoginLogic validateUsername:self.userField.text] && [LoginLogic validatePassword:self.passField.text];
+    [self requestLogin];
+
+    NSDictionary* JSON = @{@"user" : self.userField.text, @"pass" : self.passField.text};
     
-    if (valid) {
+    NSError *e;
     
-        NSDictionary* JSON = @{@"user" : self.userField.text, @"pass" : self.passField.text};
-        
-        NSError *e;
-        
-        NSData *JSONData = [NSJSONSerialization dataWithJSONObject:JSON options:kNilOptions error:&e];
-        
-        self.dataToWrite = JSONData;
-        
-        [self initializeConnection];
-        
-    }
+    NSData *JSONData = [NSJSONSerialization dataWithJSONObject:JSON options:kNilOptions error:&e];
+    
+    [self.dataToWrite appendData: JSONData];
+    [self.dataToWrite appendData:[@"\n" dataUsingEncoding:NSUTF8StringEncoding]];
+
+    [self sendData];
+}
+
+- (void)sendData {
+    
+    CFWriteStreamRef writeStream;
+    
+    CFStreamCreatePairWithSocketToHost(Nil, (CFStringRef)@"54.200.186.84", 20000, nil, &writeStream);
+    
+    self.outputStream = (__bridge NSOutputStream *)writeStream;
+    
+    [self.outputStream setDelegate:self];
+    
+    [self.outputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+    
+    [self.outputStream open];
 }
 
 - (void)overlayViewActivated {
@@ -114,7 +157,6 @@
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 #pragma mark - UITextFieldDelegate protocol implementation
@@ -124,7 +166,7 @@
     
     BOOL valid = [LoginLogic validateUsername:self.userField.text] && [LoginLogic validatePassword:self.passField.text];
     
-    self.signInButton.hidden = (valid) ? YES : NO;
+    self.signInButton.hidden = (valid) ? NO : YES;
     
 }
 
@@ -132,25 +174,7 @@
     self.overlayView.hidden = NO;
 }
 
-#pragma mark - Network code
-
-- (void)initializeConnection {
-    
-    CFReadStreamRef readStream;
-    CFWriteStreamRef writeStream;
-    
-    CFStreamCreatePairWithSocketToHost(Nil, (CFStringRef)@"54.201.226.9", 20000, &readStream, &writeStream);
-    
-    self.inputStream = (__bridge NSInputStream *)readStream;
-    self.outputStream = (__bridge NSOutputStream *)writeStream;
-    
-    [self.inputStream setDelegate:self];
-    [self.outputStream setDelegate:self];
-    [self.inputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-    [self.outputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-    [self.inputStream open];
-    [self.outputStream open];
-}
+#pragma mark - NSStream delegate methods
 
 -(void)stream:(NSStream *)aStream handleEvent:(NSStreamEvent)eventCode {
     
@@ -159,7 +183,6 @@
             
             NSLog(@"Opened stream");
             self.byteIndex = 0;
-            
             break;
             
         }
@@ -168,6 +191,8 @@
             if (!self.data) {
                 self.data = [NSMutableData data];
             }
+            
+            NSLog(@"Bytes incoming");
             
             if (aStream == self.inputStream) {
                 
@@ -182,22 +207,27 @@
                         NSLog(@"No buffer");
                     }
                 }
-                
-                
             }
+            [self deserializeJSON: self.data];
             break;
         }
         
         case NSStreamEventHasSpaceAvailable: {
             
+            NSLog(@"Bytes outgoing");
             uint8_t *readBytes = (uint8_t *)[self.dataToWrite bytes];
+            NSLog(@"%s", readBytes);
             readBytes += byteIndex;
             int data_length = [self.dataToWrite length];
             int len = ((data_length - byteIndex >= 1024) ? 1024 : (data_length - byteIndex));
             uint8_t buffer[len];
+            
             (void)memcpy(buffer, readBytes, len);
-            len = [outputStream write:buffer maxLength:len];
+            len = [self.outputStream write:buffer maxLength:len];
             byteIndex += len;
+            
+            NSLog(@"%u", self.inputStream.hasBytesAvailable);
+            
             break;
             
         }
@@ -209,14 +239,10 @@
             
         case NSStreamEventEndEncountered: {
             NSLog(@"Stream ended");
+            
             [aStream close];
             [aStream removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-            if (aStream == self.inputStream) {
-                self.inputStream = nil;
-            }
-            else {
-                self.outputStream = nil;
-            }
+            
             break;
         }
         default: {
@@ -225,6 +251,13 @@
         }
     }
     
+}
+
+- (void)deserializeJSON: (NSData *)aData {
+    NSError *e = nil;
+    NSDictionary *JSONdata = [NSJSONSerialization JSONObjectWithData:aData options:NSJSONReadingMutableContainers error:&e];
+    
+    NSLog(@"%@", JSONdata);
 }
 
 @end

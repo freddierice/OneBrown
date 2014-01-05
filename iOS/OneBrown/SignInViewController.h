@@ -16,7 +16,7 @@
     NSOutputStream *outputStream;
     
     NSMutableData *data;
-    NSData *dataToWrite;
+    NSMutableData *dataToWrite;
     
     NSUInteger byteIndex;
 }
@@ -24,7 +24,7 @@
 @property (nonatomic, assign) NSUInteger byteIndex;
 
 @property (nonatomic, retain) NSMutableData *data;
-@property (nonatomic, retain) NSData *dataToWrite;
+@property (nonatomic, retain) NSMutableData *dataToWrite;
 
 @property (nonatomic, retain) NSInputStream *inputStream;
 @property (nonatomic, retain) NSOutputStream *outputStream;

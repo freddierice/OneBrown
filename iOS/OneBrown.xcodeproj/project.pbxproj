@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4E32D8E51878CDC7007AD210 /* Brown.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4E32D8E41878CDC7007AD210 /* Brown.jpg */; };
 		4EBA21FA1875F9A3000A9BE6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EBA21F91875F9A3000A9BE6 /* Foundation.framework */; };
 		4EBA21FC1875F9A3000A9BE6 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EBA21FB1875F9A3000A9BE6 /* CoreGraphics.framework */; };
 		4EBA21FE1875F9A3000A9BE6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EBA21FD1875F9A3000A9BE6 /* UIKit.framework */; };
@@ -35,6 +36,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4E32D8E41878CDC7007AD210 /* Brown.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = Brown.jpg; path = ../../../Brown.jpg; sourceTree = "<group>"; };
 		4EBA21F61875F9A3000A9BE6 /* OneBrown.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OneBrown.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4EBA21F91875F9A3000A9BE6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4EBA21FB1875F9A3000A9BE6 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -47,7 +49,7 @@
 		4EBA22091875F9A3000A9BE6 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		4EBA220C1875F9A3000A9BE6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		4EBA22111875F9A3000A9BE6 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		4EBA22171875F9A3000A9BE6 /* OneBrownTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = OneBrownTests.xctest; path = OneBrownTests; sourceTree = BUILT_PRODUCTS_DIR; };
+		4EBA22171875F9A3000A9BE6 /* OneBrownTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OneBrownTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4EBA22181875F9A3000A9BE6 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		4EBA22201875F9A3000A9BE6 /* OneBrownTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "OneBrownTests-Info.plist"; sourceTree = "<group>"; };
 		4EBA22221875F9A3000A9BE6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -123,6 +125,7 @@
 				4EBA2231187600C5000A9BE6 /* LoginLogic.h */,
 				4EBA2232187600C5000A9BE6 /* LoginLogic.m */,
 				4EBA22111875F9A3000A9BE6 /* Images.xcassets */,
+				4E32D8E41878CDC7007AD210 /* Brown.jpg */,
 				4EBA22001875F9A3000A9BE6 /* Supporting Files */,
 			);
 			path = OneBrown;
@@ -233,6 +236,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4E32D8E51878CDC7007AD210 /* Brown.jpg in Resources */,
 				4EBA22121875F9A3000A9BE6 /* Images.xcassets in Resources */,
 				4EBA22041875F9A3000A9BE6 /* InfoPlist.strings in Resources */,
 				4EBA220D1875F9A3000A9BE6 /* Main.storyboard in Resources */,
@@ -382,7 +386,7 @@
 		4EBA22291875F9A3000A9BE6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "OneBrown/OneBrown-Prefix.pch";
@@ -395,7 +399,7 @@
 		4EBA222A1875F9A3000A9BE6 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "OneBrown/OneBrown-Prefix.pch";

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>C44EB57E-51D8-4A65-9316-AC22BBBA2E33</string>
+	<key>IDESourceControlProjectName</key>
+	<string>OneBrown</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>85AF11C1-0BA7-41A2-835B-9E553B140C97</key>
+		<string>https://github.com/frice2014/OneBrown.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>iOS/OneBrown.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>85AF11C1-0BA7-41A2-835B-9E553B140C97</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/frice2014/OneBrown.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>85AF11C1-0BA7-41A2-835B-9E553B140C97</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>85AF11C1-0BA7-41A2-835B-9E553B140C97</string>
+			<key>IDESourceControlWCCName</key>
+			<string>OneBrown</string>
+		</dict>
+	</array>
+</dict>
+</plist>
