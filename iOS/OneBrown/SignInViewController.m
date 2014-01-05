@@ -92,9 +92,20 @@
 
 - (void)createIO {
     
-    CFReadStreamRef readStream;
+    sockaddr_in *saddr = (sockaddr_in *)malloc(sizeof(sockaddr_in));
+    memset(saddr,NULL,sizeof(sockaddr_in));
+    saddr->sin_len      = 16;
+    saddr->sin_family   = AF_INET;
+    saddr->sin_port     = 20000;
+    saddr->sin_addr     = 919124564;//54.200.186.84
     
-    CFStreamCreatePairWithSocketToHost(Nil, (CFStringRef)@"54.200.186.84", 20000, &readStream, nil);
+    CFDataRef addrRef = CFDataCreate(NULL,saddr,sizeof(sockaddr_in));
+        
+    sock = CFSocketCreate (NULL,PF_INET,PF_INET,IPROTO_TCP,kCFSocketNoCallBack,NULL,NULL);
+    CFSocketConnectToAddress(sock,addrRef,30);//30 is the timeout
+    sockNative = CFSocketGetNative(sock);
+    
+    CFStreamCreatePairWithSocket(NULL,sockNative,&readStream,NULL);
     
     self.inputStream = (__bridge NSInputStream *)readStream;
     
@@ -136,10 +147,7 @@
 
 - (void)sendData {
     
-    CFWriteStreamRef writeStream;
-    
-    CFStreamCreatePairWithSocketToHost(Nil, (CFStringRef)@"54.200.186.84", 20000, nil, &writeStream);
-    
+    CFStreamCreatePairWithSocket(NULL,sockNative,NULL,&writeStream);    
     self.outputStream = (__bridge NSOutputStream *)writeStream;
     
     [self.outputStream setDelegate:self];

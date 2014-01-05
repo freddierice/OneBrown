@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
+#import <CoreFoundation/CoreFoundation.h>//might not need?
+#include <sys/socket.h>  
+#include <netinet/in.h>
+
 @interface SignInViewController : UIViewController <UITextFieldDelegate, NSStreamDelegate> {
 
     UIView *overlayView;
@@ -19,6 +23,11 @@
     NSMutableData *dataToWrite;
     
     NSUInteger byteIndex;
+    
+    CFSocketNativeHandle sockNative;
+    CFSocketRef sock;
+    CFReadStreamRef readStream;
+    CFWriteStreamRef writeStream;
 }
 
 @property (nonatomic, assign) NSUInteger byteIndex;
