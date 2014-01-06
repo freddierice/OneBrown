@@ -73,6 +73,8 @@
 
 - (void)animateToRegister {
     
+    // Animate to display registration screen
+    
 }
 
 
@@ -105,18 +107,15 @@
 
 - (void)configureRegistration {
     
+    // Set up registration screen
+    
 }
 
 - (void)configureBackground {
     
     UIImageView *backgroundView = [[UIImageView alloc] initWithFrame: self.view.frame];
     
-    if (backgroundView.frame.size.height == 480.0f) {
-        [backgroundView setImage:[UIImage imageNamed:@"background320x480.png"]];
-    }
-    else if (backgroundView.frame.size.height == 568.0f) {
-        [backgroundView setImage:[UIImage imageNamed:@"background320x568.png"]];
-    }
+    [backgroundView setImage:[UIImage imageNamed:@"background"]];
     
     [self.view addSubview: backgroundView];
     
@@ -127,7 +126,7 @@
     [self.view addSubview:shadingView];
     
     UIImageView *titleView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 30, 320, 75)];
-    [titleView setImage:[UIImage imageNamed:@"title.png"]];
+    [titleView setImage:[UIImage imageNamed:@"oneBrown"]];
     
     [self.view addSubview:titleView];
     
