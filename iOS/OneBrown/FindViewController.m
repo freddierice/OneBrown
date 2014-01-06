@@ -8,11 +8,14 @@
 
 #import "FindViewController.h"
 #import "SignInViewController.h"
+#import "UserCell.h"
 
 @interface FindViewController ()
 {
     
     NSUserDefaults *defaults;
+    NSMutableArray *userPictures;
+    NSMutableArray *userPictureNames;
 }
 
 @end
@@ -34,7 +37,17 @@
 	// Do any additional setup after loading the view.
     defaults = [NSUserDefaults standardUserDefaults];
    
+    [self.collectionView setDataSource: self];
+    [self.collectionView setDelegate: self];
+    
+    userPictureNames = [[NSMutableArray alloc]init];
+    userPictures = [[NSMutableArray alloc]init];
 
+    userPictureNames = [NSMutableArray arrayWithObjects: @"Valentin Perez", @"Ben Murphy", @"sara", @"joan", @"erik", @"john", nil];
+    
+    for (NSString *name in userPictureNames)
+        [userPictures addObject:[UIImage imageNamed: name]];
+    
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -53,5 +66,48 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+# pragma mark - CollectionView methods.
+
+
+- (NSInteger) collectionView:(UICollectionView *)view numberOfItemsInSection:(NSInteger)section
+{
+    return 6;
+}
+
+
+/*
+ * Return 1 for number of sections.
+ */
+- (NSInteger) collectionView:(UICollectionView *)view numberOfSection:(NSInteger)section
+{
+    return 1;
+}
+
+/*
+ * Displays the cells of the collectionView
+ */
+- (UICollectionViewCell *) collectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    UserCell *cell = [cv dequeueReusableCellWithReuseIdentifier:@"UserCell" forIndexPath: indexPath];
+    
+    // Set the appropiate image and name to it.
+    [cell.userImageView setImage: userPictures[indexPath.row]];
+    
+    [cell.userNameLabel setText: userPictureNames[indexPath.row]];
+    
+    return cell;
+    
+}
+
+
+/*
+ * Handles the cell the user clicked in the collectionView.
+ */
+- (void) collectionView:(UICollectionView *) cv didHighlightItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+}
+
 
 @end

@@ -25,6 +25,7 @@
 		4EBA2233187600C5000A9BE6 /* LoginLogic.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EBA2232187600C5000A9BE6 /* LoginLogic.m */; };
 		597AE6F9187B35BD003FE40E /* FindViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 597AE6F8187B35BD003FE40E /* FindViewController.m */; };
 		597AE6FC187B35D0003FE40E /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 597AE6FB187B35D0003FE40E /* ProfileViewController.m */; };
+		597AE704187B5B02003FE40E /* UserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 597AE703187B5B02003FE40E /* UserCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +66,8 @@
 		597AE6F8187B35BD003FE40E /* FindViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FindViewController.m; sourceTree = "<group>"; };
 		597AE6FA187B35D0003FE40E /* ProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileViewController.h; sourceTree = "<group>"; };
 		597AE6FB187B35D0003FE40E /* ProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileViewController.m; sourceTree = "<group>"; };
+		597AE702187B5B02003FE40E /* UserCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserCell.h; path = ../UserCell.h; sourceTree = "<group>"; };
+		597AE703187B5B02003FE40E /* UserCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserCell.m; path = ../UserCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -192,6 +195,8 @@
 				597AE6F8187B35BD003FE40E /* FindViewController.m */,
 				597AE6FA187B35D0003FE40E /* ProfileViewController.h */,
 				597AE6FB187B35D0003FE40E /* ProfileViewController.m */,
+				597AE702187B5B02003FE40E /* UserCell.h */,
+				597AE703187B5B02003FE40E /* UserCell.m */,
 			);
 			name = "Find/Profile ";
 			sourceTree = "<group>";
@@ -297,6 +302,7 @@
 				4EBA22301875F9E8000A9BE6 /* SignInViewController.m in Sources */,
 				4EBA2233187600C5000A9BE6 /* LoginLogic.m in Sources */,
 				597AE6F9187B35BD003FE40E /* FindViewController.m in Sources */,
+				597AE704187B5B02003FE40E /* UserCell.m in Sources */,
 				597AE6FC187B35D0003FE40E /* ProfileViewController.m in Sources */,
 				4E337410187A22A700B11011 /* NetworkManager.m in Sources */,
 				4EBA22061875F9A3000A9BE6 /* main.m in Sources */,
