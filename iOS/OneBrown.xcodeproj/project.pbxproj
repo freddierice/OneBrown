@@ -23,6 +23,8 @@
 		4EBA22251875F9A3000A9BE6 /* OneBrownTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EBA22241875F9A3000A9BE6 /* OneBrownTests.m */; };
 		4EBA22301875F9E8000A9BE6 /* SignInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EBA222F1875F9E8000A9BE6 /* SignInViewController.m */; };
 		4EBA2233187600C5000A9BE6 /* LoginLogic.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EBA2232187600C5000A9BE6 /* LoginLogic.m */; };
+		597AE6F9187B35BD003FE40E /* FindViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 597AE6F8187B35BD003FE40E /* FindViewController.m */; };
+		597AE6FC187B35D0003FE40E /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 597AE6FB187B35D0003FE40E /* ProfileViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +61,10 @@
 		4EBA222F1875F9E8000A9BE6 /* SignInViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignInViewController.m; sourceTree = "<group>"; };
 		4EBA2231187600C5000A9BE6 /* LoginLogic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginLogic.h; sourceTree = "<group>"; };
 		4EBA2232187600C5000A9BE6 /* LoginLogic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginLogic.m; sourceTree = "<group>"; };
+		597AE6F7187B35BD003FE40E /* FindViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FindViewController.h; sourceTree = "<group>"; };
+		597AE6F8187B35BD003FE40E /* FindViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FindViewController.m; sourceTree = "<group>"; };
+		597AE6FA187B35D0003FE40E /* ProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileViewController.h; sourceTree = "<group>"; };
+		597AE6FB187B35D0003FE40E /* ProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,6 +147,7 @@
 				4EBA22081875F9A3000A9BE6 /* AppDelegate.h */,
 				4EBA22091875F9A3000A9BE6 /* AppDelegate.m */,
 				4EBA220B1875F9A3000A9BE6 /* Main.storyboard */,
+				597AE6FD187B35DF003FE40E /* Find/Profile  */,
 				4E337411187A3B1900B11011 /* Login */,
 				4E337412187A3B2300B11011 /* Network */,
 				4EBA22111875F9A3000A9BE6 /* Images.xcassets */,
@@ -176,6 +183,17 @@
 				4EBA22211875F9A3000A9BE6 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		597AE6FD187B35DF003FE40E /* Find/Profile  */ = {
+			isa = PBXGroup;
+			children = (
+				597AE6F7187B35BD003FE40E /* FindViewController.h */,
+				597AE6F8187B35BD003FE40E /* FindViewController.m */,
+				597AE6FA187B35D0003FE40E /* ProfileViewController.h */,
+				597AE6FB187B35D0003FE40E /* ProfileViewController.m */,
+			);
+			name = "Find/Profile ";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -278,6 +296,8 @@
 				4EBA220A1875F9A3000A9BE6 /* AppDelegate.m in Sources */,
 				4EBA22301875F9E8000A9BE6 /* SignInViewController.m in Sources */,
 				4EBA2233187600C5000A9BE6 /* LoginLogic.m in Sources */,
+				597AE6F9187B35BD003FE40E /* FindViewController.m in Sources */,
+				597AE6FC187B35D0003FE40E /* ProfileViewController.m in Sources */,
 				4E337410187A22A700B11011 /* NetworkManager.m in Sources */,
 				4EBA22061875F9A3000A9BE6 /* main.m in Sources */,
 			);

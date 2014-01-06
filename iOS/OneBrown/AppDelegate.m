@@ -7,12 +7,28 @@
 //
 
 #import "AppDelegate.h"
+#import "SignInViewController.h"
 
 @implementation AppDelegate
+{
+    NSUserDefaults *defaults;
+    
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    
+    
+    defaults = [NSUserDefaults standardUserDefaults];
+    
+    // Create an NSDictionary with the default settings (for the first time the user enters the app)
+    NSDictionary *defaultSettings = @{@"loggedIn" : @NO};
+    
+    // register these defaults and synchronize
+    [defaults registerDefaults: defaultSettings];
+    [defaults synchronize];
+    
     return YES;
 }
 							
