@@ -16,15 +16,9 @@
 
 @implementation SignInViewController
 
-@synthesize manager;
-@synthesize userField;
-@synthesize passField;
-@synthesize signInButton;
-@synthesize overlayView;
+@synthesize manager, userField, passField, signInButton, overlayView, loginOrRegister, login, signup;
 
-@synthesize loginOrRegister;
-@synthesize login;
-@synthesize signup;
+
 
 - (void)viewDidLoad
 {
