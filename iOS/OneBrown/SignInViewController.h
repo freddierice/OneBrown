@@ -7,41 +7,26 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "NetworkManager.h"
 
-#import <CoreFoundation/CoreFoundation.h>//might not need?
-#include <sys/socket.h>  
-#include <netinet/in.h>
-
-@interface SignInViewController : UIViewController <UITextFieldDelegate, NSStreamDelegate> {
+@interface SignInViewController : UIViewController <UITextFieldDelegate, NetworkManagerDelegate> {
 
     UIView *overlayView;
     
-    NSInputStream *inputStream;
-    NSOutputStream *outputStream;
+    NetworkManager *manager;
     
-    NSMutableData *data;
-    NSMutableData *dataToWrite;
-    
-    NSUInteger byteIndex;
-    
-    CFSocketNativeHandle sockNative;
-    CFSocketRef sock;
-    CFReadStreamRef readStream;
-    CFWriteStreamRef writeStream;
 }
 
-@property (nonatomic, assign) NSUInteger byteIndex;
-
-@property (nonatomic, retain) NSMutableData *data;
-@property (nonatomic, retain) NSMutableData *dataToWrite;
-
-@property (nonatomic, retain) NSInputStream *inputStream;
-@property (nonatomic, retain) NSOutputStream *outputStream;
+@property (nonatomic, retain) NetworkManager *manager;
 
 @property (nonatomic, retain) UIView *overlayView;
 
 @property (nonatomic, weak) UIButton *signInButton;
 @property (nonatomic, weak) UITextField *userField;
 @property (nonatomic, weak) UITextField *passField;
+
+@property (nonatomic, weak) UIView *loginOrRegister;
+@property (nonatomic, weak) UIView *login;
+@property (nonatomic, weak) UIView *signup;
 
 @end

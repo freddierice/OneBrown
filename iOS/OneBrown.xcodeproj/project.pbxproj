@@ -7,7 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4E32D8E51878CDC7007AD210 /* Brown.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4E32D8E41878CDC7007AD210 /* Brown.jpg */; };
+		4E3374041879D09F00B11011 /* Brown80x80.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E3374031879D09F00B11011 /* Brown80x80.png */; };
+		4E3374061879D38700B11011 /* Brown60x60.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E3374051879D38700B11011 /* Brown60x60.png */; };
+		4E3374091879D3ED00B11011 /* Brown58x58.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E3374071879D3ED00B11011 /* Brown58x58.png */; };
+		4E33740A1879D3ED00B11011 /* Brown120x120.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E3374081879D3ED00B11011 /* Brown120x120.png */; };
+		4E337410187A22A700B11011 /* NetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E33740F187A22A700B11011 /* NetworkManager.m */; };
+		4E337415187A433300B11011 /* background320x480.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E337413187A433300B11011 /* background320x480.png */; };
+		4E337416187A433300B11011 /* background320x568.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E337414187A433300B11011 /* background320x568.png */; };
+		4E33741A187A4ACE00B11011 /* title320x75.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E337419187A4ACE00B11011 /* title320x75.png */; };
+		4E33741C187A4C3300B11011 /* title.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E33741B187A4C3300B11011 /* title.png */; };
+		4E337422187A524E00B11011 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E337421187A524E00B11011 /* logo.png */; };
 		4EBA21FA1875F9A3000A9BE6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EBA21F91875F9A3000A9BE6 /* Foundation.framework */; };
 		4EBA21FC1875F9A3000A9BE6 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EBA21FB1875F9A3000A9BE6 /* CoreGraphics.framework */; };
 		4EBA21FE1875F9A3000A9BE6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EBA21FD1875F9A3000A9BE6 /* UIKit.framework */; };
@@ -36,7 +45,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		4E32D8E41878CDC7007AD210 /* Brown.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = Brown.jpg; path = ../../../Brown.jpg; sourceTree = "<group>"; };
+		4E3374031879D09F00B11011 /* Brown80x80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Brown80x80.png; path = ../../../Brown80x80.png; sourceTree = "<group>"; };
+		4E3374051879D38700B11011 /* Brown60x60.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Brown60x60.png; path = ../../../Brown60x60.png; sourceTree = "<group>"; };
+		4E3374071879D3ED00B11011 /* Brown58x58.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Brown58x58.png; path = ../../../Brown58x58.png; sourceTree = "<group>"; };
+		4E3374081879D3ED00B11011 /* Brown120x120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Brown120x120.png; path = ../../../Brown120x120.png; sourceTree = "<group>"; };
+		4E33740E187A22A700B11011 /* NetworkManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkManager.h; sourceTree = "<group>"; };
+		4E33740F187A22A700B11011 /* NetworkManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkManager.m; sourceTree = "<group>"; };
+		4E337413187A433300B11011 /* background320x480.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = background320x480.png; path = ../../../background320x480.png; sourceTree = "<group>"; };
+		4E337414187A433300B11011 /* background320x568.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = background320x568.png; path = ../../../background320x568.png; sourceTree = "<group>"; };
+		4E337419187A4ACE00B11011 /* title320x75.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = title320x75.png; path = ../../../title320x75.png; sourceTree = "<group>"; };
+		4E33741B187A4C3300B11011 /* title.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = title.png; path = ../../../title.png; sourceTree = "<group>"; };
+		4E337421187A524E00B11011 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = logo.png; path = ../../../logo.png; sourceTree = "<group>"; };
 		4EBA21F61875F9A3000A9BE6 /* OneBrown.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OneBrown.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4EBA21F91875F9A3000A9BE6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4EBA21FB1875F9A3000A9BE6 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -84,6 +103,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4E337411187A3B1900B11011 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				4EBA222E1875F9E8000A9BE6 /* SignInViewController.h */,
+				4EBA222F1875F9E8000A9BE6 /* SignInViewController.m */,
+				4EBA2231187600C5000A9BE6 /* LoginLogic.h */,
+				4EBA2232187600C5000A9BE6 /* LoginLogic.m */,
+			);
+			name = Login;
+			sourceTree = "<group>";
+		};
+		4E337412187A3B2300B11011 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				4E33740E187A22A700B11011 /* NetworkManager.h */,
+				4E33740F187A22A700B11011 /* NetworkManager.m */,
+			);
+			name = Network;
+			sourceTree = "<group>";
+		};
 		4EBA21ED1875F9A3000A9BE6 = {
 			isa = PBXGroup;
 			children = (
@@ -120,12 +159,9 @@
 				4EBA22081875F9A3000A9BE6 /* AppDelegate.h */,
 				4EBA22091875F9A3000A9BE6 /* AppDelegate.m */,
 				4EBA220B1875F9A3000A9BE6 /* Main.storyboard */,
-				4EBA222E1875F9E8000A9BE6 /* SignInViewController.h */,
-				4EBA222F1875F9E8000A9BE6 /* SignInViewController.m */,
-				4EBA2231187600C5000A9BE6 /* LoginLogic.h */,
-				4EBA2232187600C5000A9BE6 /* LoginLogic.m */,
+				4E337411187A3B1900B11011 /* Login */,
+				4E337412187A3B2300B11011 /* Network */,
 				4EBA22111875F9A3000A9BE6 /* Images.xcassets */,
-				4E32D8E41878CDC7007AD210 /* Brown.jpg */,
 				4EBA22001875F9A3000A9BE6 /* Supporting Files */,
 			);
 			path = OneBrown;
@@ -134,6 +170,15 @@
 		4EBA22001875F9A3000A9BE6 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				4E337421187A524E00B11011 /* logo.png */,
+				4E33741B187A4C3300B11011 /* title.png */,
+				4E337419187A4ACE00B11011 /* title320x75.png */,
+				4E337413187A433300B11011 /* background320x480.png */,
+				4E337414187A433300B11011 /* background320x568.png */,
+				4E3374071879D3ED00B11011 /* Brown58x58.png */,
+				4E3374081879D3ED00B11011 /* Brown120x120.png */,
+				4E3374051879D38700B11011 /* Brown60x60.png */,
+				4E3374031879D09F00B11011 /* Brown80x80.png */,
 				4EBA22011875F9A3000A9BE6 /* OneBrown-Info.plist */,
 				4EBA22021875F9A3000A9BE6 /* InfoPlist.strings */,
 				4EBA22051875F9A3000A9BE6 /* main.m */,
@@ -236,10 +281,18 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4E32D8E51878CDC7007AD210 /* Brown.jpg in Resources */,
+				4E337416187A433300B11011 /* background320x568.png in Resources */,
+				4E33741A187A4ACE00B11011 /* title320x75.png in Resources */,
+				4E33740A1879D3ED00B11011 /* Brown120x120.png in Resources */,
+				4E337415187A433300B11011 /* background320x480.png in Resources */,
 				4EBA22121875F9A3000A9BE6 /* Images.xcassets in Resources */,
 				4EBA22041875F9A3000A9BE6 /* InfoPlist.strings in Resources */,
+				4E3374091879D3ED00B11011 /* Brown58x58.png in Resources */,
 				4EBA220D1875F9A3000A9BE6 /* Main.storyboard in Resources */,
+				4E337422187A524E00B11011 /* logo.png in Resources */,
+				4E3374061879D38700B11011 /* Brown60x60.png in Resources */,
+				4E3374041879D09F00B11011 /* Brown80x80.png in Resources */,
+				4E33741C187A4C3300B11011 /* title.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -261,6 +314,7 @@
 				4EBA220A1875F9A3000A9BE6 /* AppDelegate.m in Sources */,
 				4EBA22301875F9E8000A9BE6 /* SignInViewController.m in Sources */,
 				4EBA2233187600C5000A9BE6 /* LoginLogic.m in Sources */,
+				4E337410187A22A700B11011 /* NetworkManager.m in Sources */,
 				4EBA22061875F9A3000A9BE6 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -386,7 +440,7 @@
 		4EBA22291875F9A3000A9BE6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "OneBrown/OneBrown-Prefix.pch";
@@ -399,7 +453,7 @@
 		4EBA222A1875F9A3000A9BE6 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "OneBrown/OneBrown-Prefix.pch";

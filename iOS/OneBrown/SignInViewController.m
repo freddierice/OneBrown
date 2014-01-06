@@ -8,6 +8,7 @@
 
 #import "SignInViewController.h"
 #import "LoginLogic.h"
+#import <Foundation/Foundation.h>
 
 @interface SignInViewController ()
 
@@ -15,15 +16,15 @@
 
 @implementation SignInViewController
 
-@synthesize data;
-@synthesize byteIndex;
-@synthesize dataToWrite;
+@synthesize manager;
 @synthesize userField;
 @synthesize passField;
-@synthesize inputStream;
-@synthesize outputStream;
 @synthesize signInButton;
 @synthesize overlayView;
+
+@synthesize loginOrRegister;
+@synthesize login;
+@synthesize signup;
 
 - (void)viewDidLoad
 {
@@ -38,20 +39,131 @@
     gestureRecognizer.numberOfTouchesRequired = 1;
     [self.overlayView addGestureRecognizer:gestureRecognizer];
     
-    self.dataToWrite = [NSMutableData data];
-    self.data = [NSMutableData data];
     self.overlayView.hidden = YES;
     
+    [self configureBackground];
     [self configureUsernameAndPassword];
-    [self createIO];
+    [self configureSignInAndRegister];
+    [self configureRegistration];
+    [self createNetworkManager];
     
     [self.view addSubview:self.overlayView];
 }
 
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+}
+
+
+
+- (void)animateToLogin {
+    [UIView animateWithDuration:0.3f animations:^{
+        [self.loginOrRegister setFrame:CGRectMake(-320, 170, 320, 132)];
+        [self.login setFrame:CGRectMake(0, 150, 320, 382)];
+    }];
+}
+
+- (void)animateToChoice {
+    [UIView animateWithDuration:0.3f animations:^{
+        [self.loginOrRegister setFrame:CGRectMake(0, 170, 320, 132)];
+        [self.login setFrame:CGRectMake(320, 150, 320, 382)];
+    }];
+}
+
+- (void)animateToRegister {
+    
+}
+
+
+
+- (void)signIn: (id)sender {
+    
+    NSError *e;
+    
+    NSData *loginRequest = [NSJSONSerialization dataWithJSONObject:@{@"message":@"login"} options:kNilOptions error:&e];
+    
+    NSDictionary *loginInformation = @{@"user":self.userField.text, @"pass":self.passField.text};
+    
+    NSData* information = [NSJSONSerialization dataWithJSONObject:loginInformation options:kNilOptions error:&e];
+
+    BOOL success = [self.manager writeData:loginRequest];
+    if (success) {
+        [self.manager writeData:information];
+    }
+    else {
+        NSLog(@"Error writing to server.");
+    }
+}
+
+- (void)overlayViewActivated {
+    [self.userField resignFirstResponder];
+    [self.passField resignFirstResponder];
+}
+
+#pragma mark - configuration
+
+- (void)configureRegistration {
+    
+}
+
+- (void)configureBackground {
+    
+    UIImageView *backgroundView = [[UIImageView alloc] initWithFrame: self.view.frame];
+    
+    if (backgroundView.frame.size.height == 480.0f) {
+        [backgroundView setImage:[UIImage imageNamed:@"background320x480.png"]];
+    }
+    else if (backgroundView.frame.size.height == 568.0f) {
+        [backgroundView setImage:[UIImage imageNamed:@"background320x568.png"]];
+    }
+    
+    [self.view addSubview: backgroundView];
+    
+    UIView *shadingView = [[UIView alloc] initWithFrame: self.view.frame];
+    
+    shadingView.backgroundColor = [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.4f];
+    
+    [self.view addSubview:shadingView];
+    
+    UIImageView *titleView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 30, 320, 75)];
+    [titleView setImage:[UIImage imageNamed:@"title.png"]];
+    
+    [self.view addSubview:titleView];
+    
+}
+
 - (void)configureUsernameAndPassword {
     
-    UITextField *usernameField = [[UITextField alloc] initWithFrame: CGRectMake(35, 150, 250, 31)];
-    UITextField *passwordField = [[UITextField alloc] initWithFrame: CGRectMake(35, 200, 250, 31)];
+    UIView *loginView = [[UIView alloc] initWithFrame:CGRectMake(320, 150, 320, self.view.frame.size.height-150)];
+    
+    UILabel *usernameLabel = [[UILabel alloc] initWithFrame:CGRectMake(35, 0, 250, 20)];
+    usernameLabel.font = [UIFont systemFontOfSize:16.0f];
+    usernameLabel.textColor = [UIColor whiteColor];
+    
+    usernameLabel.text = @"Username";
+    
+    [loginView addSubview:usernameLabel];
+    
+    UILabel *passwordLabel = [[UILabel alloc] initWithFrame:CGRectMake(35, 74, 250, 20)];
+    passwordLabel.font = [UIFont systemFontOfSize:16.0f];
+    passwordLabel.textColor = [UIColor whiteColor];
+    
+    passwordLabel.text = @"Password";
+    
+    [loginView addSubview:passwordLabel];
+    
+    UITextField *usernameField = [[UITextField alloc] initWithFrame: CGRectMake(35, 20, 250, 44)];
+    UITextField *passwordField = [[UITextField alloc] initWithFrame: CGRectMake(35, 94, 250, 44)];
+    
+    usernameField.font = [UIFont systemFontOfSize:20.0f];
+    passwordField.font = [UIFont systemFontOfSize:20.0f];
+    
+    usernameField.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.8f];
+    passwordField.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.8f];
+    
+    usernameField.textColor = [UIColor whiteColor];
+    passwordField.textColor = [UIColor whiteColor];
     
     usernameField.borderStyle = UITextBorderStyleRoundedRect;
     passwordField.borderStyle = UITextBorderStyleRoundedRect;
@@ -72,95 +184,86 @@
     self.userField = usernameField;
     self.passField = passwordField;
     
-    [self.view addSubview: usernameField];
-    [self.view addSubview: passwordField];
+    [loginView addSubview: usernameField];
+    [loginView addSubview: passwordField];
     
-    UIButton *signIn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [signIn setFrame: CGRectMake(110, 250, 88, 44)];
+    UIButton *signIn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [signIn setFrame:CGRectMake(35, 188, 250, 44)];
     [signIn setTitle:@"Sign In" forState:UIControlStateNormal];
+    [signIn setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.8f]];
+    [signIn.titleLabel setTextColor:[UIColor whiteColor]];
+    [signIn.titleLabel setFont:[UIFont systemFontOfSize:20.0f]];
+    signIn.layer.cornerRadius = 5.0f;
+    
     [signIn addTarget:self action:@selector(signIn:) forControlEvents:UIControlEventTouchUpInside];
     
-    signIn.layer.borderWidth = 1.0f;
-    signIn.layer.borderColor = [UIColor colorWithRed:0 green:122.0f/255.0f blue:1.0f alpha:1.0f].CGColor;
-    signIn.layer.cornerRadius = 8.0f;
     
     self.signInButton = signIn;
     
-    [self.view addSubview:signIn];
+    [loginView addSubview:signIn];
+    
+    UIButton *back = [UIButton buttonWithType:UIButtonTypeCustom];
+    [back setFrame:CGRectMake(35, self.view.frame.size.height-214, 250, 44)];
+    [back setTitle:@"Back" forState:UIControlStateNormal];
+    [back setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.8f]];
+    [back.titleLabel setTextColor:[UIColor whiteColor]];
+    [back.titleLabel setFont:[UIFont systemFontOfSize:20.0f]];
+    back.layer.cornerRadius = 5.0f;
+    
+    [back addTarget:self action:@selector(animateToChoice) forControlEvents:UIControlEventTouchUpInside];
+    
+    [loginView addSubview:back];
+    
+    self.login = loginView;
+    
+    [self.view addSubview:self.login];
     
 }
 
-- (void)createIO {
+- (void)createNetworkManager {
     
-    CFReadStreamRef readStream;
-    CFWriteStreamRef writeStream;
+    NetworkManager *nManager = [NetworkManager networkManagerWithHost:(CFStringRef)@"54.200.186.84" port:20000];
     
-    CFStreamCreatePairWithSocketToHost(Nil, (CFStringRef)@"54.200.186.84", 20000, &readStream, &writeStream);
+    nManager.delegate = self;
     
-    self.outputStream = (__bridge NSOutputStream *)writeStream;
-    self.inputStream = (__bridge NSInputStream *)readStream;
+    [nManager open];
     
-    [self.inputStream setDelegate:self];
-    [self.outputStream setDelegate:self];
-    
-    [self.outputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-    [self.inputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-    
-    [self.outputStream open];
-    [self.inputStream open];
-}
-
-- (void)requestLogin {
+    self.manager = nManager;
     
 }
 
-- (void)signIn: (id)sender {
+- (void)configureSignInAndRegister {
     
-    NSError *e;
+    UIView *buttonView = [[UIView alloc] initWithFrame:CGRectMake(0, 170, 320, 132)];
     
-    NSDictionary* loginRequest = @{@"message":@"login"};
+    UIButton *loginButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [loginButton setFrame:CGRectMake(35, 0, 250, 44)];
+    [loginButton setTitle:@"Log In" forState:UIControlStateNormal];
+    [loginButton setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.8f]];
+    [loginButton.titleLabel setTextColor:[UIColor whiteColor]];
+    [loginButton.titleLabel setFont:[UIFont systemFontOfSize:20.0f]];
+    loginButton.layer.cornerRadius = 5.0f;
     
-    NSData *loginData = [NSJSONSerialization dataWithJSONObject:loginRequest options:kNilOptions error:&e];
-    NSData *newline = [@"\n" dataUsingEncoding:NSUTF8StringEncoding];
+    [loginButton addTarget:self action:@selector(animateToLogin) forControlEvents:UIControlEventTouchUpInside];
     
-    [self.outputStream write:[loginData bytes] maxLength:[loginData length]];
-    [self.outputStream write:[newline bytes] maxLength:[newline length]];
-
-    NSDictionary* JSON = @{@"user" : self.userField.text, @"pass" : self.passField.text};
+    [buttonView addSubview:loginButton];
     
-    NSData *JSONData = [NSJSONSerialization dataWithJSONObject:JSON options:kNilOptions error:&e];
-    /*
-    [self.dataToWrite appendData: JSONData];
-    [self.dataToWrite appendData:[@"\n" dataUsingEncoding:NSUTF8StringEncoding]];
-    */
-    [self.outputStream write:[JSONData bytes] maxLength:[JSONData length]];
-    [self.outputStream write:[newline bytes] maxLength:[newline length]];
-
-}
-/*
-- (void)sendData {
+    UIButton *registerButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [registerButton setFrame:CGRectMake(35, 74, 250, 44)];
+    [registerButton setTitle:@"Register" forState:UIControlStateNormal];
+    [registerButton setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.8f]];
+    [registerButton.titleLabel setTextColor:[UIColor whiteColor]];
+    [registerButton.titleLabel setFont:[UIFont systemFontOfSize:20.0f]];
+    registerButton.layer.cornerRadius = 5.0f;
     
-    CFWriteStreamRef writeStream;
+    [registerButton addTarget:self action:@selector(animateToRegister) forControlEvents:UIControlEventTouchUpInside];
     
-    CFStreamCreatePairWithSocketToHost(Nil, (CFStringRef)@"54.200.186.84", 20000, nil, &writeStream);
+    [buttonView addSubview:registerButton];
     
-    self.outputStream = (__bridge NSOutputStream *)writeStream;
+    [self.view addSubview:buttonView];
     
-    [self.outputStream setDelegate:self];
+    self.loginOrRegister = buttonView;
     
-    [self.outputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-    
-    [self.outputStream open];
-}
-*/
-- (void)overlayViewActivated {
-    [self.userField resignFirstResponder];
-    [self.passField resignFirstResponder];
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
 }
 
 #pragma mark - UITextFieldDelegate protocol implementation
@@ -170,99 +273,17 @@
     
     BOOL valid = [LoginLogic validateUsername:self.userField.text] && [LoginLogic validatePassword:self.passField.text];
     
-    self.signInButton.hidden = (valid) ? NO : YES;
-    
+    self.signInButton.enabled = (valid) ? YES : NO;
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
     self.overlayView.hidden = NO;
 }
 
-#pragma mark - NSStream delegate methods
+#pragma mark - NetworkManagerDelegate protocol implementation
 
--(void)stream:(NSStream *)aStream handleEvent:(NSStreamEvent)eventCode {
-    
-    switch (eventCode) {
-        case NSStreamEventOpenCompleted: {
-            
-            NSLog(@"Opened stream");
-            self.byteIndex = 0;
-            break;
-            
-        }
-        case NSStreamEventHasBytesAvailable: {
-            
-            if (!self.data) {
-                self.data = [NSMutableData data];
-            }
-            
-            NSLog(@"Bytes incoming");
-            
-            if (aStream == self.inputStream) {
-                
-                uint8_t buffer[1024];
-                int len;
-                while ([inputStream hasBytesAvailable]) {
-                    len = [inputStream read:buffer maxLength:sizeof(buffer)];
-                    if (len > 0) {
-                        [data appendBytes:buffer length:len];
-                    }
-                    else {
-                        NSLog(@"No buffer");
-                    }
-                }
-            }
-            [self deserializeJSON: self.data];
-            break;
-        }
-        
-        case NSStreamEventHasSpaceAvailable: {
-            /*
-            NSLog(@"Bytes outgoing");
-            uint8_t *readBytes = (uint8_t *)[self.dataToWrite bytes];
-            NSLog(@"%s", readBytes);
-            readBytes += byteIndex;
-            int data_length = [self.dataToWrite length];
-            int len = ((data_length - byteIndex >= 1024) ? 1024 : (data_length - byteIndex));
-            uint8_t buffer[len];
-            
-            (void)memcpy(buffer, readBytes, len);
-            len = [self.outputStream write:buffer maxLength:len];
-            byteIndex += len;
-            
-            NSLog(@"%u", self.inputStream.hasBytesAvailable);
-            */
-            break;
-            
-        }
-            
-        case NSStreamEventErrorOccurred: {
-            NSLog(@"Error occurred %@", [aStream streamError]);
-            break;
-        }
-            
-        case NSStreamEventEndEncountered: {
-            NSLog(@"Stream ended");
-            
-            [aStream close];
-            [aStream removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-            
-            break;
-        }
-        default: {
-            NSLog(@"Default");
-            break;
-        }
-    }
-    
-}
-
-- (void)deserializeJSON: (NSData *)aData {
-    NSError *e = nil;
-    NSDictionary *JSONdata = [NSJSONSerialization JSONObjectWithData:aData options:NSJSONReadingMutableContainers error:&e];
-    
-    NSLog(@"%@", JSONdata);
-    self.data = [NSMutableData data];
+-(void)didReceiveJSON:(NSDictionary *)JSON {
+    NSLog(@"%@", JSON); 
 }
 
 @end
