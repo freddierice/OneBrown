@@ -165,12 +165,15 @@ public class Network extends Thread {
     public byte[] recv(boolean ssl)
     {
         byte arr[] = new byte[1024];
-        try{
-            if(ssl)
-                bufSize = inStreamSSL.read(arr);
-            else
-                bufSize = inStream.read(arr);
-        }catch(IOException e){}
+        bufSize = -1;
+        while(bufSize == -1){
+            try{
+                if(ssl)
+                    bufSize = inStreamSSL.read(arr);
+                else
+                    bufSize = inStream.read(arr);
+            }catch(IOException e){}
+        }
         return arr;
     }
     

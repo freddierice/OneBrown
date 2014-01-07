@@ -87,7 +87,7 @@ public class Client extends Thread {
                     continue;
                 msg = (String)json.get("message");
             }
-            
+            System.out.println("Message: " + msg);
             if(msg.equals("register"))
                 register();
             else if(msg.equals("login"))
