@@ -28,9 +28,11 @@ public class Network {
     OutputStream outStreamSSL = null;
     boolean sslConnection = false;
     
+    ArrayList<JSONObject> cmds;
     
     Network(Socket sock){
         this.sock = sock;
+        cmds = new ArrayList<JSONObject>();
         try{
             inStream = sock.getInputStream();
             outStream = sock.getOutputStream();
@@ -40,6 +42,56 @@ public class Network {
         //initializeSSL();
     }
     
+    public void run()
+    {
+        String str = "";
+        int par = 0;
+        byte buf[] = null;
+        int i = 0;
+        while(true){
+            if(par == 0)
+                str = "";
+            buf = recv(false);
+            i = 0;
+            while((char)buf[i] != '{'){
+                if(i != bufSize-1)
+                    ++i;
+                else
+                    continue;
+            }
+            for(; i < bufSize; ++i){
+                if((char)buf[i] == '{')
+                    ++par;
+                if((char)buf[i] == '}')
+                    --par;
+                str += new String((char)buf[i]);
+                if(par == 0)
+                    pushJSONObject(str);
+            }
+        }
+    }
+
+    public void pushJSONObject(String str)
+    {
+        Object obj  = null;
+        JSONParser parser = new JSONParser();
+        
+        try{
+            obj = parser.parse(str);
+        } catch( ParseException e ){}
+        
+        cmd.add((JSONObject)obj);
+    }
+
+    public JSONObject pullJSONObject()
+    {
+        while(cmd.size() == 0)
+            Thread.sleep(100);
+        JSONObject obj = cmd.get(0);
+        cmd.remove(0);
+        return obj;
+    }
+
     public void closeConnections()
     {
         try{
