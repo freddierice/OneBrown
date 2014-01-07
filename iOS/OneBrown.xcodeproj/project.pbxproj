@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4E337410187A22A700B11011 /* NetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E33740F187A22A700B11011 /* NetworkManager.m */; };
+		4E889FE7187C81F00069F90B /* TabController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E889FE6187C81F00069F90B /* TabController.m */; };
 		4EBA21FA1875F9A3000A9BE6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EBA21F91875F9A3000A9BE6 /* Foundation.framework */; };
 		4EBA21FC1875F9A3000A9BE6 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EBA21FB1875F9A3000A9BE6 /* CoreGraphics.framework */; };
 		4EBA21FE1875F9A3000A9BE6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EBA21FD1875F9A3000A9BE6 /* UIKit.framework */; };
@@ -41,6 +42,8 @@
 /* Begin PBXFileReference section */
 		4E33740E187A22A700B11011 /* NetworkManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkManager.h; sourceTree = "<group>"; };
 		4E33740F187A22A700B11011 /* NetworkManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkManager.m; sourceTree = "<group>"; };
+		4E889FE5187C81F00069F90B /* TabController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TabController.h; sourceTree = "<group>"; };
+		4E889FE6187C81F00069F90B /* TabController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TabController.m; sourceTree = "<group>"; };
 		4EBA21F61875F9A3000A9BE6 /* OneBrown.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OneBrown.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4EBA21F91875F9A3000A9BE6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4EBA21FB1875F9A3000A9BE6 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -191,6 +194,8 @@
 		597AE6FD187B35DF003FE40E /* Find/Profile  */ = {
 			isa = PBXGroup;
 			children = (
+				4E889FE5187C81F00069F90B /* TabController.h */,
+				4E889FE6187C81F00069F90B /* TabController.m */,
 				597AE6F7187B35BD003FE40E /* FindViewController.h */,
 				597AE6F8187B35BD003FE40E /* FindViewController.m */,
 				597AE6FA187B35D0003FE40E /* ProfileViewController.h */,
@@ -299,6 +304,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4EBA220A1875F9A3000A9BE6 /* AppDelegate.m in Sources */,
+				4E889FE7187C81F00069F90B /* TabController.m in Sources */,
 				4EBA22301875F9E8000A9BE6 /* SignInViewController.m in Sources */,
 				4EBA2233187600C5000A9BE6 /* LoginLogic.m in Sources */,
 				597AE6F9187B35BD003FE40E /* FindViewController.m in Sources */,

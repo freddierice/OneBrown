@@ -15,19 +15,23 @@
     
     NetworkManager *manager;
     
+    NSArray *loginScreen;
+    NSArray *openingScreen;
+    NSArray *registerScreen;
+    
 }
 
 @property (nonatomic, retain) NetworkManager *manager;
 
 @property (nonatomic, retain) UIView *overlayView;
 
-@property (nonatomic, weak) UIButton *signInButton;
 @property (nonatomic, weak) UITextField *userField;
 @property (nonatomic, weak) UITextField *passField;
+@property (nonatomic, weak) UILabel *loginIssue;
 
-@property (nonatomic, weak) UIView *loginOrRegister;
-@property (nonatomic, weak) UIView *login;
-@property (nonatomic, weak) UIView *signup;
+@property (nonatomic, retain) NSArray *loginScreen;
+@property (nonatomic, retain) NSArray *openingScreen;
+@property (nonatomic, retain) NSArray *registerScreen;
 
 // clicking on this button will dismiss this sign up view
 - (IBAction)clickedTemporaryButton:(id)sender;

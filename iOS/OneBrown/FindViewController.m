@@ -9,6 +9,7 @@
 #import "FindViewController.h"
 #import "SignInViewController.h"
 #import "UserCell.h"
+#import "NetworkManager.h"
 
 @interface FindViewController ()
 {
@@ -16,11 +17,14 @@
     NSUserDefaults *defaults;
     NSMutableArray *userPictures;
     NSMutableArray *userPictureNames;
+        
 }
 
 @end
 
 @implementation FindViewController
+
+@synthesize manager;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -58,12 +62,14 @@
 
 -(void)viewDidAppear:(BOOL)animated
 {
+    //[defaults setObject:@NO forKey:@"loggedIn"]; //Enable log in screen for testing purposes
+    
     // Show the sign up/log in view if the user is not loggedIn
     if(![defaults boolForKey:@"loggedIn"])
     {
         SignInViewController *signIn = [[SignInViewController alloc] init];
         signIn = [self.storyboard instantiateViewControllerWithIdentifier:@"SignInController"];
-        [self presentViewController:signIn animated:YES completion:nil];
+        [self presentViewController:signIn animated:NO completion:nil];
     }
 }
 
@@ -71,6 +77,14 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - NetworkManager delegate method
+/*
+ * Called when NetworkManager receives new JSON data
+ */
+-(void)didReceiveJSON:(NSDictionary *)JSON {
+    NSLog(@"%@", JSON);
 }
 
 # pragma mark - CollectionView methods.
@@ -121,6 +135,5 @@
         [_searchBar resignFirstResponder];
     
 }
-
 
 @end
