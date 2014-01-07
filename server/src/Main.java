@@ -17,7 +17,7 @@ public class Main extends Thread {
         main.runner();
     }
     
-    static final int hostPort = 20001; 
+    static final int hostPort = 20000; 
     List<Client> clients = null;
     ServerSocket listener = null;
     
