@@ -124,6 +124,7 @@
                     <tabBarItem key="tabBarItem" title="Find" image="IconSearch" id="azO-r7-I5j"/>
                     <connections>
                         <outlet property="collectionView" destination="mB7-NQ-4i7" id="0KZ-PI-rWq"/>
+                        <outlet property="searchBar" destination="cnb-WW-Jjq" id="PRm-Fb-89i"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8Ba-xT-faV" userLabel="First Responder" sceneMemberID="firstResponder"/>

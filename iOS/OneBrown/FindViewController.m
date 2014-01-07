@@ -78,7 +78,7 @@
 
 - (NSInteger) collectionView:(UICollectionView *)view numberOfItemsInSection:(NSInteger)section
 {
-    return 6;
+    return [userPictureNames count];
 }
 
 
@@ -103,7 +103,6 @@
     [cell.userNameLabel setText: userPictureNames[indexPath.row]];
     
     return cell;
-    
 }
 
 
@@ -112,6 +111,14 @@
  */
 - (void) collectionView:(UICollectionView *) cv didHighlightItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    
+}
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    UITouch *touch = [[event allTouches] anyObject];
+    
+    if ([_searchBar isFirstResponder] && [touch view] != _searchBar)
+        [_searchBar resignFirstResponder];
     
 }
 

@@ -11,5 +11,6 @@
 @interface FindViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate>
 
 @property (strong, nonatomic) IBOutlet UICollectionView *collectionView;
+@property (strong, nonatomic) IBOutlet UISearchBar *searchBar;
 
 @end
