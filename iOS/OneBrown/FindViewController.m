@@ -40,6 +40,7 @@
     [self.collectionView setDataSource: self];
     [self.collectionView setDelegate: self];
     
+    [self.collectionView setBackgroundColor:[UIColor clearColor]];
     userPictureNames = [[NSMutableArray alloc]init];
     userPictures = [[NSMutableArray alloc]init];
 
@@ -48,6 +49,11 @@
     for (NSString *name in userPictureNames)
         [userPictures addObject:[UIImage imageNamed: name]];
     
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
 }
 
 -(void)viewDidAppear:(BOOL)animated
