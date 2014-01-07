@@ -69,6 +69,12 @@ public class Network extends Thread {
                 if(par == 0){
                     pushJSONObject(str);
                     str = "";
+                    while((char)buf[i] != '{'){
+                        if(i != bufSize-1)
+                            ++i;
+                        else
+                            continue;
+                    }
                 }
             }
         }
