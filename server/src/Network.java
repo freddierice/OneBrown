@@ -66,8 +66,10 @@ public class Network extends Thread {
                 if((char)buf[i] == '}')
                     --par;
                 str += ((Character)((char)(buf[i]))).toString();
-                if(par == 0)
+                if(par == 0){
                     pushJSONObject(str);
+                    str = "";
+                }
             }
         }
     }
