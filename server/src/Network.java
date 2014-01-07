@@ -48,11 +48,11 @@ public class Network extends Thread {
         String str = "";
         int par = 0;
         byte buf[] = null;
+        int i = 0;
         while(true){
             if(par == 0)
                 str = "";
             buf = recv(false);
-            /*
             i = 0;
             while((char)buf[i] != '{'){
                 if(i != bufSize-1)
@@ -60,8 +60,7 @@ public class Network extends Thread {
                 else
                     continue;
             }
-            */
-            for(int i = 0; i < bufSize; ++i){
+            for(; i < bufSize; ++i){
                 if((char)buf[i] == '{')
                     ++par;
                 if((char)buf[i] == '}')
