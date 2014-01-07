@@ -29,7 +29,6 @@ public class Network extends Thread {
     boolean sslConnection = false;
     
     ArrayList<JSONObject> cmds;
-    int bufSize = 0;
     
     Network(Socket sock){
         this.sock = sock;
@@ -46,13 +45,15 @@ public class Network extends Thread {
     public void run()
     {
         String str = "";
+        int bufSize = 0;
         int par = 0;
-        byte buf[] = null;
+        byte buf[] = new byte[1024];
         int i = 0;
+        
         while(true){
             if(par == 0)
                 str = "";
-            buf = recv(false);
+            bufSize = recv(buf,false);
             i = 0;
             while((char)buf[i] != '{'){
                 if(i != bufSize-1)
@@ -82,7 +83,6 @@ public class Network extends Thread {
 
     public void pushJSONObject(String str)
     {
-        System.out.println("Pushing: " + str);
         Object obj  = null;
         JSONParser parser = new JSONParser();
         
@@ -130,22 +130,6 @@ public class Network extends Thread {
             
         } catch( IOException e ){}
     }
-    
-    public Object getJSONObject(boolean ssl)
-    {
-        Object obj  = null;
-        String str = "";
-        JSONParser parser = new JSONParser();
-        int length;
-        
-        str = recvString(ssl);
-        
-        try{
-            obj = parser.parse(str);
-        } catch( ParseException e ){}
-        
-        return obj;
-    }
 
     public void sendString(String str,boolean ssl)
     {
@@ -173,10 +157,9 @@ public class Network extends Thread {
         }catch(IOException e){}
     }
 
-    public byte[] recv(boolean ssl)
+    public int recv(byte arr[], boolean ssl)
     {
-        byte arr[] = new byte[1024];
-        bufSize = -1;
+        int bufSize = -1;
         while(bufSize == -1){
             try{
                 if(ssl)
@@ -185,7 +168,7 @@ public class Network extends Thread {
                     bufSize = inStream.read(arr);
             }catch(IOException e){}
         }
-        return arr;
+        return bufSize;
     }
     
     public void initSSL()
