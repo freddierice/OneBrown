@@ -29,4 +29,8 @@
 @property (nonatomic, weak) UIView *login;
 @property (nonatomic, weak) UIView *signup;
 
+// clicking on this button will dismiss this sign up view
+- (IBAction)clickedTemporaryButton:(id)sender;
+@property (weak, nonatomic) IBOutlet UIButton *temporaryButton;
+
 @end

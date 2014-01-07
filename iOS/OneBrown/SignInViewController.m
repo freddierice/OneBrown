@@ -42,6 +42,10 @@
     [self createNetworkManager];
     
     [self.view addSubview:self.overlayView];
+    
+    
+    // Brings the temporaryButton to the front so that it can be clicked.
+    [self.view bringSubviewToFront:_temporaryButton];
 }
 
 - (void)didReceiveMemoryWarning
@@ -277,6 +281,12 @@
 
 -(void)didReceiveJSON:(NSDictionary *)JSON {
     NSLog(@"%@", JSON); 
+}
+
+- (IBAction)clickedTemporaryButton:(id)sender
+{
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"loggedIn"];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end
