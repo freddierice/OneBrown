@@ -74,6 +74,7 @@ public class Network extends Thread {
 
     public void pushJSONObject(String str)
     {
+        System.out.println("Pushing: " + str);
         Object obj  = null;
         JSONParser parser = new JSONParser();
         
@@ -86,10 +87,13 @@ public class Network extends Thread {
 
     public JSONObject pullJSONObject()
     {
-        try{
-            while(cmds.size() == 0)
+        while(cmds.size() == 0){
+            try{
                 Thread.sleep(100);
-           }catch( InterruptedException e){}
+            }catch( InterruptedException e){
+                continue;
+            }
+        }
         JSONObject obj = cmds.get(0);
         cmds.remove(0);
         return obj;

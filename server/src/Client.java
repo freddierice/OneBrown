@@ -120,7 +120,9 @@ public class Client extends Thread {
                 return;
             }
             firstTime = false;
+            System.out.println("Getting second JSON");
             json = network.pullJSONObject();
+            System.out.println("Got second JSON");
             if(json == null)
                 continue;
             user = (String)json.get("user");
