@@ -35,6 +35,7 @@ public class Client extends Thread {
     Client(Socket sock){
         this.cs = ClientStatus.NOT_AUTHORIZED;
         this.network = new Network(sock);
+        this.network.start();
     }
     
     public boolean isDead()
@@ -80,7 +81,8 @@ public class Client extends Thread {
                 json.put("message","login_or_register");
                 network.sendJSONObject(json,false);    
             
-                json = (JSONObject)network.getJSONObject(false);
+                //json = (JSONObject)network.getJSONObject(false);
+                json = network.pullJSONObject();
                 if(json == null)
                     continue;
                 msg = (String)json.get("message");

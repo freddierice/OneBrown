@@ -12,7 +12,7 @@ import org.json.simple.*;
 import org.json.simple.parser.*;
 
 @SuppressWarnings("unchecked")
-public class Network {
+public class Network extends Thread {
     
     Socket sock = null;
     PrintWriter out = null;
@@ -29,6 +29,7 @@ public class Network {
     boolean sslConnection = false;
     
     ArrayList<JSONObject> cmds;
+    int bufSize = 0;
     
     Network(Socket sock){
         this.sock = sock;
@@ -47,11 +48,11 @@ public class Network {
         String str = "";
         int par = 0;
         byte buf[] = null;
-        int i = 0;
         while(true){
             if(par == 0)
                 str = "";
             buf = recv(false);
+            /*
             i = 0;
             while((char)buf[i] != '{'){
                 if(i != bufSize-1)
@@ -59,12 +60,13 @@ public class Network {
                 else
                     continue;
             }
-            for(; i < bufSize; ++i){
+            */
+            for(int i = 0; i < bufSize; ++i){
                 if((char)buf[i] == '{')
                     ++par;
                 if((char)buf[i] == '}')
                     --par;
-                str += new String((char)buf[i]);
+                str += ((Character)((char)(buf[i]))).toString();
                 if(par == 0)
                     pushJSONObject(str);
             }
@@ -80,15 +82,17 @@ public class Network {
             obj = parser.parse(str);
         } catch( ParseException e ){}
         
-        cmd.add((JSONObject)obj);
+        cmds.add((JSONObject)obj);
     }
 
     public JSONObject pullJSONObject()
     {
-        while(cmd.size() == 0)
-            Thread.sleep(100);
-        JSONObject obj = cmd.get(0);
-        cmd.remove(0);
+        try{
+            while(cmds.size() == 0)
+                Thread.sleep(100);
+           }catch( InterruptedException e){}
+        JSONObject obj = cmds.get(0);
+        cmds.remove(0);
         return obj;
     }
 
@@ -163,9 +167,9 @@ public class Network {
         byte arr[] = new byte[1024];
         try{
             if(ssl)
-                inStreamSSL.read(arr);
+                bufSize = inStreamSSL.read(arr);
             else
-                inStream.read(arr);
+                bufSize = inStream.read(arr);
         }catch(IOException e){}
         return arr;
     }
