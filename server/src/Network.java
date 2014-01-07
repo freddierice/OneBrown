@@ -58,7 +58,7 @@ public class Network extends Thread {
                 if(i != bufSize-1)
                     ++i;
                 else
-                    continue;
+                    break;
             }
             for(; i < bufSize; ++i){
                 if((char)buf[i] == '{')
@@ -73,7 +73,7 @@ public class Network extends Thread {
                         if(i != bufSize-1)
                             ++i;
                         else
-                            continue;
+                            break;
                     }
                 }
             }
