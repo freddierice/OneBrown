@@ -69,6 +69,8 @@ public class Network extends Thread {
                     str = "";
                     while((char)buf[i] != '{' && i != bufSize)
                         ++i;
+                    if( i != bufSize && i != 0)
+                        --i;
                 }
             }
             sleep();
