@@ -62,7 +62,7 @@
 
 -(void)viewDidAppear:(BOOL)animated
 {
-    //[defaults setObject:@NO forKey:@"loggedIn"]; //Enable log in screen for testing purposes
+    [defaults setObject:@NO forKey:@"loggedIn"]; //Enable log in screen for testing purposes
     
     // Show the sign up/log in view if the user is not loggedIn
     if(![defaults boolForKey:@"loggedIn"])

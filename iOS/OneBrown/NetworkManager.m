@@ -104,6 +104,9 @@
     switch (eventCode) {
             
         case NSStreamEventOpenCompleted: {
+            
+            NSLog(@"Opened");
+            
             break;
         }
             
