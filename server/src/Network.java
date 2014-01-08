@@ -70,6 +70,7 @@ public class Network extends Thread {
                         ++i;
                 }
             }
+            Thread.sleep(100);
         }
     }
 
@@ -159,6 +160,7 @@ public class Network extends Thread {
                 else
                     bufSize = inStream.read(arr);
             }catch(IOException e){}
+            Thread.sleep(100);
         }
         return bufSize;
     }
