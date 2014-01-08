@@ -70,7 +70,7 @@ public class Network extends Thread {
                         ++i;
                 }
             }
-            Thread.sleep(100);
+            sleep();
         }
     }
 
@@ -89,11 +89,7 @@ public class Network extends Thread {
     public JSONObject pullJSONObject()
     {
         while(cmds.size() == 0){
-            try{
-                Thread.sleep(100);
-            }catch( InterruptedException e){
-                continue;
-            }
+            sleep();
         }
         JSONObject obj = cmds.get(0);
         cmds.remove(0);
@@ -160,7 +156,7 @@ public class Network extends Thread {
                 else
                     bufSize = inStream.read(arr);
             }catch(IOException e){}
-            Thread.sleep(100);
+            sleep();
         }
         return bufSize;
     }
@@ -196,5 +192,13 @@ public class Network extends Thread {
             inSSL = new BufferedReader(new InputStreamReader(inStreamSSL));
             outSSL = new PrintWriter( sslSock.getOutputStream(), true);
         }catch( IOException e ){}
+    }
+    
+    public void sleep(){
+        try{
+            Thread.sleep(100);
+        }catch( InterruptedException e){
+            continue;
+        }
     }
 }
