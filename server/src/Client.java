@@ -141,6 +141,9 @@ public class Client extends Thread {
                 email = rs.getString("email");
                 hash = rs.getBytes("hash");
                 salt = rs.getBytes("salt");
+            }else{
+                sendAuth(false);
+                return;
             }
         } catch(SQLException e) {}
         

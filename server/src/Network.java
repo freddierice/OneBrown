@@ -58,7 +58,6 @@ public class Network extends Thread {
             while((char)buf[i] != '{' &&  i != bufSize)
                 ++i;
             for(; i < bufSize; ++i){
-                System.out.println(((Character)((char)(buf[i]))).toString() + "<-->" + str);
                 if((char)buf[i] == '{')
                     ++par;
                 if((char)buf[i] == '}')
@@ -118,27 +117,12 @@ public class Network extends Thread {
             json.writeJSONString(sw);
             str = sw.toString();
             
-            sendString(str,ssl);
+            if(ssl)
+                outSSL.println(str);
+            else
+                out.println(str);
             
         } catch( IOException e ){}
-    }
-
-    public void sendString(String str,boolean ssl)
-    {
-        if(ssl)
-            outSSL.println(str);
-        else
-            out.println(str);
-    }
-    
-    public String recvString(boolean ssl)
-    {   
-        try{
-            if(ssl)
-                return inSSL.readLine();
-            else
-                return in.readLine();
-        } catch( IOException e) {return "";}
     }
     
     public void send(byte arr[], boolean ssl)
