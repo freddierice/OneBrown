@@ -87,7 +87,6 @@ public class Client extends Thread {
                     continue;
                 msg = (String)json.get("message");
             }
-            System.out.println("Message: " + msg);
             if(msg.equals("register"))
                 register();
             else if(msg.equals("login"))
@@ -102,6 +101,7 @@ public class Client extends Thread {
         ResultSet rs = null;
         String user = null;
         String pass = null;
+        String sID  = null;
         String sql = "";
         String email = "";
         byte hash[] = null;
@@ -114,19 +114,23 @@ public class Client extends Thread {
         } catch(NoSuchAlgorithmException e){}
         
         boolean firstTime = true;
-        while(user == null || pass == null ){
+        while( (user == null || pass == null) && sID == null ){
             if(!firstTime){
                 sendAuth(false);
                 return;
             }
             firstTime = false;
-            System.out.println("Getting second JSON");
             json = network.pullJSONObject();
-            System.out.println("Got second JSON");
             if(json == null)
                 continue;
             user = (String)json.get("user");
             pass = (String)json.get("pass");
+            sID  = (String)json.get("session");
+        }
+        
+        if(sID != null){
+            sendAuth(true);
+            return;
         }
         
         //clean input

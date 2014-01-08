@@ -17,7 +17,7 @@ public class Main extends Thread {
         main.runner();
     }
     
-    static final int hostPort = 20001;
+    static final int hostPort = 20000;
     List<Client> clients = null;
     ServerSocket listener = null;
     
@@ -65,6 +65,7 @@ public class Main extends Thread {
                 c.closeConnection();
                 c = null;
                 clients.remove(i);
+                System.out.println("Client closed");
             }
         }
         try{
