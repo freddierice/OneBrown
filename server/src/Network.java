@@ -58,6 +58,7 @@ public class Network extends Thread {
             while((char)buf[i] != '{' &&  i != bufSize)
                 ++i;
             for(; i < bufSize; ++i){
+                System.out.println(((Character)((char)(buf[i]))).toString() + "<-->" + str);
                 if((char)buf[i] == '{')
                     ++par;
                 if((char)buf[i] == '}')
