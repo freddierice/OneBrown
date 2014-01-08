@@ -197,8 +197,6 @@ public class Network extends Thread {
     public void sleep(){
         try{
             Thread.sleep(100);
-        }catch( InterruptedException e){
-            continue;
-        }
+        }catch( InterruptedException e){}
     }
 }
