@@ -124,8 +124,23 @@ public class Client extends Thread {
         }
         
         if(sID != null){
-            sendAuth(true);
-            return;
+            
+            try{
+                stmt = conn.createStatement();
+                sql = "SELECT * FROM users WHERE session='" + sID + "'";
+                rs = stmt.executeQuery(sql);
+                if(rs.next()){
+                    userID = rs.getInt("id");
+                    email = rs.getString("email");
+                    hash = rs.getBytes("hash");
+                    salt = rs.getBytes("salt");
+                    sendAuth(true);
+                    return;
+                }else{
+                    sendAuth(false);
+                    return;
+                }
+            } catch(SQLException e) {}
         }
         
         //clean input
