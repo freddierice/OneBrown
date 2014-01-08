@@ -55,12 +55,8 @@ public class Network extends Thread {
                 str = "";
             bufSize = recv(buf,false);
             i = 0;
-            while((char)buf[i] != '{'){
-                if(i != bufSize-1)
-                    ++i;
-                else
-                    break;
-            }
+            while((char)buf[i] != '{' &&  i != bufSize)
+                ++i;
             for(; i < bufSize; ++i){
                 if((char)buf[i] == '{')
                     ++par;
@@ -70,12 +66,8 @@ public class Network extends Thread {
                 if(par == 0){
                     pushJSONObject(str);
                     str = "";
-                    while((char)buf[i] != '{'){
-                        if(i != bufSize-1)
-                            ++i;
-                        else
-                            break;
-                    }
+                    while((char)buf[i] != '{' && i != bufSize)
+                        ++i;
                 }
             }
         }
