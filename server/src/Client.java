@@ -19,8 +19,10 @@ public class Client extends Thread {
     public enum ClientStatus { NOT_AUTHORIZED, AUTHORIZED, DEAD}
 
     ClientStatus cs;
+    
     int userID;
     String sessionID;
+    String email = "";
     
     Connection conn = null;
     Statement stmt = null;
@@ -103,7 +105,6 @@ public class Client extends Thread {
         String pass = null;
         String sID  = null;
         String sql = "";
-        String email = "";
         byte hash[] = null;
         byte salt[] = null;
         byte digest[] = null;
@@ -134,6 +135,7 @@ public class Client extends Thread {
                     email = rs.getString("email");
                     hash = rs.getBytes("hash");
                     salt = rs.getBytes("salt");
+                    sessionID = rs.getString("session");
                     sendAuth(true);
                     return;
                 }else{
@@ -155,6 +157,14 @@ public class Client extends Thread {
                 email = rs.getString("email");
                 hash = rs.getBytes("hash");
                 salt = rs.getBytes("salt");
+                sessionID = rs.getString("session");
+                if(sessionID == null){
+                    sessionID = Utility.runCommand("openssl rand -base64 24");
+                    try{
+                        sql = "UPDATE users SET session='" + sessionID + "' WHERE id='" + sID + "'";
+                        rs = stmt.executeQuery(sql);
+                    } catch(SQLException e) {}
+                }
             }else{
                 sendAuth(false);
                 return;
@@ -164,7 +174,7 @@ public class Client extends Thread {
         pass += new String(salt);
         md.update(pass.getBytes());
         digest = md.digest();
-
+        
         sendAuth(Arrays.equals(hash,digest));
     }
     
@@ -179,7 +189,6 @@ public class Client extends Thread {
         if(success){
             System.out.println("Success!");
             cs = ClientStatus.AUTHORIZED;
-            sessionID = Utility.runCommand("openssl rand -base64 12");
             json.put("message","auth_success");
             json.put("session",sessionID);
         }else{
