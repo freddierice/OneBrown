@@ -55,7 +55,7 @@ public class Client extends Thread {
             String msg = null;
             while(msg == null){
                 JSONObject json = new JSONObject();
-                json.put("message","login_or_register");
+                json.put("message","query");
                 network.sendJSONObject(json,false);    
                 
                 json = network.pullJSONObject();
