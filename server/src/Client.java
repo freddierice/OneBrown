@@ -168,7 +168,7 @@ public class Client extends Thread {
                     try{
                         sql = "UPDATE users SET session='" + sessionID + "' WHERE id='" + ((Integer)userID).toString() + "'";
                         rs = stmt.executeQuery(sql);
-                    } catch(SQLException e) {
+                    } catch(SQLException ex) {
                         System.out.println("Error while executing UPDATE");
                         System.out.println("userID: " + ((Integer)userID).toString());
                         System.out.println("SQLException: " + ex.getMessage());
