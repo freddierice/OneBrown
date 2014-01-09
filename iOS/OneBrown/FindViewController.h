@@ -7,11 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "NetworkManager.h"
+#import "UserProfileViewController.h"
 
-@interface FindViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate, NetworkManagerDelegate>
-
-@property (nonatomic, weak) NetworkManager *manager; //Keep weak reference to manager for sending data
+@interface FindViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate>
 
 @property (strong, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (strong, nonatomic) IBOutlet UISearchBar *searchBar;

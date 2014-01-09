@@ -288,7 +288,6 @@
     NSLog(@"%@", JSON);
     if ([[JSON objectForKey:@"message"] isEqualToString:@"auth_success"]) {
         [[NSUserDefaults standardUserDefaults] setObject:@YES forKey:@"loggedIn"];
-        [(TabController *)[self presentingViewController] setManager: self.manager];
         [self.presentingViewController dismissViewControllerAnimated:YES completion:NULL];
     }
     else if ([[JSON objectForKey:@"message"] isEqualToString:@"auth_failed"]) {
