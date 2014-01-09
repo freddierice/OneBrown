@@ -15,7 +15,8 @@ all: check_dirs $(SOURCES) $(CLASSES)
 
 #DEPENDENCIES
 $(BUILD_DIR)/$(PACKAGE)/Main.class: $(BUILD_DIR)/$(PACKAGE)/Client.class
-$(BUILD_DIR)/$(PACKAGE)/Client.class: $(BUILD_DIR)/$(PACKAGE)/Utility.class $(BUILD_DIR)/$(PACKAGE)/Network.class
+$(BUILD_DIR)/$(PACKAGE)/Client.class:$(BUILD_DIR)/$(PACKAGE)/Database.class $(BUILD_DIR)/$(PACKAGE)/Utility.class $(BUILD_DIR)/$(PACKAGE)/Network.class
+$(BUILD_DIR)/$(PACKAGE)/Database.class: $(BUILD_DIR)/$(PACKAGE)/Utility.class
 
 #BUILD
 $(BUILD_DIR)/$(PACKAGE)/%.class: $(SRC_DIR)/%.java

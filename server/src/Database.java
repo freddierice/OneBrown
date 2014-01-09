@@ -52,7 +52,7 @@ public class Database {
     {
         try{
             stmt = conn.createStatement();
-            sql = "SELECT * FROM users WHERE session='" + sID + "'";
+            sql = "SELECT * FROM users WHERE session='" + session + "'";
             rs = stmt.executeQuery(sql);
             if(rs.next()){
                 id = rs.getInt("id");
@@ -95,7 +95,7 @@ public class Database {
                 if(session == null){
                     session = Utility.runCommand("openssl rand -base64 24");
                     try{
-                        sql = "UPDATE users SET session='" + sessionID + "' WHERE id='" + ((Integer)userID).toString() + "'";
+                        sql = "UPDATE users SET session='" + session + "' WHERE id='" + ((Integer)id).toString() + "'";
                         stmt.executeUpdate(sql);
                     } catch(SQLException ex) {
                         System.out.println("SQLException: " + ex.getMessage());

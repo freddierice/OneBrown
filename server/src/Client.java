@@ -109,7 +109,7 @@ public class Client extends Thread {
             return;
         }
         
-        if(session != null){
+        if(session != null)
             sendAuth(database.login(session));
         else
             sendAuth(database.login(user,pass));
