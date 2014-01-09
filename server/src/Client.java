@@ -20,10 +20,6 @@ public class Client extends Thread {
 
     ClientStatus cs;
     
-    int userID;
-    String sessionID;
-    String email = "";
-    
     Network network;
     Database database;
      
@@ -48,8 +44,6 @@ public class Client extends Thread {
         else
             return false;
     }
-    
-    
 
     public void run()
     {
@@ -146,7 +140,7 @@ public class Client extends Thread {
             cs = ClientStatus.AUTHORIZED;
             json.put("message","auth_success");
             if(!database.loggedInWithSession)
-                json.put("session",sessionID);
+                json.put("session",database.session);
         }else{
                 System.out.println("Failed!");
                 json.put("message","auth_failed");
