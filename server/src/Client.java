@@ -164,11 +164,14 @@ public class Client extends Thread {
                 salt = rs.getBytes("salt");
                 sessionID = rs.getString("session");
                 if(sessionID == null){
+                    System.out.println("String is null");
                     sessionID = Utility.runCommand("openssl rand -base64 24");
                     try{
                         sql = "UPDATE users SET session='" + sessionID + "' WHERE id='" + sID + "'";
                         rs = stmt.executeQuery(sql);
-                    } catch(SQLException e) {}
+                    } catch(SQLException e) {
+                        System.out.println("Error while executing UPDATE");
+                    }
                 }
             }else{
                 sendAuth(false);
