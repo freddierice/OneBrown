@@ -190,13 +190,11 @@ public class Client extends Thread {
             cs = ClientStatus.AUTHORIZED;
             json.put("message","auth_success");
             if(sessionID == null){
-                if(sessionID == null){
-                    sessionID = Utility.runCommand("openssl rand -base64 24");
-                    try{
-                        String sql = "UPDATE users SET session='" + sessionID + "' WHERE id='" + ((Integer)userID).toString() + "'";
-                        stmt.executeUpdate(sql);
-                    } catch(SQLException ex) {}
-                }
+                sessionID = Utility.runCommand("openssl rand -base64 24");
+                try{
+                    String sql = "UPDATE users SET session='" + sessionID + "' WHERE id='" + ((Integer)userID).toString() + "'";
+                    stmt.executeUpdate(sql);
+                } catch(SQLException ex) {}
                 json.put("session",sessionID);
             }
         }else{
