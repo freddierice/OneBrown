@@ -28,6 +28,12 @@
 @property (nonatomic, weak) UITextField *userField;
 @property (nonatomic, weak) UITextField *passField;
 
+@property (nonatomic, weak) UITextField *enterPassword;
+@property (nonatomic, weak) UITextField *confirmPassword;
+@property (nonatomic, weak) UITextField *enterEmail;
+@property (nonatomic, weak) UIScrollView *scrollView;
+@property (nonatomic, weak) UIButton *registrationButton;
+
 @property (nonatomic, retain) NSArray *loginScreen;
 @property (nonatomic, retain) NSArray *openingScreen;
 @property (nonatomic, retain) NSArray *registerScreen;

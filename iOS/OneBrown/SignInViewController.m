@@ -17,7 +17,7 @@
 
 @implementation SignInViewController
 
-@synthesize manager, userField, passField, overlayView, openingScreen, loginScreen, registerScreen, tintView, activity, signInButton;
+@synthesize manager, userField, passField, overlayView, openingScreen, loginScreen, registerScreen, tintView, activity, signInButton, enterEmail, enterPassword, confirmPassword, scrollView, registrationButton;
 
 - (void)viewDidLoad
 {
@@ -130,6 +130,10 @@
     }
 }
 
+- (void)registerUser {
+    
+}
+
 - (void)overlayViewActivated {
     [self.userField resignFirstResponder];
     [self.passField resignFirstResponder];
@@ -139,8 +143,85 @@
 
 - (void)configureRegistration {
     
-    // Set up registration screen
+    UIScrollView *scroll = [[UIScrollView alloc] initWithFrame:CGRectMake(0+320, 140, 320, 113)];
+    scroll.contentSize = CGSizeMake(320, 113);
+    self.scrollView = scroll;
     
+    UITextField *emailField = [[UITextField alloc] initWithFrame: CGRectMake(35, 0, 145, 31)];
+    emailField.font = [UIFont systemFontOfSize:16.0f];
+    emailField.backgroundColor = [UIColor colorWithWhite:255.0f alpha:0.9f];
+    emailField.borderStyle = UITextBorderStyleRoundedRect;
+    emailField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    emailField.autocorrectionType = UITextAutocorrectionTypeNo;
+    emailField.placeholder = @"Email";
+    emailField.layer.cornerRadius = 5.0f;
+    emailField.delegate = self;
+    self.enterEmail = emailField;
+    
+    
+    
+    UILabel *brown = [[UILabel alloc] initWithFrame:CGRectMake(180, 0, 105, 31)];
+    brown.textColor = [UIColor colorWithRed:211.0f/255.0f green:71.0f/255.0f blue:42.0f/255.0f alpha:1.0f];
+    [brown setText:@" @ brown.edu"];
+    
+    UITextField *password = [[UITextField alloc] initWithFrame: CGRectMake(35, 41, 250, 31)];
+    password.font = [UIFont systemFontOfSize:16.0f];
+    password.backgroundColor = [UIColor colorWithWhite:255.0f alpha:0.9f];
+    password.borderStyle = UITextBorderStyleRoundedRect;
+    password.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    password.autocorrectionType = UITextAutocorrectionTypeNo;
+    password.placeholder = @"Password";
+    password.secureTextEntry = YES;
+    password.layer.cornerRadius = 5.0f;
+    password.delegate = self;
+    self.enterPassword = password;
+    
+    UITextField *confirm = [[UITextField alloc] initWithFrame: CGRectMake(35, 82, 250, 31)];
+    confirm.font = [UIFont systemFontOfSize:16.0f];
+    confirm.backgroundColor = [UIColor colorWithWhite:255.0f alpha:0.9f];
+    confirm.borderStyle = UITextBorderStyleRoundedRect;
+    confirm.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    confirm.autocorrectionType = UITextAutocorrectionTypeNo;
+    confirm.placeholder = @"Confirm Password";
+    confirm.secureTextEntry = YES;
+    confirm.layer.cornerRadius = 5.0f;
+    confirm.delegate = self;
+    self.confirmPassword = confirm;
+    
+    UIButton *registerButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    registerButton.frame = CGRectMake(35+320, 263, 250, 44);
+    registerButton.backgroundColor = [UIColor colorWithRed:211.0f/255.0f green:71.0f/255.0f blue:42.0f/255.0f alpha:1.0f];
+    registerButton.titleLabel.textColor = [UIColor blackColor];
+    registerButton.titleLabel.font = [UIFont systemFontOfSize:20.0f];
+    registerButton.layer.cornerRadius = 5.0f;
+    [registerButton setTitle:@"Register" forState:UIControlStateNormal];
+    self.registrationButton = registerButton;
+    
+    [registerButton addTarget:self action:@selector(registerUser) forControlEvents:UIControlEventTouchUpInside];
+    
+    UILabel *agreement = [[UILabel alloc] initWithFrame:CGRectMake(35+320, 317, 250, 44)];
+    agreement.text = @"By continuing, you are indicating that you have read and agree to the Terms of Service and Privacy Policy.";
+    agreement.lineBreakMode = NSLineBreakByWordWrapping;
+    agreement.font = [UIFont systemFontOfSize:12.0f];
+    agreement.textAlignment = NSTextAlignmentCenter;
+    agreement.textColor = [UIColor whiteColor];
+    agreement.numberOfLines = 0;
+    
+    UIButton *back = [UIButton buttonWithType:UIButtonTypeCustom];
+    back.frame = CGRectMake(20+320, self.view.frame.size.height-64, 44, 44);
+    [back setImage:[UIImage imageNamed:@"backArrow"] forState:UIControlStateNormal];
+    [back addTarget:self action:@selector(animateToChoice) forControlEvents:UIControlEventTouchUpInside];
+    
+    [self.view addSubview:scroll];
+    [self.view addSubview:agreement];
+    [self.view addSubview:back];
+    [self.view addSubview:registerButton];
+    [scroll addSubview:brown];
+    [scroll addSubview:confirm];
+    [scroll addSubview:password];
+    [scroll addSubview:emailField];
+    
+    self.registerScreen = @[scroll, agreement, back, registerButton];
 }
 
 - (void)configureBackground {
@@ -272,9 +353,13 @@
 
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
     
-    self.userField.textColor = [UIColor blackColor];
-    self.passField.textColor = [UIColor blackColor];
-
+    if (textField == self.userField || textField == self.passField) {
+        self.userField.textColor = [UIColor blackColor];
+        self.passField.textColor = [UIColor blackColor];
+    }
+    else if (textField == self.enterEmail || textField == self.enterPassword || textField == self.confirmPassword) {
+        [self.scrollView setFrame:CGRectMake(0, 140, 320, self.view.frame.size.height-140-216)];
+    }
     return YES;
 }
 
@@ -288,6 +373,7 @@
     NSLog(@"%@", JSON);
     if ([[JSON objectForKey:@"message"] isEqualToString:@"auth_success"]) {
         [[NSUserDefaults standardUserDefaults] setObject:@YES forKey:@"loggedIn"];
+        [[NSUserDefaults standardUserDefaults] setObject:[JSON objectForKey:@"session"] forKey:@"sessionID"];
         [self.presentingViewController dismissViewControllerAnimated:YES completion:NULL];
     }
     else if ([[JSON objectForKey:@"message"] isEqualToString:@"auth_failed"]) {
