@@ -27,12 +27,12 @@
     NSMutableArray *messages;
     
     CFStringRef host;
-    NSUInteger port;
+    UInt32 port;
     
 }
 
 @property (nonatomic, assign) CFStringRef host;
-@property (nonatomic, assign) NSUInteger port;
+@property (nonatomic, assign) UInt32 port;
 
 @property (nonatomic, retain) NSMutableArray *messages;
 @property (nonatomic, retain) NSInputStream *inputStream;
@@ -41,7 +41,7 @@
 
 @property (nonatomic, weak) id <NetworkManagerDelegate> delegate;
 
-+(NetworkManager*)networkManagerWithHost: (CFStringRef)host port: (NSUInteger)port;
++(NetworkManager*)networkManagerWithHost: (CFStringRef)host port: (UInt32)port;
 
 -(void)open;
 

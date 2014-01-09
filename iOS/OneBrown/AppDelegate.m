@@ -7,7 +7,6 @@
 //
 
 #import "AppDelegate.h"
-#import "SignInViewController.h"
 
 @implementation AppDelegate
 {
@@ -23,7 +22,7 @@
     defaults = [NSUserDefaults standardUserDefaults];
     
     // Create an NSDictionary with the default settings (for the first time the user enters the app)
-    NSDictionary *defaultSettings = @{@"loggedIn" : @NO};
+    NSDictionary *defaultSettings = @{@"loggedIn" : @NO, @"sessionID":@""};
     
     // register these defaults and synchronize
     [defaults registerDefaults: defaultSettings];

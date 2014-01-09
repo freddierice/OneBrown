@@ -8,6 +8,7 @@
 
 #import "SignInViewController.h"
 #import "LoginLogic.h"
+#import "TabController.h"
 #import <Foundation/Foundation.h>
 
 @interface SignInViewController ()
@@ -16,9 +17,7 @@
 
 @implementation SignInViewController
 
-@synthesize manager, userField, passField, signInButton, overlayView, loginOrRegister, login, signup;
-
-
+@synthesize manager, userField, passField, overlayView, openingScreen, loginScreen, registerScreen, tintView, activity, signInButton, enterEmail, enterPassword, confirmPassword, scrollView, registrationButton;
 
 - (void)viewDidLoad
 {
@@ -33,19 +32,16 @@
     gestureRecognizer.numberOfTouchesRequired = 1;
     [self.overlayView addGestureRecognizer:gestureRecognizer];
     
+    [self configureBackground];
+
     self.overlayView.hidden = YES;
     
-    [self configureBackground];
     [self configureUsernameAndPassword];
     [self configureSignInAndRegister];
     [self configureRegistration];
     [self createNetworkManager];
-    
-    [self.view addSubview:self.overlayView];
-    
-    
     // Brings the temporaryButton to the front so that it can be clicked.
-    [self.view bringSubviewToFront:_temporaryButton];
+    //[self.view bringSubviewToFront:_temporaryButton];
 }
 
 - (void)didReceiveMemoryWarning
@@ -56,37 +52,75 @@
 
 
 - (void)animateToLogin {
+    
+    self.tintView.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.0f];
+    
     [UIView animateWithDuration:0.3f animations:^{
-        [self.loginOrRegister setFrame:CGRectMake(-320, 170, 320, 132)];
-        [self.login setFrame:CGRectMake(0, 150, 320, 382)];
+        for (UIView *view in self.loginScreen) {
+            CGRect frame = view.frame;
+            view.frame = CGRectMake(frame.origin.x-320, frame.origin.y, frame.size.width, frame.size.height);
+        }
+        for (UIView *view in self.openingScreen) {
+            CGRect frame = view.frame;
+            view.frame = CGRectMake(frame.origin.x+320, frame.origin.y, frame.size.width, frame.size.height);
+        }
     }];
 }
 
 - (void)animateToChoice {
     [UIView animateWithDuration:0.3f animations:^{
-        [self.loginOrRegister setFrame:CGRectMake(0, 170, 320, 132)];
-        [self.login setFrame:CGRectMake(320, 150, 320, 382)];
+        
+        self.tintView.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.0f];
+        
+        for (UIView *view in self.loginScreen) {
+            CGRect frame = view.frame;
+            view.frame = CGRectMake(fmodf(frame.origin.x, 320.0f)+320, frame.origin.y, frame.size.width, frame.size.height);
+        }
+        for (UIView *view in self.openingScreen) {
+            CGRect frame = view.frame;
+            view.frame = CGRectMake(frame.origin.x-320, frame.origin.y, frame.size.width, frame.size.height);
+        }
+        for (UIView *view in self.registerScreen) {
+            CGRect frame = view.frame;
+            view.frame = CGRectMake(fmodf(frame.origin.x, 320.0f)+320, frame.origin.y, frame.size.width, frame.size.height);
+        }
     }];
+    self.passField.text = @"";
 }
 
 - (void)animateToRegister {
     
-    // Animate to display registration screen
+    self.tintView.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.2f];
     
+    [UIView animateWithDuration:0.3f animations:^{
+        for (UIView *view in self.registerScreen) {
+            CGRect frame = view.frame;
+            view.frame = CGRectMake(frame.origin.x-320, frame.origin.y, frame.size.width, frame.size.height);
+        }
+        for (UIView *view in self.openingScreen) {
+            CGRect frame = view.frame;
+            view.frame = CGRectMake(frame.origin.x+320, frame.origin.y, frame.size.width, frame.size.height);
+        }
+    }];
 }
 
-
-
-- (void)signIn: (id)sender {
+- (void)signIn {
+    NSLog(@"Sign in");
+    self.userField.backgroundColor = [UIColor colorWithWhite:0.4f alpha:0.9f];
+    self.passField.backgroundColor = [UIColor colorWithWhite:0.4f alpha:0.9f];
+    self.signInButton.enabled = NO;
+    [self.signInButton setTitle:@"" forState:UIControlStateNormal];
+    [self.activity startAnimating];
     
     NSError *e;
-    
     NSData *loginRequest = [NSJSONSerialization dataWithJSONObject:@{@"message":@"login"} options:kNilOptions error:&e];
-    
     NSDictionary *loginInformation = @{@"user":self.userField.text, @"pass":self.passField.text};
-    
     NSData* information = [NSJSONSerialization dataWithJSONObject:loginInformation options:kNilOptions error:&e];
 
+    if (e) {
+        NSLog(@"%@", e);
+    }
+    
     BOOL success = [self.manager writeData:loginRequest];
     if (success) {
         [self.manager writeData:information];
@@ -94,6 +128,10 @@
     else {
         NSLog(@"Error writing to server.");
     }
+}
+
+- (void)registerUser {
+    
 }
 
 - (void)overlayViewActivated {
@@ -105,172 +143,224 @@
 
 - (void)configureRegistration {
     
-    // Set up registration screen
+    UIScrollView *scroll = [[UIScrollView alloc] initWithFrame:CGRectMake(0+320, 140, 320, 113)];
+    scroll.contentSize = CGSizeMake(320, 113);
+    self.scrollView = scroll;
     
+    UITextField *emailField = [[UITextField alloc] initWithFrame: CGRectMake(35, 0, 145, 31)];
+    emailField.font = [UIFont systemFontOfSize:16.0f];
+    emailField.backgroundColor = [UIColor colorWithWhite:255.0f alpha:0.9f];
+    emailField.borderStyle = UITextBorderStyleRoundedRect;
+    emailField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    emailField.autocorrectionType = UITextAutocorrectionTypeNo;
+    emailField.placeholder = @"Email";
+    emailField.layer.cornerRadius = 5.0f;
+    emailField.delegate = self;
+    self.enterEmail = emailField;
+    
+    
+    
+    UILabel *brown = [[UILabel alloc] initWithFrame:CGRectMake(180, 0, 105, 31)];
+    brown.textColor = [UIColor colorWithRed:211.0f/255.0f green:71.0f/255.0f blue:42.0f/255.0f alpha:1.0f];
+    [brown setText:@" @ brown.edu"];
+    
+    UITextField *password = [[UITextField alloc] initWithFrame: CGRectMake(35, 41, 250, 31)];
+    password.font = [UIFont systemFontOfSize:16.0f];
+    password.backgroundColor = [UIColor colorWithWhite:255.0f alpha:0.9f];
+    password.borderStyle = UITextBorderStyleRoundedRect;
+    password.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    password.autocorrectionType = UITextAutocorrectionTypeNo;
+    password.placeholder = @"Password";
+    password.secureTextEntry = YES;
+    password.layer.cornerRadius = 5.0f;
+    password.delegate = self;
+    self.enterPassword = password;
+    
+    UITextField *confirm = [[UITextField alloc] initWithFrame: CGRectMake(35, 82, 250, 31)];
+    confirm.font = [UIFont systemFontOfSize:16.0f];
+    confirm.backgroundColor = [UIColor colorWithWhite:255.0f alpha:0.9f];
+    confirm.borderStyle = UITextBorderStyleRoundedRect;
+    confirm.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    confirm.autocorrectionType = UITextAutocorrectionTypeNo;
+    confirm.placeholder = @"Confirm Password";
+    confirm.secureTextEntry = YES;
+    confirm.layer.cornerRadius = 5.0f;
+    confirm.delegate = self;
+    self.confirmPassword = confirm;
+    
+    UIButton *registerButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    registerButton.frame = CGRectMake(35+320, 263, 250, 44);
+    registerButton.backgroundColor = [UIColor colorWithRed:211.0f/255.0f green:71.0f/255.0f blue:42.0f/255.0f alpha:1.0f];
+    registerButton.titleLabel.textColor = [UIColor blackColor];
+    registerButton.titleLabel.font = [UIFont systemFontOfSize:20.0f];
+    registerButton.layer.cornerRadius = 5.0f;
+    [registerButton setTitle:@"Register" forState:UIControlStateNormal];
+    self.registrationButton = registerButton;
+    
+    [registerButton addTarget:self action:@selector(registerUser) forControlEvents:UIControlEventTouchUpInside];
+    
+    UILabel *agreement = [[UILabel alloc] initWithFrame:CGRectMake(35+320, 317, 250, 44)];
+    agreement.text = @"By continuing, you are indicating that you have read and agree to the Terms of Service and Privacy Policy.";
+    agreement.lineBreakMode = NSLineBreakByWordWrapping;
+    agreement.font = [UIFont systemFontOfSize:12.0f];
+    agreement.textAlignment = NSTextAlignmentCenter;
+    agreement.textColor = [UIColor whiteColor];
+    agreement.numberOfLines = 0;
+    
+    UIButton *back = [UIButton buttonWithType:UIButtonTypeCustom];
+    back.frame = CGRectMake(20+320, self.view.frame.size.height-64, 44, 44);
+    [back setImage:[UIImage imageNamed:@"backArrow"] forState:UIControlStateNormal];
+    [back addTarget:self action:@selector(animateToChoice) forControlEvents:UIControlEventTouchUpInside];
+    
+    [self.view addSubview:scroll];
+    [self.view addSubview:agreement];
+    [self.view addSubview:back];
+    [self.view addSubview:registerButton];
+    [scroll addSubview:brown];
+    [scroll addSubview:confirm];
+    [scroll addSubview:password];
+    [scroll addSubview:emailField];
+    
+    self.registerScreen = @[scroll, agreement, back, registerButton];
 }
 
 - (void)configureBackground {
     
     UIImageView *backgroundView = [[UIImageView alloc] initWithFrame: self.view.frame];
-    
-    [backgroundView setImage:[UIImage imageNamed:@"background"]];
-    
+    backgroundView.image = [UIImage imageNamed:@"background"];
     [self.view addSubview: backgroundView];
     
     UIView *shadingView = [[UIView alloc] initWithFrame: self.view.frame];
-    
-    shadingView.backgroundColor = [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.4f];
-    
+    shadingView.backgroundColor = [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.0f];
     [self.view addSubview:shadingView];
     
-    UIImageView *titleView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 30, 320, 75)];
-    [titleView setImage:[UIImage imageNamed:@"oneBrown"]];
+    self.tintView = shadingView;
     
+    UIImageView *titleView = [[UIImageView alloc] initWithFrame:CGRectMake(32.5, 30, 255, 75)];
+    titleView.image = [UIImage imageNamed:@"one brown logo"];
     [self.view addSubview:titleView];
-    
 }
 
 - (void)configureUsernameAndPassword {
     
-    UIView *loginView = [[UIView alloc] initWithFrame:CGRectMake(320, 150, 320, self.view.frame.size.height-150)];
-    
-    UILabel *usernameLabel = [[UILabel alloc] initWithFrame:CGRectMake(35, 0, 250, 20)];
-    usernameLabel.font = [UIFont systemFontOfSize:16.0f];
-    usernameLabel.textColor = [UIColor whiteColor];
-    
-    usernameLabel.text = @"Username";
-    
-    [loginView addSubview:usernameLabel];
-    
-    UILabel *passwordLabel = [[UILabel alloc] initWithFrame:CGRectMake(35, 74, 250, 20)];
-    passwordLabel.font = [UIFont systemFontOfSize:16.0f];
-    passwordLabel.textColor = [UIColor whiteColor];
-    
-    passwordLabel.text = @"Password";
-    
-    [loginView addSubview:passwordLabel];
-    
-    UITextField *usernameField = [[UITextField alloc] initWithFrame: CGRectMake(35, 20, 250, 44)];
-    UITextField *passwordField = [[UITextField alloc] initWithFrame: CGRectMake(35, 94, 250, 44)];
-    
+    UITextField *usernameField = [[UITextField alloc] initWithFrame: CGRectMake(35+320, 140, 250, 44)];
     usernameField.font = [UIFont systemFontOfSize:20.0f];
-    passwordField.font = [UIFont systemFontOfSize:20.0f];
-    
-    usernameField.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.8f];
-    passwordField.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.8f];
-    
-    usernameField.textColor = [UIColor whiteColor];
-    passwordField.textColor = [UIColor whiteColor];
-    
+    usernameField.backgroundColor = [UIColor colorWithWhite:255.0f alpha:0.9f];
     usernameField.borderStyle = UITextBorderStyleRoundedRect;
-    passwordField.borderStyle = UITextBorderStyleRoundedRect;
-    
     usernameField.autocapitalizationType = UITextAutocapitalizationTypeNone;
     usernameField.autocorrectionType = UITextAutocorrectionTypeNo;
+    usernameField.placeholder = @"Email";
+    usernameField.layer.cornerRadius = 5.0f;
+    usernameField.delegate = self;
+
+    UITextField *passwordField = [[UITextField alloc] initWithFrame: CGRectMake(35+320, 214, 250, 44)];
+    passwordField.font = [UIFont systemFontOfSize:20.0f];
+    passwordField.backgroundColor = [UIColor colorWithWhite:255.0f alpha:0.9f];
+    passwordField.borderStyle = UITextBorderStyleRoundedRect;
     passwordField.autocapitalizationType = UITextAutocapitalizationTypeNone;
     passwordField.autocorrectionType = UITextAutocorrectionTypeNo;
-    
-    usernameField.placeholder = @"Username or Email";
     passwordField.placeholder = @"Password";
-    
     passwordField.secureTextEntry = YES;
-    
-    usernameField.delegate = self;
+    passwordField.layer.cornerRadius = 5.0f;
     passwordField.delegate = self;
     
     self.userField = usernameField;
     self.passField = passwordField;
     
-    [loginView addSubview: usernameField];
-    [loginView addSubview: passwordField];
-    
     UIButton *signIn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [signIn setFrame:CGRectMake(35, 188, 250, 44)];
-    [signIn setTitle:@"Sign In" forState:UIControlStateNormal];
-    [signIn setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.8f]];
-    [signIn.titleLabel setTextColor:[UIColor whiteColor]];
-    [signIn.titleLabel setFont:[UIFont systemFontOfSize:20.0f]];
+    signIn.frame = CGRectMake(35+320, 302, 250, 44);
+    signIn.backgroundColor = [UIColor colorWithRed:211.0f/255.0f green:71.0f/255.0f blue:42.0f/255.0f alpha:1.0f];
+    signIn.titleLabel.textColor = [UIColor blackColor];
+    signIn.titleLabel.font = [UIFont systemFontOfSize:20.0f];
     signIn.layer.cornerRadius = 5.0f;
-    
-    [signIn addTarget:self action:@selector(signIn:) forControlEvents:UIControlEventTouchUpInside];
-    
-    
     self.signInButton = signIn;
     
-    [loginView addSubview:signIn];
+    [signIn setTitle:@"Sign In" forState:UIControlStateNormal];
+    [signIn addTarget:self action:@selector(signIn) forControlEvents:UIControlEventTouchUpInside];
     
     UIButton *back = [UIButton buttonWithType:UIButtonTypeCustom];
-    [back setFrame:CGRectMake(35, self.view.frame.size.height-214, 250, 44)];
-    [back setTitle:@"Back" forState:UIControlStateNormal];
-    [back setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.8f]];
-    [back.titleLabel setTextColor:[UIColor whiteColor]];
-    [back.titleLabel setFont:[UIFont systemFontOfSize:20.0f]];
-    back.layer.cornerRadius = 5.0f;
-    
+    back.frame = CGRectMake(20+320, self.view.frame.size.height-64, 44, 44);
+    [back setImage:[UIImage imageNamed:@"backArrow"] forState:UIControlStateNormal];
     [back addTarget:self action:@selector(animateToChoice) forControlEvents:UIControlEventTouchUpInside];
+
+    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(141.5+320, 313.5, 21, 21)];
+    activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhite;
+    [activityIndicator setHidesWhenStopped:YES];
+    self.activity = activityIndicator;
     
-    [loginView addSubview:back];
+    UIButton *resetPassword = [UIButton buttonWithType:UIButtonTypeCustom];
+    resetPassword.frame = CGRectMake(72.5+320, 265, 175, 30);
+    resetPassword.titleLabel.font = [UIFont systemFontOfSize:16.0f];
+    resetPassword.titleLabel.textColor = [UIColor whiteColor];
+    [resetPassword setTitle:@"Need Help?" forState:UIControlStateNormal];
     
-    self.login = loginView;
+    [self.view addSubview:signIn];
+    [self.view addSubview:back];
+    [self.view addSubview:activityIndicator];
+    [self.view addSubview:resetPassword];
+    [self.view addSubview:usernameField];
+    [self.view addSubview:passwordField];
     
-    [self.view addSubview:self.login];
+    [self.view insertSubview:self.overlayView belowSubview:usernameField];
     
+    self.loginScreen = @[usernameField, passwordField, activityIndicator, resetPassword, signIn, back];
 }
 
 - (void)createNetworkManager {
     
     NetworkManager *nManager = [NetworkManager networkManagerWithHost:(CFStringRef)@"54.200.186.84" port:20000];
-    
     nManager.delegate = self;
-    
     [nManager open];
     
     self.manager = nManager;
-    
 }
 
 - (void)configureSignInAndRegister {
     
-    UIView *buttonView = [[UIView alloc] initWithFrame:CGRectMake(0, 170, 320, 132)];
+    UIImageView *loginCircle = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"loginCircle"]];
+    loginCircle.frame = CGRectMake(102.5, 269, 115, 115);
     
     UIButton *loginButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [loginButton setFrame:CGRectMake(35, 0, 250, 44)];
-    [loginButton setTitle:@"Log In" forState:UIControlStateNormal];
-    [loginButton setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.8f]];
-    [loginButton.titleLabel setTextColor:[UIColor whiteColor]];
-    [loginButton.titleLabel setFont:[UIFont systemFontOfSize:20.0f]];
-    loginButton.layer.cornerRadius = 5.0f;
+    loginButton.frame = CGRectMake(121.5, 314, 77, 25);
+    loginButton.backgroundColor = [UIColor clearColor];
     
+    [loginButton setImage:[UIImage imageNamed:@"loginText"] forState:UIControlStateNormal];
     [loginButton addTarget:self action:@selector(animateToLogin) forControlEvents:UIControlEventTouchUpInside];
     
-    [buttonView addSubview:loginButton];
+    UIImageView *registerCircle = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"registerCircle"]];
+    registerCircle.frame = CGRectMake(102.5, 355, 115, 115);
     
     UIButton *registerButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [registerButton setFrame:CGRectMake(35, 74, 250, 44)];
-    [registerButton setTitle:@"Register" forState:UIControlStateNormal];
-    [registerButton setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.8f]];
-    [registerButton.titleLabel setTextColor:[UIColor whiteColor]];
-    [registerButton.titleLabel setFont:[UIFont systemFontOfSize:20.0f]];
-    registerButton.layer.cornerRadius = 5.0f;
+    registerButton.frame = CGRectMake(114, 400, 92, 25);
+    registerButton.backgroundColor = [UIColor clearColor];
     
+    [registerButton setImage:[UIImage imageNamed:@"registerText"] forState:UIControlStateNormal];
     [registerButton addTarget:self action:@selector(animateToRegister) forControlEvents:UIControlEventTouchUpInside];
     
-    [buttonView addSubview:registerButton];
+    [self.view addSubview:loginCircle];
+    [self.view addSubview:loginButton];
+    [self.view addSubview:registerCircle];
+    [self.view addSubview:registerButton];
     
-    [self.view addSubview:buttonView];
-    
-    self.loginOrRegister = buttonView;
-    
+    self.openingScreen = @[loginCircle, loginButton, registerCircle, registerButton];
 }
 
 #pragma mark - UITextFieldDelegate protocol implementation
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     self.overlayView.hidden = YES;
+}
+
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
     
-    BOOL valid = [LoginLogic validateUsername:self.userField.text] && [LoginLogic validatePassword:self.passField.text];
-    
-    self.signInButton.enabled = (valid) ? YES : NO;
+    if (textField == self.userField || textField == self.passField) {
+        self.userField.textColor = [UIColor blackColor];
+        self.passField.textColor = [UIColor blackColor];
+    }
+    else if (textField == self.enterEmail || textField == self.enterPassword || textField == self.confirmPassword) {
+        [self.scrollView setFrame:CGRectMake(0, 140, 320, self.view.frame.size.height-140-216)];
+    }
+    return YES;
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
@@ -280,7 +370,31 @@
 #pragma mark - NetworkManagerDelegate protocol implementation
 
 -(void)didReceiveJSON:(NSDictionary *)JSON {
-    NSLog(@"%@", JSON); 
+    NSLog(@"%@", JSON);
+    if ([[JSON objectForKey:@"message"] isEqualToString:@"auth_success"]) {
+        [[NSUserDefaults standardUserDefaults] setObject:@YES forKey:@"loggedIn"];
+        [[NSUserDefaults standardUserDefaults] setObject:[JSON objectForKey:@"session"] forKey:@"sessionID"];
+        [self.presentingViewController dismissViewControllerAnimated:YES completion:NULL];
+    }
+    else if ([[JSON objectForKey:@"message"] isEqualToString:@"auth_failed"]) {
+        self.userField.backgroundColor = [UIColor colorWithWhite:1.0f alpha:0.9f];
+        self.passField.backgroundColor = [UIColor colorWithWhite:1.0f alpha:0.9f];
+        self.signInButton.enabled = YES;
+        [self.signInButton setTitle:@"Sign In" forState:UIControlStateNormal];
+        [self.activity stopAnimating];
+
+        CAKeyframeAnimation * anim = [ CAKeyframeAnimation animationWithKeyPath:@"transform" ] ;
+        anim.values = @[ [ NSValue valueWithCATransform3D:CATransform3DMakeTranslation(-5.0f, 0.0f, 0.0f) ], [ NSValue valueWithCATransform3D:CATransform3DMakeTranslation(5.0f, 0.0f, 0.0f) ] ] ;
+        anim.autoreverses = YES ;
+        anim.repeatCount = 2.0f ;
+        anim.duration = 0.07f ;
+        
+        [self.userField.layer addAnimation:anim forKey:nil];
+        [self.passField.layer addAnimation:anim forKey:nil];
+        
+        self.userField.textColor = [UIColor colorWithRed:211.0f/255.0f green:71.0f/255.0f blue:42.0f/255.0f alpha:1.0f];
+        self.passField.textColor = [UIColor colorWithRed:211.0f/255.0f green:71.0f/255.0f blue:42.0f/255.0f alpha:1.0f];
+    }
 }
 
 - (IBAction)clickedTemporaryButton:(id)sender

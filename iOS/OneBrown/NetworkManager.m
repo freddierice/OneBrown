@@ -8,8 +8,6 @@
 
 #import "NetworkManager.h"
 
-#define kNewline [@"\n" dataUsingEncoding: NSUTF8StringEncoding]
-
 @implementation NetworkManager
 
 @synthesize messages;
@@ -20,7 +18,7 @@
 @synthesize host;
 @synthesize port;
 
-+(NetworkManager *)networkManagerWithHost:(CFStringRef)host port:(NSUInteger)port {
++(NetworkManager *)networkManagerWithHost:(CFStringRef)host port:(UInt32)port {
     
     NetworkManager *manager = [NetworkManager new];
     
@@ -72,9 +70,6 @@
 -(BOOL)writeData:(NSData *)msg {
     
     NSUInteger written = [self.outputStream write:[msg bytes] maxLength:[msg length]];
-    
-    [self.outputStream write:[kNewline bytes] maxLength:[kNewline length]];
-    
     return written == [msg length];
 }
 
@@ -109,6 +104,9 @@
     switch (eventCode) {
             
         case NSStreamEventOpenCompleted: {
+            
+            NSLog(@"Opened");
+            
             break;
         }
             
@@ -120,7 +118,7 @@
             if (aStream == self.inputStream) {
                 
                 uint8_t buffer[1024];
-                int len;
+                long len;
                 while ([inputStream hasBytesAvailable]) {
                     len = [inputStream read:buffer maxLength:sizeof(buffer)];
                     if (len > 0) {
