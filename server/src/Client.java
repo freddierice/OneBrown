@@ -167,14 +167,8 @@ public class Client extends Thread {
                     sessionID = Utility.runCommand("openssl rand -base64 24");
                     try{
                         sql = "UPDATE users SET session='" + sessionID + "' WHERE id='" + ((Integer)userID).toString() + "'";
-                        rs = stmt.executeQuery(sql);
-                    } catch(SQLException ex) {
-                        System.out.println("Error while executing UPDATE");
-                        System.out.println("userID: " + ((Integer)userID).toString());
-                        System.out.println("SQLException: " + ex.getMessage());
-                        System.out.println("SQLState: " + ex.getSQLState());
-                        System.out.println("VendorError: " + ex.getErrorCode());
-                    }
+                        rs = stmt.executeUpdate(sql);
+                    } catch(SQLException ex) {}
                 }
             }else{
                 sendAuth(false);
