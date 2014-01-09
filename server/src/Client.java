@@ -167,7 +167,7 @@ public class Client extends Thread {
                     sessionID = Utility.runCommand("openssl rand -base64 24");
                     try{
                         sql = "UPDATE users SET session='" + sessionID + "' WHERE id='" + ((Integer)userID).toString() + "'";
-                        rs = stmt.executeUpdate(sql);
+                        stmt.executeUpdate(sql);
                     } catch(SQLException ex) {}
                 }
             }else{
