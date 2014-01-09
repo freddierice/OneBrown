@@ -163,13 +163,7 @@ public class Client extends Thread {
                 hash = rs.getBytes("hash");
                 salt = rs.getBytes("salt");
                 sessionID = rs.getString("session");
-                if(sessionID == null){
-                    sessionID = Utility.runCommand("openssl rand -base64 24");
-                    try{
-                        sql = "UPDATE users SET session='" + sessionID + "' WHERE id='" + ((Integer)userID).toString() + "'";
-                        stmt.executeUpdate(sql);
-                    } catch(SQLException ex) {}
-                }
+                sendAuth(true);
             }else{
                 sendAuth(false);
                 return;
@@ -195,7 +189,16 @@ public class Client extends Thread {
             System.out.println("Success!");
             cs = ClientStatus.AUTHORIZED;
             json.put("message","auth_success");
-            json.put("session",sessionID);
+            if(sessionID == null){
+                if(sessionID == null){
+                    sessionID = Utility.runCommand("openssl rand -base64 24");
+                    try{
+                        String sql = "UPDATE users SET session='" + sessionID + "' WHERE id='" + ((Integer)userID).toString() + "'";
+                        stmt.executeUpdate(sql);
+                    } catch(SQLException ex) {}
+                }
+                json.put("session",sessionID);
+            }
         }else{
             System.out.println("Failed!");
             json.put("message","auth_failed");
