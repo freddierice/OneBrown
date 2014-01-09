@@ -170,6 +170,10 @@ public class Client extends Thread {
                         rs = stmt.executeQuery(sql);
                     } catch(SQLException e) {
                         System.out.println("Error while executing UPDATE");
+                        System.out.println("userID: " + ((Integer)userID).toString());
+                        System.out.println("SQLException: " + ex.getMessage());
+                        System.out.println("SQLState: " + ex.getSQLState());
+                        System.out.println("VendorError: " + ex.getErrorCode());
                     }
                 }
             }else{
