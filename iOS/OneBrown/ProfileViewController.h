@@ -10,4 +10,5 @@
 
 @interface ProfileViewController : UIViewController
 
+- (IBAction)clickedLogOut:(id)sender;
 @end

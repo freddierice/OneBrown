@@ -7,9 +7,12 @@
 //
 
 #import "ProfileViewController.h"
+#import "SignInViewController.h"
 
 @interface ProfileViewController ()
-
+{
+    NSUserDefaults *defaults;
+}
 @end
 
 @implementation ProfileViewController
@@ -27,6 +30,8 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+    
+    defaults = [NSUserDefaults standardUserDefaults];
 }
 
 - (void)didReceiveMemoryWarning
@@ -40,4 +45,13 @@
     return UIStatusBarStyleLightContent;
 }
 
+- (IBAction)clickedLogOut:(id)sender
+{
+    [defaults setBool:NO forKey:@"loggedIn"];
+    
+    SignInViewController *signIn = [[SignInViewController alloc] init];
+    signIn = [self.storyboard instantiateViewControllerWithIdentifier:@"SignInController"];
+    [self presentViewController:signIn animated:YES completion:nil];
+
+}
 @end
