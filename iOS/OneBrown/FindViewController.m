@@ -127,39 +127,15 @@
     
     [self presentViewController:viewController animated:YES completion:nil];
 
-    //UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main.storyboard" bundle:nil];
-   //UserProfileViewController *viewController = (UserProfileViewController *) self.storyboard instantiateViewControllerWithIdentifier:@"UserProfileController"];
-    
-    //UserProfileViewController *viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"UserProfileController"];
-    
-    
-    
-   // viewController.nameLabel.text = userPictureNames[indexPath.row];
    
-    
-    //[self presentViewController:viewController animated:YES completion:nil];
-    //[self setProfileViewController: userPictureNames[indexPath.row]];
 }
 
 - (void) setProfileViewController: (NSString *) uName
 {
-    //UserProfileViewController *viewController = [[UserProfileViewController alloc] init];
+    
     
     UserProfileViewController *viewController = (UserProfileViewController *) [self.storyboard instantiateViewControllerWithIdentifier:@"UserProfileController"];
-    //UIViewController *viewController = [[UIViewController alloc]init];
-    /*[viewController.view setBackgroundColor: [UIColor colorWithRed:89 green:38 blue:11 alpha:1]];
-    
-    UILabel *nameLabel = [self newLabelWithTitle:uName];
-    [nameLabel setFrame: CGRectMake(50, 50, 200, 50)];
-    
-    [viewController.view addSubview:nameLabel];
-    */
-    
-    //viewController.delegate = self;
-    //viewController.delegate.name = @"cuchirrimin";
-    
-    //=  [self newLabelWithTitle: @"what"];
-   // [viewController.nameLabel setText:@"vali"];
+   
     
     [self presentViewController:viewController animated:YES completion:nil];
 

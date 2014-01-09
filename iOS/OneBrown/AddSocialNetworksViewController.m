@@ -95,31 +95,6 @@ static NSString *TableViewCellIdentifier = @"SNCells";
     return cell;
 }
 
-/*- (UITableViewCellEditingStyle) tableView:( UITableView *) tableView editingStyleForRowAtIndexPath:( NSIndexPath *) indexPath
-{
-    return UITableViewCellEditingStyleDelete;
-}
- 
-
-- (void) setEditing:( BOOL) editing animated:( BOOL) animated
-{
-    [super setEditing:editing animated:animated];
-    
-    [self.tableView setEditing:editing animated:animated];
-}
-
-- (void) tableView:( UITableView *) tableView commitEditingStyle:( UITableViewCellEditingStyle) editingStyle forRowAtIndexPath:( NSIndexPath *) indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete)
-    {
-        //First remove this object from the source
-        [[sharedUserManager.allUserPRequests objectAtIndex: 0 ]removeObjectAtIndex:indexPath.row];
-        // Then remove the associated cell from the Table View
-        [_tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
-        [_tableView reloadData];
-        
-    }
-}*/
 
 // Returns a UILabel with the given NSString.
 - (UILabel *) newLabelWithTitle:( NSString *) paramTitle
