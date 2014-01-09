@@ -135,7 +135,7 @@ public class Client extends Thread {
     
     public void logout()
     {
-        closeSession();
+        database.closeSession();
     }
 
     public void sendAuth(boolean success)
