@@ -163,7 +163,8 @@ public class Client extends Thread {
                 hash = rs.getBytes("hash");
                 salt = rs.getBytes("salt");
                 sessionID = rs.getString("session");
-                if(sessionID.equals("")){
+                if(sessionID == null){
+                    System.out.println("HI");
                     sessionID = Utility.runCommand("openssl rand -base64 24");
                     try{
                         sql = "UPDATE users SET session='" + sessionID + "' WHERE id='" + sID + "'";
