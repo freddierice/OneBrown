@@ -29,7 +29,9 @@ public class Database {
     
     boolean loggedInWithSession = false;
 
-    private Database(Connection conn){}
+    private Database(Connection conn){
+        this.conn = conn;
+    }
     
     public static Database getDatabase()
     {
