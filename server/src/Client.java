@@ -109,6 +109,11 @@ public class Client extends Thread {
         byte salt[] = null;
         byte digest[] = null;
         
+        //get hashing algorithm 
+        try{
+            md = MessageDigest.getInstance("SHA-256");
+        } catch(NoSuchAlgorithmException e){}
+        
         boolean firstTime = true;
         while( (user == null || pass == null) && sID == null ){
             if(!firstTime){
