@@ -123,4 +123,19 @@ public class Database {
         
         return Arrays.equals(hash,digest);
     }
+    
+    public boolean closeSession()
+    {
+        try{
+            sql = "UPDATE users SET session=NULL WHERE id='" + ((Integer)id).toString() + "'";
+            stmt.executeUpdate(sql);
+            return true;
+        } catch(SQLException ex) {
+            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendorError: " + ex.getErrorCode());
+        }
+        
+        return false;
+    }
 }

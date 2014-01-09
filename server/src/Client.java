@@ -58,9 +58,22 @@ public class Client extends Thread {
         authorize();
         
         while(cs.equals(ClientStatus.AUTHORIZED)){
-            JSONObject json = new JSONObject();
-            json.put("message","login_or_register");
-            network.sendJSONObject(json,false);    
+            String msg = null;
+            while(msg == null){
+                JSONObject json = new JSONObject();
+                json.put("message","login_or_register");
+                network.sendJSONObject(json,false);    
+                
+                json = network.pullJSONObject();
+                if(json == null)
+                    continue;
+                msg = (String)json.get("message");
+            }
+            
+            if(msg.equals("logout")){
+                logout();
+                break;
+            }
         }
         
         cs = ClientStatus.DEAD;
@@ -118,6 +131,11 @@ public class Client extends Thread {
     public void register()
     {
         
+    }
+    
+    public void logout()
+    {
+        closeSession();
     }
 
     public void sendAuth(boolean success)
