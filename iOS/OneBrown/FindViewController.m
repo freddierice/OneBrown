@@ -9,6 +9,8 @@
 #import "FindViewController.h"
 #import "SignInViewController.h"
 #import "UserCell.h"
+#import "UserProfileViewController.h"
+#import "UserManager.h"
 
 @interface FindViewController ()
 {
@@ -16,6 +18,7 @@
     NSUserDefaults *defaults;
     NSMutableArray *userPictures;
     NSMutableArray *userPictureNames;
+    UserManager *sharedUserManager;
 }
 
 @end
@@ -37,6 +40,8 @@
 	// Do any additional setup after loading the view.
     defaults = [NSUserDefaults standardUserDefaults];
    
+    sharedUserManager = [UserManager sharedUserManager];
+    
     [self.collectionView setDataSource: self];
     [self.collectionView setDelegate: self];
     
@@ -99,7 +104,6 @@
     
     // Set the appropiate image and name to it.
     [cell.userImageView setImage: userPictures[indexPath.row]];
-    
     [cell.userNameLabel setText: userPictureNames[indexPath.row]];
     
     return cell;
@@ -111,8 +115,46 @@
  */
 - (void) collectionView:(UICollectionView *) cv didHighlightItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    sharedUserManager.stalkedUserName = userPictureNames[indexPath.row];
+    
+    sharedUserManager.stalkedUserImage  = userPictures[indexPath.row];
+    
+    sharedUserManager.stalkedUserNetworks = [NSMutableArray arrayWithObjects:@"Facebook", @"Instagram", @"Twitter", @"Snapchat", @"Vine", @"Tumblr", @"LinkedIn", nil];
+    
+    //sharedUserManager.stalkedUserImage = [userPictures[indexPath.row] image];
+    
+    UserProfileViewController *viewController = (UserProfileViewController *) [self.storyboard instantiateViewControllerWithIdentifier:@"UserProfileController"];
+    
+    [self presentViewController:viewController animated:YES completion:nil];
+
+   
+}
+
+- (void) setProfileViewController: (NSString *) uName
+{
+    
+    
+    UserProfileViewController *viewController = (UserProfileViewController *) [self.storyboard instantiateViewControllerWithIdentifier:@"UserProfileController"];
+   
+    
+    [self presentViewController:viewController animated:YES completion:nil];
+
+    
+    //[viewController.userImageView setImage: userPictures[indexPath.row]];
     
 }
+
+// Returns a UILabel with the given NSString.
+- (UILabel *) newLabelWithTitle:( NSString *) paramTitle
+{
+    UILabel *label = [[ UILabel alloc] initWithFrame:CGRectZero];
+    label.text = paramTitle;
+    label.backgroundColor = [UIColor clearColor];
+    [label sizeToFit];
+    
+    return label;
+}
+
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     UITouch *touch = [[event allTouches] anyObject];

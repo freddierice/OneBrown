@@ -26,6 +26,9 @@
 		597AE6F9187B35BD003FE40E /* FindViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 597AE6F8187B35BD003FE40E /* FindViewController.m */; };
 		597AE6FC187B35D0003FE40E /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 597AE6FB187B35D0003FE40E /* ProfileViewController.m */; };
 		597AE704187B5B02003FE40E /* UserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 597AE703187B5B02003FE40E /* UserCell.m */; };
+		59C2B271187CE293009A70D4 /* UserProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 59C2B270187CE293009A70D4 /* UserProfileViewController.m */; };
+		59C2B275187DC7D5009A70D4 /* UserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 59C2B274187DC7D5009A70D4 /* UserManager.m */; };
+		59C2B278187DEC68009A70D4 /* AddSocialNetworksViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 59C2B277187DEC68009A70D4 /* AddSocialNetworksViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +71,12 @@
 		597AE6FB187B35D0003FE40E /* ProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileViewController.m; sourceTree = "<group>"; };
 		597AE702187B5B02003FE40E /* UserCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserCell.h; path = ../UserCell.h; sourceTree = "<group>"; };
 		597AE703187B5B02003FE40E /* UserCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserCell.m; path = ../UserCell.m; sourceTree = "<group>"; };
+		59C2B26F187CE293009A70D4 /* UserProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserProfileViewController.h; sourceTree = "<group>"; };
+		59C2B270187CE293009A70D4 /* UserProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserProfileViewController.m; sourceTree = "<group>"; };
+		59C2B273187DC7D5009A70D4 /* UserManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserManager.h; sourceTree = "<group>"; };
+		59C2B274187DC7D5009A70D4 /* UserManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserManager.m; sourceTree = "<group>"; };
+		59C2B276187DEC68009A70D4 /* AddSocialNetworksViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddSocialNetworksViewController.h; sourceTree = "<group>"; };
+		59C2B277187DEC68009A70D4 /* AddSocialNetworksViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddSocialNetworksViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -193,10 +202,16 @@
 			children = (
 				597AE6F7187B35BD003FE40E /* FindViewController.h */,
 				597AE6F8187B35BD003FE40E /* FindViewController.m */,
+				59C2B273187DC7D5009A70D4 /* UserManager.h */,
+				59C2B274187DC7D5009A70D4 /* UserManager.m */,
 				597AE6FA187B35D0003FE40E /* ProfileViewController.h */,
 				597AE6FB187B35D0003FE40E /* ProfileViewController.m */,
 				597AE702187B5B02003FE40E /* UserCell.h */,
 				597AE703187B5B02003FE40E /* UserCell.m */,
+				59C2B26F187CE293009A70D4 /* UserProfileViewController.h */,
+				59C2B270187CE293009A70D4 /* UserProfileViewController.m */,
+				59C2B276187DEC68009A70D4 /* AddSocialNetworksViewController.h */,
+				59C2B277187DEC68009A70D4 /* AddSocialNetworksViewController.m */,
 			);
 			name = "Find/Profile ";
 			sourceTree = "<group>";
@@ -298,8 +313,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				59C2B271187CE293009A70D4 /* UserProfileViewController.m in Sources */,
 				4EBA220A1875F9A3000A9BE6 /* AppDelegate.m in Sources */,
+				59C2B275187DC7D5009A70D4 /* UserManager.m in Sources */,
 				4EBA22301875F9E8000A9BE6 /* SignInViewController.m in Sources */,
+				59C2B278187DEC68009A70D4 /* AddSocialNetworksViewController.m in Sources */,
 				4EBA2233187600C5000A9BE6 /* LoginLogic.m in Sources */,
 				597AE6F9187B35BD003FE40E /* FindViewController.m in Sources */,
 				597AE704187B5B02003FE40E /* UserCell.m in Sources */,
