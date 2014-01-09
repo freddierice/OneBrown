@@ -24,10 +24,8 @@ public class Client extends Thread {
     String sessionID;
     String email = "";
     
-    Connection conn = null;
-    Statement stmt = null;
-    
     Network network;
+    Database database;
      
     Client()
     {
@@ -38,52 +36,45 @@ public class Client extends Thread {
         this.cs = ClientStatus.NOT_AUTHORIZED;
         this.network = new Network(sock);
         this.network.start();
+        this.database = Database.getDatabase();
+        if(this.database == null)
+            cs = ClientStatus.DEAD;
     }
     
     public boolean isDead()
     {
-        if(cs == ClientStatus.DEAD)
+        if(cs.equals(ClientStatus.DEAD))
             return true;
         else
             return false;
     }
     
-    public void dbLogin()
-    {
-        try{
-            System.out.print("Connecting to database... ");
-            String url = "jdbc:mysql://127.0.0.1:3306/onebrown";
-            String user = "root";
-            String pass = "df9qfEZVoXl/8MW4";
-            conn = DriverManager.getConnection(url,user,pass);
-        } catch(SQLException ex) {
-            System.out.println("error.");
-            System.out.println("SQLException: " + ex.getMessage());
-            System.out.println("SQLState: " + ex.getSQLState());
-            System.out.println("VendorError: " + ex.getErrorCode());
-            cs = ClientStatus.DEAD;
-        }
-        System.out.println("done!");
-    }
+    
 
     public void run()
     {
-        dbLogin();
+        if(cs.equals(ClientStatus.DEAD))
+            return;
         authorize();
+        
+        while(cs.equals(ClientStatus.AUTHORIZED)){
+            JSONObject json = new JSONObject();
+            json.put("message","login_or_register");
+            network.sendJSONObject(json,false);    
+        }
         
         cs = ClientStatus.DEAD;
     }
 
     public void authorize()
     {
-        while(cs == ClientStatus.NOT_AUTHORIZED){
+        while(cs.equals(ClientStatus.NOT_AUTHORIZED)){
             String msg = null;
             while(msg == null){
                 JSONObject json = new JSONObject();
                 json.put("message","login_or_register");
                 network.sendJSONObject(json,false);    
             
-                //json = (JSONObject)network.getJSONObject(false);
                 json = network.pullJSONObject();
                 if(json == null)
                     continue;
@@ -100,81 +91,28 @@ public class Client extends Thread {
     {
         JSONObject json = new JSONObject();
         MessageDigest md = null;
-        ResultSet rs = null;
         String user = null;
         String pass = null;
-        String sID  = null;
-        String sql = "";
-        byte hash[] = null;
-        byte salt[] = null;
-        byte digest[] = null;
+        String session  = null;
         
-        //get hashing algorithm 
-        try{
-            md = MessageDigest.getInstance("SHA-256");
-        } catch(NoSuchAlgorithmException e){}
+        json = network.pullJSONObject();
+        if(json == null){
+            sendAuth(false);
+            return;
+        }
+        user = (String)json.get("user");
+        pass = (String)json.get("pass");
+        session  = (String)json.get("session");
         
-        boolean firstTime = true;
-        while( (user == null || pass == null) && sID == null ){
-            if(!firstTime){
-                sendAuth(false);
-                return;
-            }
-            firstTime = false;
-            json = network.pullJSONObject();
-            if(json == null)
-                continue;
-            user = (String)json.get("user");
-            pass = (String)json.get("pass");
-            sID  = (String)json.get("session");
+        if( (user == null || pass == null) && session == null ){
+            sendAuth(false);
+            return;
         }
         
-        if(sID != null){
-            
-            try{
-                stmt = conn.createStatement();
-                sql = "SELECT * FROM users WHERE session='" + sID + "'";
-                rs = stmt.executeQuery(sql);
-                if(rs.next()){
-                    userID = rs.getInt("id");
-                    email = rs.getString("email");
-                    hash = rs.getBytes("hash");
-                    salt = rs.getBytes("salt");
-                    sessionID = rs.getString("session");
-                    sendAuth(true);
-                    return;
-                }else{
-                    sendAuth(false);
-                    return;
-                }
-            } catch(SQLException e) {}
-        }
-        
-        //clean input
-        user = Utility.cleanSQL(user); 
-
-        try{
-            stmt = conn.createStatement();
-            sql = "SELECT * FROM users WHERE email='" + user + "'";
-            rs = stmt.executeQuery(sql);
-            if(rs.next()){
-                userID = rs.getInt("id");
-                email = rs.getString("email");
-                hash = rs.getBytes("hash");
-                salt = rs.getBytes("salt");
-                sessionID = rs.getString("session");
-                sendAuth(true);
-            }else{
-                sendAuth(false);
-                return;
-            }
-        } catch(SQLException e) {}
-        
-        pass += new String(salt);
-        md.update(pass.getBytes());
-        digest = md.digest();
-        
-        sendAuth(Arrays.equals(hash,digest));
+        if(session != null){
+            sendAuth(database.login(session));
+        else
+            sendAuth(database.login(user,pass));
     }
     
     public void register()
@@ -189,19 +127,11 @@ public class Client extends Thread {
             System.out.println("Success!");
             cs = ClientStatus.AUTHORIZED;
             json.put("message","auth_success");
-            if(sessionID == null){
-                if(sessionID == null){
-                    sessionID = Utility.runCommand("openssl rand -base64 24");
-                    try{
-                        String sql = "UPDATE users SET session='" + sessionID + "' WHERE id='" + ((Integer)userID).toString() + "'";
-                        stmt.executeUpdate(sql);
-                    } catch(SQLException ex) {}
-                }
+            if(!database.loggedInWithSession)
                 json.put("session",sessionID);
-            }else{
+        }else{
                 System.out.println("Failed!");
                 json.put("message","auth_failed");
-            }
         }
         network.sendJSONObject(json,false);
     }
