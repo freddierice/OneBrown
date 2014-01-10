@@ -12,10 +12,13 @@
 @interface ProfileViewController ()
 {
     NSUserDefaults *defaults;
+    
 }
 @end
 
 @implementation ProfileViewController
+
+@synthesize profileImageView, profileNameLabel;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -32,6 +35,12 @@
 	// Do any additional setup after loading the view.
     
     defaults = [NSUserDefaults standardUserDefaults];
+    
+    profileImageView.layer.cornerRadius = 80;
+    profileImageView.clipsToBounds = YES;
+    profileImageView.layer.borderWidth = 2;
+    //UIColor *brownColor = [UIColor colorWithRed:89 green:38 blue:11 alpha:1];
+    profileImageView.layer.borderColor = [UIColor blackColor].CGColor;
 }
 
 - (void)didReceiveMemoryWarning
@@ -40,10 +49,10 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (UIStatusBarStyle)preferredStatusBarStyle
+/*- (UIStatusBarStyle)preferredStatusBarStyle
 {
     return UIStatusBarStyleLightContent;
-}
+}*/
 
 - (IBAction)clickedLogOut:(id)sender
 {

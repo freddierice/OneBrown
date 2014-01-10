@@ -44,9 +44,8 @@
     userImageView.layer.borderWidth = 2;
     userImageView.layer.borderColor = [UIColor whiteColor].CGColor;
    [userImageView setImage: sharedUserManager.stalkedUserImage];
-    
-    
 }
+
 
 - (void)didReceiveMemoryWarning
 {
@@ -58,6 +57,7 @@
 {
     return UIStatusBarStyleLightContent;
 }
+
 
 - (IBAction)clickedBack:(id)sender
 {
