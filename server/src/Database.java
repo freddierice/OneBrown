@@ -100,6 +100,7 @@ public class Database {
                 salt = rs.getBytes("salt");
                 session = rs.getBytes("session");
                 if(session == null){
+                    System.out.println("Session is null");
                     session = Utility.stringToBase64(Utility.runCommand("openssl rand -base64 32"));
                     try{
                         sql = "UPDATE users SET session='" + session + "' WHERE id='" + ((Integer)id).toString() + "'";
@@ -112,6 +113,7 @@ public class Database {
                     }
                 }
             }else{
+                System.out.println("Could not find the user");
                 return false;
             }
         } catch(SQLException ex) {
@@ -125,6 +127,8 @@ public class Database {
         pass += salt.toString();
         md.update(pass.getBytes());
         digest = md.digest();
+        
+        System.out.println("After digest");
         
         return Arrays.equals(hash,digest);
     }
