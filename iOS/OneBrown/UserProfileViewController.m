@@ -38,7 +38,14 @@
     sharedUserManager = [UserManager sharedUserManager];
     
     nameLabel.text = sharedUserManager.stalkedUserName;
+    
+    userImageView.layer.cornerRadius = 80;
+    userImageView.clipsToBounds = YES;
+    userImageView.layer.borderWidth = 2;
+    userImageView.layer.borderColor = [UIColor whiteColor].CGColor;
    [userImageView setImage: sharedUserManager.stalkedUserImage];
+    
+    
 }
 
 - (void)didReceiveMemoryWarning
