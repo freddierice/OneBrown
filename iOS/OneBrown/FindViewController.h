@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "UserProfileViewController.h"
 
 @interface FindViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate>
 
