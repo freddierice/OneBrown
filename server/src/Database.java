@@ -156,8 +156,11 @@ public class Database {
             return DATABASE_ERR;
         }
         
+        email = user;
+        
         saltString = Utility.runCommand("openssl rand -base64 16");
         salt = Utility.stringToBase64(saltString);
+        
         pass += new String(salt);
         md.update(pass.getBytes());
         hash = md.digest();
