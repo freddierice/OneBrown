@@ -131,9 +131,10 @@ public class Database {
     
     public int addAccount(String user, String pass)
     {
+        String hashString = null;
+        String saltString = null;
         byte hash[] = null;
         byte salt[] = null;
-        byte digest[] = null;
         MessageDigest md = null;
         
         try{
@@ -155,11 +156,14 @@ public class Database {
             return DATABASE_ERR;
         }
         
+        saltString = Utility.runCommand("openssl rand -base64 16");
+        salt = Utility.stringToBase64(saltString);
+        pass += new String(salt);
         md.update(pass.getBytes());
-        digest = md.digest();
+        hash = md.digest();
 
         try{
-            sql = "INSERT INTO users (email,hash,salt) VALUES ('" + email + "',FROM_BASE64('" + Utility.bytesToBase64(hash) + "'),FROM_BASE64('" + Utility.bytesToBase64(salt) + "'))";
+            sql = "INSERT INTO users (email,hash,salt) VALUES ('" + email + "',FROM_BASE64('" + Utility.bytesToBase64(hash) + "'),FROM_BASE64('" + saltString + "'))";
             System.out.println(sql);
             stmt.executeUpdate(sql);
             return NO_ERR;
