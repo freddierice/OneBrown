@@ -124,11 +124,9 @@ public class Database {
         }
         
         user = Utility.cleanSQL(user); 
-        pass += salt.toString();
+        pass += new String(salt);
         md.update(pass.getBytes());
         digest = md.digest();
-        
-        System.out.println("After digest");
         
         return Arrays.equals(hash,digest);
     }
