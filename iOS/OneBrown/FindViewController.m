@@ -106,6 +106,18 @@
     [cell.userImageView setImage: userPictures[indexPath.row]];
     [cell.userNameLabel setText: userPictureNames[indexPath.row]];
     
+    
+    cell.userImageView.layer.cornerRadius = 10;
+    cell.userImageView.clipsToBounds = YES;
+    cell.userImageView.layer.borderWidth = 2;
+    cell.userImageView.layer.borderColor = [UIColor whiteColor].CGColor;
+    
+    cell.fadeView.layer.cornerRadius = 10;
+    cell.fadeView.clipsToBounds = YES;
+    //cell.userImageView.layer.borderWidth = 2;
+    //cell.userImageView.layer.borderColor = [UIColor whiteColor].CGColor;
+
+
     return cell;
 }
 

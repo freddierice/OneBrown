@@ -65,16 +65,16 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="hHw-DZ-bhW">
-                                                    <rect key="frame" x="0.0" y="-1" width="144" height="144"/>
+                                                    <rect key="frame" x="0.0" y="1" width="144" height="141"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 </imageView>
                                                 <view alpha="0.29999999999999966" contentMode="scaleToFill" id="olF-bb-TUQ">
-                                                    <rect key="frame" x="0.0" y="118" width="144" height="26"/>
+                                                    <rect key="frame" x="2" y="118" width="140" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                                                 </view>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.90000000000000002" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Valentin Perez" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="8" adjustsLetterSpacingToFitWidth="YES" id="Ukv-BI-lfT">
-                                                    <rect key="frame" x="0.0" y="117" width="144" height="26"/>
+                                                    <rect key="frame" x="3" y="116" width="140" height="26"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -85,6 +85,7 @@
                                         </view>
                                         <size key="customSize" width="144" height="144"/>
                                         <connections>
+                                            <outlet property="fadeView" destination="olF-bb-TUQ" id="AVX-0g-TEP"/>
                                             <outlet property="userImageView" destination="hHw-DZ-bhW" id="bif-Pe-RD5"/>
                                             <outlet property="userNameLabel" destination="Ukv-BI-lfT" id="D1J-mE-Ogb"/>
                                         </connections>
