@@ -25,7 +25,12 @@ public class Database {
     
     int id;
     String email;
-    String session;
+    byte session[];
+    
+    static final int NO_ERR = 0;
+    static final int ACCOUNT_EXISTS = 1;
+    static final int DATABASE_ERR = 2;
+    
     
     boolean loggedInWithSession = false;
 
@@ -54,12 +59,12 @@ public class Database {
     {
         try{
             stmt = conn.createStatement();
-            sql = "SELECT * FROM users WHERE session='" + session + "'";
+            sql = "SELECT * FROM users WHERE session=FROM_BASE64('" + session + "')";
             rs = stmt.executeQuery(sql);
             if(rs.next()){
                 id = rs.getInt("id");
                 email = rs.getString("email");
-                session = rs.getString("session");
+                this.session = Utility.stringToBase64(session);
                 loggedInWithSession = true;
                 return true;
             }else{
@@ -93,9 +98,9 @@ public class Database {
                 email = rs.getString("email");
                 hash = rs.getBytes("hash");
                 salt = rs.getBytes("salt");
-                session = rs.getString("session");
+                session = rs.getBytes("session");
                 if(session == null){
-                    session = Utility.runCommand("openssl rand -base64 24");
+                    session = Utility.stringToBase64(Utility.runCommand("openssl rand -base64 32"));
                     try{
                         sql = "UPDATE users SET session='" + session + "' WHERE id='" + ((Integer)id).toString() + "'";
                         stmt.executeUpdate(sql);
@@ -117,11 +122,52 @@ public class Database {
         }
         
         user = Utility.cleanSQL(user); 
-        pass += new String(salt);
+        pass += salt.toString();
         md.update(pass.getBytes());
         digest = md.digest();
         
         return Arrays.equals(hash,digest);
+    }
+    
+    public int addAccount(String user, String pass)
+    {
+        byte hash[] = null;
+        byte salt[] = null;
+        byte digest[] = null;
+        MessageDigest md = null;
+        
+        try{
+            md = MessageDigest.getInstance("SHA-256");
+        } catch(NoSuchAlgorithmException e){}
+        
+        try{
+            user = Utility.cleanSQL(user); 
+            stmt = conn.createStatement();
+            sql = "SELECT * FROM users WHERE email='" + user + "'";
+            rs = stmt.executeQuery(sql);
+            if(rs.next()){
+                return ACCOUNT_EXISTS;
+            }
+        } catch(SQLException ex) {
+            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendorError: " + ex.getErrorCode());
+            return DATABASE_ERR;
+        }
+        
+        md.update(pass.getBytes());
+        digest = md.digest();
+
+        try{
+            sql = "INSERT INTO users (email,hash,salt) VALUES ('" + email + "',FROM_BASE64('" + Utility.bytesToBase64(hash) + "'),FROM_BASE64('" + Utility.bytesToBase64(salt) + "'))";
+            stmt.executeUpdate(sql);
+            return NO_ERR;
+        } catch(SQLException ex) {
+            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendorError: " + ex.getErrorCode());
+        }
+        return DATABASE_ERR;
     }
     
     public boolean closeSession()
