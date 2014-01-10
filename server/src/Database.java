@@ -100,7 +100,6 @@ public class Database {
                 salt = rs.getBytes("salt");
                 session = rs.getBytes("session");
                 if(session == null){
-                    System.out.println("Session is null");
                     session = Utility.stringToBase64(Utility.runCommand("openssl rand -base64 32"));
                     try{
                         sql = "UPDATE users SET session='" + session + "' WHERE id='" + ((Integer)id).toString() + "'";
@@ -113,7 +112,6 @@ public class Database {
                     }
                 }
             }else{
-                System.out.println("Could not find the user");
                 return false;
             }
         } catch(SQLException ex) {
@@ -162,6 +160,7 @@ public class Database {
 
         try{
             sql = "INSERT INTO users (email,hash,salt) VALUES ('" + email + "',FROM_BASE64('" + Utility.bytesToBase64(hash) + "'),FROM_BASE64('" + Utility.bytesToBase64(salt) + "'))";
+            System.out.println(sql);
             stmt.executeUpdate(sql);
             return NO_ERR;
         } catch(SQLException ex) {
