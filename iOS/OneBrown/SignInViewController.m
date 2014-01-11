@@ -8,16 +8,38 @@
 
 #import "SignInViewController.h"
 #import "LoginLogic.h"
-#import "TabController.h"
 #import <Foundation/Foundation.h>
 
 @interface SignInViewController ()
+
+@property (nonatomic, weak) UITextField *userField;
+@property (nonatomic, weak) UITextField *passField;
+
+@property (nonatomic, weak) UITextField *enterPassword;
+@property (nonatomic, weak) UITextField *confirmPassword;
+@property (nonatomic, weak) UITextField *enterEmail;
+@property (nonatomic, weak) UIScrollView *scrollView;
+@property (nonatomic, weak) UIButton *registrationButton;
+@property (nonatomic, weak) UIActivityIndicatorView *rActivity;
+@property (nonatomic, weak) UILabel *registrationError;
+@property (nonatomic, weak) UITextField *codeField;
+@property (nonatomic, weak) UIButton *enterCode;
+@property (nonatomic, weak) UILabel *codeError;
+@property (nonatomic, weak) UIButton *resend;
+@property (nonatomic, weak) UIActivityIndicatorView *vActivity;
+
+@property (nonatomic, weak) UIView *tintView;
+
+@property (nonatomic, weak) UILabel *vError;
+
+@property (nonatomic, weak) UIActivityIndicatorView *activity;
+@property (nonatomic, weak) UIButton *signInButton;
 
 @end
 
 @implementation SignInViewController
 
-@synthesize manager, userField, passField, overlayView, openingScreen, loginScreen, registerScreen, tintView, activity, signInButton, enterEmail, enterPassword, confirmPassword, scrollView, registrationButton;
+@synthesize manager, userField, passField, overlayView, openingScreen, loginScreen, registerScreen, tintView, activity, signInButton, enterEmail, enterPassword, confirmPassword, scrollView, registrationButton, rActivity, registrationError, verifyScreen, codeField, codeError, enterCode, resend, vActivity;
 
 - (void)viewDidLoad
 {
@@ -39,6 +61,7 @@
     [self configureUsernameAndPassword];
     [self configureSignInAndRegister];
     [self configureRegistration];
+    [self configureVerifyEmail];
     [self createNetworkManager];
     // Brings the temporaryButton to the front so that it can be clicked.
     //[self.view bringSubviewToFront:_temporaryButton];
@@ -50,10 +73,77 @@
 }
 
 
+- (void)overlayViewActivated {
+    [self.userField resignFirstResponder];
+    [self.passField resignFirstResponder];
+    [self.enterEmail resignFirstResponder];
+    [self.enterPassword resignFirstResponder];
+    [self.confirmPassword resignFirstResponder];
+    [self.codeField resignFirstResponder];
+}
+
+- (void)segueToWelcome {
+    
+    //Testing purposes
+    
+    [self performSegueWithIdentifier:@"goWelcome" sender:self];
+    
+}
+
+- (void)segueToValidate {
+    NSLog(@"Register");
+    
+    CAKeyframeAnimation * anim = [ CAKeyframeAnimation animationWithKeyPath:@"transform" ] ;
+    anim.values = @[ [ NSValue valueWithCATransform3D:CATransform3DMakeTranslation(-5.0f, 0.0f, 0.0f) ], [ NSValue valueWithCATransform3D:CATransform3DMakeTranslation(5.0f, 0.0f, 0.0f) ] ] ;
+    anim.autoreverses = YES ;
+    anim.repeatCount = 2.0f ;
+    anim.duration = 0.07f ;
+    
+    BOOL didFail = NO;
+    
+    if (![self.confirmPassword.text isEqualToString: self.enterPassword.text] || self.enterPassword.text.length == 0 || ![LoginLogic validatePassword:self.enterPassword.text]) {
+        [self.confirmPassword.layer addAnimation:anim forKey:NULL];
+        [self.enterPassword.layer addAnimation:anim forKey:NULL];
+        didFail = YES;
+    }
+    if (self.enterEmail.text.length == 0 || ![LoginLogic validateEmail:self.enterEmail.text]) {
+        [self.enterEmail.layer addAnimation:anim forKey:NULL];
+        didFail = YES;
+    }
+    
+    if (didFail) {return;}
+    
+    [self animateToVerify];
+}
+
+#pragma mark - animation implementation
+
+- (void)animateToVerify {
+    
+    [self.overlayView removeFromSuperview];
+    [self.view insertSubview:self.overlayView belowSubview:self.codeField];
+    
+    [UIView animateWithDuration:0.3f animations:^{
+        
+        [self.overlayView removeFromSuperview];
+        [self.view insertSubview:self.overlayView belowSubview:self.codeField];
+        
+        for (UIView *view in self.verifyScreen) {
+            CGRect frame = view.frame;
+            view.frame = CGRectMake(frame.origin.x-320, frame.origin.y, frame.size.width, frame.size.height);
+        }
+        for (UIView *view in self.registerScreen) {
+            CGRect frame = view.frame;
+            view.frame = CGRectMake(frame.origin.x-320, frame.origin.y, frame.size.width, frame.size.height);
+        }
+    }];
+    
+}
 
 - (void)animateToLogin {
     
-    self.tintView.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.0f];
+    [self.overlayView removeFromSuperview];
+    [self.view insertSubview:self.overlayView belowSubview:self.userField];
     
     [UIView animateWithDuration:0.3f animations:^{
         for (UIView *view in self.loginScreen) {
@@ -62,7 +152,7 @@
         }
         for (UIView *view in self.openingScreen) {
             CGRect frame = view.frame;
-            view.frame = CGRectMake(frame.origin.x+320, frame.origin.y, frame.size.width, frame.size.height);
+            view.frame = CGRectMake(frame.origin.x-320, frame.origin.y, frame.size.width, frame.size.height);
         }
     }];
 }
@@ -70,15 +160,13 @@
 - (void)animateToChoice {
     [UIView animateWithDuration:0.3f animations:^{
         
-        self.tintView.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.0f];
-        
         for (UIView *view in self.loginScreen) {
             CGRect frame = view.frame;
             view.frame = CGRectMake(fmodf(frame.origin.x, 320.0f)+320, frame.origin.y, frame.size.width, frame.size.height);
         }
         for (UIView *view in self.openingScreen) {
             CGRect frame = view.frame;
-            view.frame = CGRectMake(frame.origin.x-320, frame.origin.y, frame.size.width, frame.size.height);
+            view.frame = CGRectMake(frame.origin.x+320, frame.origin.y, frame.size.width, frame.size.height);
         }
         for (UIView *view in self.registerScreen) {
             CGRect frame = view.frame;
@@ -86,11 +174,14 @@
         }
     }];
     self.passField.text = @"";
+    self.enterPassword.text = @"";
+    self.confirmPassword.text = @"";
 }
 
 - (void)animateToRegister {
     
-    self.tintView.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.2f];
+    [self.overlayView removeFromSuperview];
+    [self.view insertSubview:self.overlayView belowSubview:self.scrollView];
     
     [UIView animateWithDuration:0.3f animations:^{
         for (UIView *view in self.registerScreen) {
@@ -99,10 +190,12 @@
         }
         for (UIView *view in self.openingScreen) {
             CGRect frame = view.frame;
-            view.frame = CGRectMake(frame.origin.x+320, frame.origin.y, frame.size.width, frame.size.height);
+            view.frame = CGRectMake(frame.origin.x-320, frame.origin.y, frame.size.width, frame.size.height);
         }
     }];
 }
+
+#pragma mark - server communications
 
 - (void)signIn {
     NSLog(@"Sign in");
@@ -130,13 +223,77 @@
     }
 }
 
-- (void)registerUser {
+- (void)submitCode {
+    NSLog(@"Submit Code");
+    
+    CAKeyframeAnimation * anim = [ CAKeyframeAnimation animationWithKeyPath:@"transform" ] ;
+    anim.values = @[ [ NSValue valueWithCATransform3D:CATransform3DMakeTranslation(-5.0f, 0.0f, 0.0f) ], [ NSValue valueWithCATransform3D:CATransform3DMakeTranslation(5.0f, 0.0f, 0.0f) ] ] ;
+    anim.autoreverses = YES ;
+    anim.repeatCount = 2.0f ;
+    anim.duration = 0.07f ;
+    
+    if (self.codeField.text.length < 6) {
+        [self.codeField.layer addAnimation:anim forKey:NULL];
+        return;
+    }
+    
+    self.codeField.backgroundColor = [UIColor colorWithWhite:0.4f alpha:0.9f];
+    self.enterCode.enabled = NO;
+    [self.enterCode setTitle:@"" forState:UIControlStateNormal];
+    [self.vActivity startAnimating];
+}
+
+- (void)resendCode {
     
 }
 
-- (void)overlayViewActivated {
-    [self.userField resignFirstResponder];
-    [self.passField resignFirstResponder];
+- (void)registerUser {
+    NSLog(@"Register");
+    
+    CAKeyframeAnimation * anim = [ CAKeyframeAnimation animationWithKeyPath:@"transform" ] ;
+    anim.values = @[ [ NSValue valueWithCATransform3D:CATransform3DMakeTranslation(-5.0f, 0.0f, 0.0f) ], [ NSValue valueWithCATransform3D:CATransform3DMakeTranslation(5.0f, 0.0f, 0.0f) ] ] ;
+    anim.autoreverses = YES ;
+    anim.repeatCount = 2.0f ;
+    anim.duration = 0.07f ;
+    
+    BOOL didFail = NO;
+    
+    if (![self.confirmPassword.text isEqualToString: self.enterPassword.text] || self.enterPassword.text.length == 0 || ![LoginLogic validatePassword:self.enterPassword.text]) {
+        [self.confirmPassword.layer addAnimation:anim forKey:NULL];
+        [self.enterPassword.layer addAnimation:anim forKey:NULL];
+        didFail = YES;
+    }
+    if (self.enterEmail.text.length == 0 || ![LoginLogic validateEmail:self.enterEmail.text]) {
+        [self.enterEmail.layer addAnimation:anim forKey:NULL];
+        didFail = YES;
+    }
+    
+    if (didFail) {return;}
+    
+    self.enterPassword.backgroundColor = [UIColor colorWithWhite:0.4f alpha:0.9f];
+    self.enterEmail.backgroundColor = [UIColor colorWithWhite:0.4f alpha:0.9f];
+    self.confirmPassword.backgroundColor = [UIColor colorWithWhite:0.4f alpha:0.9f];
+    self.registrationButton.enabled = NO;
+    [self.registrationButton setTitle:@"" forState:UIControlStateNormal];
+    [self.rActivity startAnimating];
+    
+    NSError *e;
+    NSData *loginRequest = [NSJSONSerialization dataWithJSONObject:@{@"message":@"register"} options:kNilOptions error:&e];
+    NSDictionary *registerInformation = @{@"user":self.enterEmail.text, @"pass":self.enterPassword.text};
+    NSData* information = [NSJSONSerialization dataWithJSONObject:registerInformation options:kNilOptions error:&e];
+    
+    if (e) {
+        NSLog(@"%@", e);
+    }
+    
+    BOOL success = [self.manager writeData:loginRequest];
+    if (success) {
+        [self.manager writeData:information];
+    }
+    else {
+        NSLog(@"Error writing to server.");
+    }
+
 }
 
 #pragma mark - configuration
@@ -146,6 +303,11 @@
     UIScrollView *scroll = [[UIScrollView alloc] initWithFrame:CGRectMake(0+320, 140, 320, 113)];
     scroll.contentSize = CGSizeMake(320, 113);
     self.scrollView = scroll;
+    
+    UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(overlayViewActivated)];
+    recognizer.numberOfTapsRequired = 1;
+    recognizer.numberOfTouchesRequired = 1;
+    [scroll addGestureRecognizer:recognizer];
     
     UITextField *emailField = [[UITextField alloc] initWithFrame: CGRectMake(35, 0, 145, 31)];
     emailField.font = [UIFont systemFontOfSize:16.0f];
@@ -158,10 +320,8 @@
     emailField.delegate = self;
     self.enterEmail = emailField;
     
-    
-    
     UILabel *brown = [[UILabel alloc] initWithFrame:CGRectMake(180, 0, 105, 31)];
-    brown.textColor = [UIColor colorWithRed:211.0f/255.0f green:71.0f/255.0f blue:42.0f/255.0f alpha:1.0f];
+    brown.textColor = [UIColor blackColor];
     [brown setText:@" @ brown.edu"];
     
     UITextField *password = [[UITextField alloc] initWithFrame: CGRectMake(35, 41, 250, 31)];
@@ -188,6 +348,11 @@
     confirm.delegate = self;
     self.confirmPassword = confirm;
     
+    UIActivityIndicatorView *registerActivity = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(141.5+320, 274.5, 21, 21)];
+    registerActivity.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhite;
+    [registerActivity setHidesWhenStopped:YES];
+    self.rActivity = registerActivity;
+    
     UIButton *registerButton = [UIButton buttonWithType:UIButtonTypeCustom];
     registerButton.frame = CGRectMake(35+320, 263, 250, 44);
     registerButton.backgroundColor = [UIColor colorWithRed:211.0f/255.0f green:71.0f/255.0f blue:42.0f/255.0f alpha:1.0f];
@@ -197,7 +362,9 @@
     [registerButton setTitle:@"Register" forState:UIControlStateNormal];
     self.registrationButton = registerButton;
     
-    [registerButton addTarget:self action:@selector(registerUser) forControlEvents:UIControlEventTouchUpInside];
+  //  [registerButton addTarget:self action:@selector(registerUser) forControlEvents:UIControlEventTouchUpInside];
+    
+    [registerButton addTarget:self action:@selector(segueToValidate) forControlEvents:UIControlEventTouchUpInside];
     
     UILabel *agreement = [[UILabel alloc] initWithFrame:CGRectMake(35+320, 317, 250, 44)];
     agreement.text = @"By continuing, you are indicating that you have read and agree to the Terms of Service and Privacy Policy.";
@@ -212,16 +379,27 @@
     [back setImage:[UIImage imageNamed:@"backArrow"] forState:UIControlStateNormal];
     [back addTarget:self action:@selector(animateToChoice) forControlEvents:UIControlEventTouchUpInside];
     
+    UILabel *error = [[UILabel alloc] initWithFrame:CGRectMake(35+320, 370, 250, 44)];
+    error.text = @"We were unable to register you at this time. Please try again later.";
+    error.lineBreakMode = NSLineBreakByWordWrapping;
+    error.textAlignment = NSTextAlignmentCenter;
+    error.textColor = [UIColor colorWithRed:211.0f/255.0f green:71.0f/255.0f blue:42.0f/255.0f alpha:1.0f];
+    error.numberOfLines = 0;
+    error.hidden = YES;
+    self.registrationError = error;
+    
     [self.view addSubview:scroll];
     [self.view addSubview:agreement];
     [self.view addSubview:back];
     [self.view addSubview:registerButton];
+    [self.view addSubview:registerActivity];
+    [self.view addSubview:error];
     [scroll addSubview:brown];
     [scroll addSubview:confirm];
     [scroll addSubview:password];
     [scroll addSubview:emailField];
     
-    self.registerScreen = @[scroll, agreement, back, registerButton];
+    self.registerScreen = @[scroll, agreement, back, registerButton, registerActivity];
 }
 
 - (void)configureBackground {
@@ -239,6 +417,77 @@
     UIImageView *titleView = [[UIImageView alloc] initWithFrame:CGRectMake(32.5, 30, 255, 75)];
     titleView.image = [UIImage imageNamed:@"one brown logo"];
     [self.view addSubview:titleView];
+}
+
+- (void)configureVerifyEmail {
+    
+    UILabel *informationLabel = [[UILabel alloc] initWithFrame: CGRectMake(35+320, 140, 250, 44)];
+    informationLabel.text = @"Enter the six-digit verification code we just emailed you:";
+    informationLabel.textAlignment = NSTextAlignmentCenter;
+    informationLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    informationLabel.numberOfLines = 0;
+    informationLabel.font = [UIFont boldSystemFontOfSize:18.0f];
+    informationLabel.textColor = [UIColor whiteColor];
+    informationLabel.layer.cornerRadius = 5.0f;
+    
+    UITextField *code = [[UITextField alloc] initWithFrame: CGRectMake(35+320, 190, 250, 44)];
+    code.font = [UIFont boldSystemFontOfSize:25.0f];
+    code.backgroundColor = [UIColor colorWithWhite:255.0f alpha:0.9f];
+    code.borderStyle = UITextBorderStyleRoundedRect;
+    code.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    code.autocorrectionType = UITextAutocorrectionTypeNo;
+    code.layer.cornerRadius = 5.0f;
+    code.keyboardType = UIKeyboardTypeNumberPad;
+    code.textAlignment = NSTextAlignmentCenter;
+    code.delegate = self;
+    self.codeField = code;
+    
+    UIButton *submitCode = [UIButton buttonWithType:UIButtonTypeCustom];
+    submitCode.frame = CGRectMake(35+320, 242, 250, 44);
+    submitCode.backgroundColor = [UIColor colorWithRed:211.0f/255.0f green:71.0f/255.0f blue:42.0f/255.0f alpha:1.0f];
+    submitCode.titleLabel.textColor = [UIColor blackColor];
+    submitCode.titleLabel.font = [UIFont systemFontOfSize:20.0f];
+    submitCode.layer.cornerRadius = 5.0f;
+    [submitCode setTitle:@"Submit" forState:UIControlStateNormal];
+    self.enterCode = submitCode;
+    
+    [submitCode addTarget:self action:@selector(segueToWelcome) forControlEvents:UIControlEventTouchUpInside];
+    
+    UILabel *resendCode = [[UILabel alloc] initWithFrame:CGRectMake(85+320, 295, 150, 75)];
+    resendCode.text = @"Can't find the code? It may take a few minutes to arrive. You can also resend it:";
+    resendCode.lineBreakMode = NSLineBreakByWordWrapping;
+    resendCode.numberOfLines = 0;
+    resendCode.textAlignment = NSTextAlignmentCenter;
+    resendCode.textColor = [UIColor whiteColor];
+    
+    UIButton *resendButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    resendButton.frame = CGRectMake(35+320, 380, 250, 44);
+    resendButton.backgroundColor = [UIColor colorWithRed:211.0f/255.0f green:71.0f/255.0f blue:42.0f/255.0f alpha:1.0f];
+    resendButton.titleLabel.textColor = [UIColor blackColor];
+    resendButton.titleLabel.font = [UIFont systemFontOfSize:20.0f];
+    resendButton.layer.cornerRadius = 5.0f;
+    [resendButton setTitle:@"Resend" forState:UIControlStateNormal];
+    self.resend = submitCode;
+    
+    UILabel *error = [[UILabel alloc] initWithFrame: CGRectMake(35+320, 430, 320, 44)];
+    error.text = @"We couldn't verify you.";
+    error.hidden = YES;
+    self.vError = error;
+    
+    UIActivityIndicatorView *verifyIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(141.5+320, 253.5, 21, 21)];
+    verifyIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhite;
+    [verifyIndicator setHidesWhenStopped:YES];
+    self.vActivity = verifyIndicator;
+    
+    [self.view addSubview:error];
+    [self.view addSubview:informationLabel];
+    [self.view addSubview:code];
+    [self.view addSubview:submitCode];
+    [self.view addSubview:resendCode];
+    [self.view addSubview:resendButton];
+    [self.view addSubview:verifyIndicator];
+    
+    self.verifyScreen = @[informationLabel, code, submitCode, resendCode, resendButton, error, verifyIndicator];
 }
 
 - (void)configureUsernameAndPassword {
@@ -301,8 +550,6 @@
     [self.view addSubview:usernameField];
     [self.view addSubview:passwordField];
     
-    [self.view insertSubview:self.overlayView belowSubview:usernameField];
-    
     self.loginScreen = @[usernameField, passwordField, activityIndicator, resetPassword, signIn, back];
 }
 
@@ -347,8 +594,30 @@
 
 #pragma mark - UITextFieldDelegate protocol implementation
 
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    
+    if (textField == self.codeField) {
+        NSUInteger newLength = [textField.text length] + [string length] - range.length;
+        return (newLength > 6) ? NO : YES;
+    }
+    return YES;
+}
+
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     self.overlayView.hidden = YES;
+    
+    if (textField == self.enterPassword || textField == self.confirmPassword) {
+        
+        if (![self.confirmPassword.text isEqualToString: self.enterPassword.text] && self.confirmPassword.text.length > 0 && self.enterPassword.text.length > 0) {
+         
+            self.enterPassword.textColor = [UIColor colorWithRed:211.0f/255.0f green:71.0f/255.0f blue:42.0f/255.0f alpha:1.0f];
+            self.confirmPassword.textColor = [UIColor colorWithRed:211.0f/255.0f green:71.0f/255.0f blue:42.0f/255.0f alpha:1.0f];
+        }
+        else {
+            self.enterPassword.textColor = [UIColor blackColor];
+            self.confirmPassword.textColor = [UIColor blackColor];
+        }
+    }
 }
 
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
@@ -394,6 +663,37 @@
         
         self.userField.textColor = [UIColor colorWithRed:211.0f/255.0f green:71.0f/255.0f blue:42.0f/255.0f alpha:1.0f];
         self.passField.textColor = [UIColor colorWithRed:211.0f/255.0f green:71.0f/255.0f blue:42.0f/255.0f alpha:1.0f];
+    }
+    else if ([[JSON objectForKey:@"message"] isEqualToString:@"reg_success"]) {
+        
+        [self animateToVerify];
+        
+    }
+    else if ([[JSON objectForKey:@"message"] isEqualToString:@"reg_failed"]) {
+        self.enterPassword.backgroundColor = [UIColor colorWithWhite:1.0f alpha:0.9f];
+        self.enterEmail.backgroundColor = [UIColor colorWithWhite:1.0f alpha:0.9f];
+        self.confirmPassword.backgroundColor = [UIColor colorWithWhite:1.0f alpha:0.9f];
+        self.registrationButton.enabled = YES;
+        [self.registrationButton setTitle:@"Register" forState:UIControlStateNormal];
+        [self.rActivity stopAnimating];
+        
+        self.registrationError.hidden = NO;
+    }
+    
+    else if ([[JSON objectForKey:@"message"] isEqualToString:@"verify_success"]) {
+        
+        NSLog(@"Verification succeeded! Now the code actually should do something.");
+        [self performSegueWithIdentifier:@"goWelcome" sender:self];
+        
+    }
+    
+    else if ([[JSON objectForKey:@"message"] isEqualToString:@"verify_failed"]) {
+        
+        self.codeField.backgroundColor = [UIColor colorWithWhite:0.4f alpha:0.9f];
+        self.enterCode.enabled = NO;
+        [self.enterCode setTitle:@"" forState:UIControlStateNormal];
+        [self.vActivity startAnimating];
+        self.vError.hidden = NO;
     }
 }
 

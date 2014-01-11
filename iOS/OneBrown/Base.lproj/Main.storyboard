@@ -28,7 +28,7 @@
                     <navigationItem key="navigationItem" id="ICL-Eb-KRn"/>
                     <connections>
                         <outlet property="temporaryButton" destination="FrL-fN-sgT" id="BLS-kg-nC8"/>
-                        <segue destination="Fz5-9F-TwB" kind="push" identifier="enterInformation" id="Iij-0t-bmk"/>
+                        <segue destination="Fz5-9F-TwB" kind="modal" identifier="goWelcome" id="Iij-0t-bmk"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
@@ -235,16 +235,49 @@
             </objects>
             <point key="canvasLocation" x="665" y="1098"/>
         </scene>
-        <!--View Controller-->
+        <!--Welcome View Controller-->
         <scene sceneID="KmS-s9-72J">
             <objects>
-                <viewController id="Fz5-9F-TwB" sceneMemberID="viewController">
+                <viewController id="Fz5-9F-TwB" customClass="WelcomeViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="SBj-Mp-AC3">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="BrownTreeBlurred" id="DgD-xT-dYq">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="one brown logo" id="5rQ-lZ-gA4">
+                                <rect key="frame" x="33" y="30" width="255" height="75"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="addStuff" id="Osg-ZP-kDI">
+                                <rect key="frame" x="35" y="130" width="250" height="100"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="findPeople" id="Oj0-cm-XRL">
+                                <rect key="frame" x="35" y="228" width="250" height="75"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="followus" id="BDV-R4-hCM">
+                                <rect key="frame" x="35" y="328" width="250" height="100"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="40S-Cc-IgW">
+                                <rect key="frame" x="35" y="419" width="250" height="44"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.82745098039215681" green="0.27843137254901962" blue="0.16470588235294117" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="15"/>
+                                <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="Get Started"/>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="eaL-Pw-fUr"/>
+                    <connections>
+                        <outlet property="getStartedButton" destination="40S-Cc-IgW" id="dSY-1l-XkN"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bnh-4z-qqb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -361,6 +394,9 @@
         <image name="IconProfile" width="32" height="32"/>
         <image name="IconSearch" width="32" height="32"/>
         <image name="Valentin Perez" width="1095" height="1277"/>
+        <image name="addStuff" width="250" height="101"/>
+        <image name="findPeople" width="250" height="75"/>
+        <image name="followus" width="250" height="101"/>
         <image name="one brown logo" width="4274" height="1507"/>
     </resources>
     <color key="tintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>

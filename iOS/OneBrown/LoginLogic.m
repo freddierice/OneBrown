@@ -18,4 +18,8 @@
     return YES;
 }
 
++ (BOOL)validateEmail:(NSString *)email {
+    return YES;
+}
+
 @end

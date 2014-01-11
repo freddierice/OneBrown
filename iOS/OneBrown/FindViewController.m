@@ -63,8 +63,9 @@
 
 -(void)viewDidAppear:(BOOL)animated
 {
+    
     // Show the sign up/log in view if the user is not loggedIn
-    if(![defaults boolForKey:@"loggedIn"])
+    if([[defaults objectForKey:@"sessionID"] isEqualToString:@""])
     {
         SignInViewController *signIn = [[SignInViewController alloc] init];
         signIn = [self.storyboard instantiateViewControllerWithIdentifier:@"SignInController"];
