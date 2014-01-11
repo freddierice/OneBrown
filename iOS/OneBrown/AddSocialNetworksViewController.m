@@ -15,6 +15,7 @@ static NSString *TableViewCellIdentifier = @"SNCells";
 {
     UserManager *sharedUserManager;
     NSUserDefaults *defaults;
+    NSMutableArray *socialNetworkImages;
 }
 @end
 
@@ -40,6 +41,8 @@ static NSString *TableViewCellIdentifier = @"SNCells";
     [self.tableView setDataSource:self];
     
     [self.tableView registerClass:[ UITableViewCell class] forCellReuseIdentifier:TableViewCellIdentifier];
+    
+    socialNetworkImages = [NSMutableArray arrayWithObjects:[UIImage imageNamed:@"facebookIcon"], [UIImage imageNamed:@"twitterIcon"], [UIImage imageNamed:@"instagramIcon"], [UIImage imageNamed:@"snapchatIcon"], [UIImage imageNamed:@"vineIcon"], [UIImage imageNamed:@"linkedinIcon"], nil];
     
     /* Make sure our table view resizes correctly */
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -83,13 +86,15 @@ static NSString *TableViewCellIdentifier = @"SNCells";
         
         cell = [tableView dequeueReusableCellWithIdentifier: TableViewCellIdentifier forIndexPath:indexPath];
         
-        cell.imageView.image = [UIImage imageNamed:@"IconProfile"];
+        cell.imageView.image = socialNetworkImages[indexPath.row];
         //cell.userInteractionEnabled = NO;
         cell.textLabel.text = [sharedUserManager.stalkedUserNetworks objectAtIndex: indexPath.row];
         
+        [cell.textLabel setContentMode:UIViewContentModeRight];
+        
         [cell.textLabel setFont: [UIFont fontWithName:@"Helvetica" size:12 ]];
     
-        [cell setBackgroundColor:[UIColor grayColor]];
+        [cell setBackgroundColor:[UIColor clearColor]];
         
     }
     return cell;

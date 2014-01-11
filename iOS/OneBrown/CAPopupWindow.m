@@ -27,15 +27,17 @@
         self.layer.cornerRadius = 4.0f;
         self.layer.borderWidth = 1.0f;
         
-        UILabel* label = [[UILabel alloc] initWithFrame:CGRectMake(0, 64, 88, 20)];
+        
+        UILabel* label = [[UILabel alloc] initWithFrame:CGRectMake(0, 62, 88, 20)];
         [self.contentView addSubview:label];
         [label setTextAlignment:NSTextAlignmentCenter];
         [label setBackgroundColor:[UIColor clearColor]];
         [label setTextColor:[UIColor whiteColor]];
-        [label setFont:[UIFont systemFontOfSize:20]];
+        [label setFont:[UIFont systemFontOfSize:19]];
         self.text = label;
         
-        UIImageView* imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 88, 60)];
+        UIImageView* imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 4, 88, 58)];
+        [imageView setContentMode: UIViewContentModeScaleAspectFit];
         [self.contentView addSubview:imageView];
         self.image = imageView;
     }
@@ -171,7 +173,7 @@
     [UIView animateWithDuration:0.2
                      animations:^(void) {
                          
-                         self.alpha = 0.8f;
+                         self.alpha = 1.0f;
                          opacityLayer.alpha = 0.4f;
                          
                      } completion:NULL];

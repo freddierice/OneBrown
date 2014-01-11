@@ -60,12 +60,13 @@
 
 -(void)buttonPress {
     
-    CAPopupWindow* popView = [[CAPopupWindow alloc] initWithObjectList:@[[CAWindowObject windowObject:@"Save" image:nil target:self action:@selector(say)],
-                                                                         [CAWindowObject windowObject:@"Share" image:nil target:nil action:nil],
-                                                                         [CAWindowObject windowObject:@"Delete" image:nil target:nil action:nil],
-                                                                         [CAWindowObject windowObject:@"Undo" image:nil target:nil action:nil],
-                                                                         [CAWindowObject windowObject:@"Redo" image:nil target:nil action:nil],
-                                                                         [CAWindowObject windowObject:@"New" image:nil target:nil action:nil]]];
+    CAPopupWindow* popView = [[CAPopupWindow alloc] initWithObjectList:@[
+                                                                         [CAWindowObject windowObject:@"Facebook" image:[UIImage imageNamed:@"facebookIcon"] target:nil action:nil],
+                                                                         [CAWindowObject windowObject:@"Twitter" image:[UIImage imageNamed:@"twitterIcon"] target:nil action:nil],
+                                                                         [CAWindowObject windowObject:@"Instagram" image:[UIImage imageNamed:@"instagramIcon"] target:nil action:nil],
+                                                                         [CAWindowObject windowObject:@"Snapchat" image:[UIImage imageNamed:@"snapchatIcon"] target:nil action:nil],
+                                                                         [CAWindowObject windowObject:@"Vine" image:[UIImage imageNamed:@"vineIcon"] target:nil action:nil],
+                                                                         [CAWindowObject windowObject:@"LinkedIn" image:[UIImage imageNamed:@"linkedinIcon"] target:nil action:nil]]];
     [popView presentInView:self.view];
     
 }

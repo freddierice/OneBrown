@@ -131,7 +131,7 @@
     
     sharedUserManager.stalkedUserImage  = userPictures[indexPath.row];
     
-    sharedUserManager.stalkedUserNetworks = [NSMutableArray arrayWithObjects:@"Facebook", @"Instagram", @"Twitter", @"Snapchat", @"Vine", @"Tumblr", @"LinkedIn", nil];
+    sharedUserManager.stalkedUserNetworks = [NSMutableArray arrayWithObjects:@"Facebook", @"Instagram", @"Twitter", @"Snapchat", @"Vine", @"LinkedIn", nil];
     
     //sharedUserManager.stalkedUserImage = [userPictures[indexPath.row] image];
     
