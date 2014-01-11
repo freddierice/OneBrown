@@ -247,15 +247,13 @@
                                 <state key="normal">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
-                                <connections>
-                                    <segue destination="JP5-pu-22B" kind="modal" modalTransitionStyle="crossDissolve" id="82O-ba-4mD"/>
-                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Profile" image="IconProfile" id="xQz-uk-1pX"/>
                     <connections>
+                        <outlet property="addButton" destination="WrD-14-DDQ" id="h5t-iB-Z6I"/>
                         <outlet property="profileImageView" destination="pgL-vk-rhJ" id="eWe-pm-YpT"/>
                         <outlet property="profileNameLabel" destination="LVV-wX-xur" id="nmO-Hh-6bw"/>
                     </connections>

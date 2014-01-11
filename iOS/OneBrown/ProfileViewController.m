@@ -8,6 +8,7 @@
 
 #import "ProfileViewController.h"
 #import "SignInViewController.h"
+#import "CAPopupWindow.h"
 
 @interface ProfileViewController ()
 {
@@ -41,6 +42,9 @@
     profileImageView.layer.borderWidth = 2;
     //UIColor *brownColor = [UIColor colorWithRed:89 green:38 blue:11 alpha:1];
     profileImageView.layer.borderColor = [UIColor whiteColor].CGColor;
+    
+    [self.addButton addTarget:self action:@selector(buttonPress) forControlEvents:UIControlEventTouchUpInside];
+
 }
 
 - (void)didReceiveMemoryWarning
@@ -53,6 +57,23 @@
 {
     return UIStatusBarStyleLightContent;
 }
+
+-(void)buttonPress {
+    
+    CAPopupWindow* popView = [[CAPopupWindow alloc] initWithObjectList:@[[CAWindowObject windowObject:@"Save" image:nil target:self action:@selector(say)],
+                                                                         [CAWindowObject windowObject:@"Share" image:nil target:nil action:nil],
+                                                                         [CAWindowObject windowObject:@"Delete" image:nil target:nil action:nil],
+                                                                         [CAWindowObject windowObject:@"Undo" image:nil target:nil action:nil],
+                                                                         [CAWindowObject windowObject:@"Redo" image:nil target:nil action:nil],
+                                                                         [CAWindowObject windowObject:@"New" image:nil target:nil action:nil]]];
+    [popView presentInView:self.view];
+    
+}
+
+-(void) say {
+    NSLog(@"Hi!");
+}
+
 
 - (IBAction)clickedLogOut:(id)sender
 {

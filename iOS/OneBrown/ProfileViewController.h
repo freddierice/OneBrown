@@ -18,4 +18,5 @@
 @property (strong, nonatomic) IBOutlet UILabel *profileNameLabel;
 
 - (IBAction)clickedLogOut:(id)sender;
+@property (strong, nonatomic) IBOutlet UIButton *addButton;
 @end
