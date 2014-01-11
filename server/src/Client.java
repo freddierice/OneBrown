@@ -162,7 +162,7 @@ public class Client extends Thread {
             cs = ClientStatus.AUTHORIZED;
             json.put("message","auth_success");
             if(!database.loggedInWithSession)
-                json.put("session",database.session);
+                json.put("session",Utility.bytesToBase64(database.session));
         }else{
                 System.out.println("Failed!");
                 json.put("message","auth_failed");

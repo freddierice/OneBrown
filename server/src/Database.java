@@ -167,7 +167,6 @@ public class Database {
 
         try{
             sql = "INSERT INTO users (email,hash,salt) VALUES ('" + email + "',FROM_BASE64('" + Utility.bytesToBase64(hash) + "'),FROM_BASE64('" + saltString + "'))";
-            System.out.println(sql);
             stmt.executeUpdate(sql);
             return NO_ERR;
         } catch(SQLException ex) {
