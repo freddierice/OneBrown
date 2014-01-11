@@ -9,9 +9,14 @@
 #import "UserProfileViewController.h"
 #import "UserManager.h"
 
+static NSString *TableViewCellIdentifier = @"SNCells";
+
 @interface UserProfileViewController ()
 {
     UserManager *sharedUserManager;
+    NSMutableArray *socialNetworkImages;
+    NSUserDefaults *defaults;
+
 }
 
 @end
@@ -35,6 +40,7 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
 
+    defaults = [NSUserDefaults standardUserDefaults];
     sharedUserManager = [UserManager sharedUserManager];
     
     nameLabel.text = sharedUserManager.stalkedUserName;
@@ -44,6 +50,18 @@
     userImageView.layer.borderWidth = 2;
     userImageView.layer.borderColor = [UIColor whiteColor].CGColor;
    [userImageView setImage: sharedUserManager.stalkedUserImage];
+    
+    
+    [self.tableView setDelegate:self];
+    [self.tableView setDataSource:self];
+    
+    [self.tableView registerClass:[ UITableViewCell class] forCellReuseIdentifier:TableViewCellIdentifier];
+    
+    socialNetworkImages = [NSMutableArray arrayWithObjects:[UIImage imageNamed:@"facebookIcon"], [UIImage imageNamed:@"twitterIcon"], [UIImage imageNamed:@"instagramIcon"], [UIImage imageNamed:@"snapchatIcon"], [UIImage imageNamed:@"vineIcon"], [UIImage imageNamed:@"linkedinIcon"], nil];
+    
+    /* Make sure our table view resizes correctly */
+    self.tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    
 }
 
 
@@ -57,6 +75,73 @@
 {
     return UIStatusBarStyleLightContent;
 }
+
+# pragma mark TableView Delegate Methods
+- (NSInteger) numberOfSectionsInTableView:( UITableView *) tableView
+{
+    if ([ tableView isEqual:self.tableView] && [defaults objectForKey:@"loggedIn"])
+    {
+        return 1;
+    }
+    return 0;
+    
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    
+    if ([tableView isEqual:self.tableView] && [defaults objectForKey:@"loggedIn"])
+    {
+        if ([sharedUserManager.stalkedUserNetworks count]!=0)
+            return [sharedUserManager.stalkedUserNetworks  count];
+    }
+    
+    return 0;
+}
+
+- (UITableViewCell *) tableView:( UITableView *) tableView cellForRowAtIndexPath:( NSIndexPath *) indexPath
+{
+    UITableViewCell *cell = nil;
+    if ([tableView isEqual:self.tableView] && [defaults objectForKey:@"loggedIn"])
+    {
+        
+        cell = [tableView dequeueReusableCellWithIdentifier: TableViewCellIdentifier forIndexPath:indexPath];
+        
+        cell.imageView.image = socialNetworkImages[indexPath.row];
+        cell.textLabel.text = [sharedUserManager.stalkedUserNetworks objectAtIndex: indexPath.row];
+        
+        [cell.textLabel setContentMode:UIViewContentModeRight];
+        
+        [cell.textLabel setFont: [UIFont fontWithName:@"Helvetica" size:12]];
+        
+        [cell.textLabel setTextColor: [UIColor whiteColor]];
+    
+        [cell setBackgroundColor:[UIColor clearColor]];
+        
+    }
+    return cell;
+}
+
+
+// Returns a UILabel with the given NSString.
+- (UILabel *) newLabelWithTitle:( NSString *) paramTitle
+{
+    UILabel *label = [[ UILabel alloc] initWithFrame:CGRectZero];
+    label.text = paramTitle;
+    label.backgroundColor = [UIColor clearColor];
+    [label sizeToFit]; return label;
+}
+
+/*
+- (UIView *) tableView:( UITableView *) tableView viewForHeaderInSection:( NSInteger) section
+{
+    //if (section == 0)
+    return [self newLabelWithTitle:@"  Social Networks"];
+    
+    //return nil;
+}*/
+
+
 
 
 - (IBAction)clickedBack:(id)sender
