@@ -102,7 +102,7 @@ public class Database {
                 if(session == null){
                     session = Utility.stringToBase64(Utility.runCommand("openssl rand -base64 32"));
                     try{
-                        sql = "UPDATE users SET session='" + session + "' WHERE id='" + ((Integer)id).toString() + "'";
+                        sql = "UPDATE users SET session='" + Utility.bytesToBase64(session) + "' WHERE id='" + ((Integer)id).toString() + "'";
                         stmt.executeUpdate(sql);
                     } catch(SQLException ex) {
                         System.out.println("SQLException: " + ex.getMessage());
