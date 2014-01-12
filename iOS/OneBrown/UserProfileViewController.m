@@ -14,7 +14,6 @@ static NSString *TableViewCellIdentifier = @"SNCells";
 @interface UserProfileViewController ()
 {
     UserManager *sharedUserManager;
-    NSMutableArray *socialNetworkImages;
     NSUserDefaults *defaults;
 
 }
@@ -55,9 +54,10 @@ static NSString *TableViewCellIdentifier = @"SNCells";
     [self.tableView setDelegate:self];
     [self.tableView setDataSource:self];
     
+     self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLineEtched;
+    self.tableView.separatorInset =  UIEdgeInsetsMake(5, 3, 5, 5);
     [self.tableView registerClass:[ UITableViewCell class] forCellReuseIdentifier:TableViewCellIdentifier];
-    
-    socialNetworkImages = [NSMutableArray arrayWithObjects:[UIImage imageNamed:@"facebookIcon"], [UIImage imageNamed:@"twitterIcon"], [UIImage imageNamed:@"instagramIcon"], [UIImage imageNamed:@"snapchatIcon"], [UIImage imageNamed:@"vineIcon"], [UIImage imageNamed:@"linkedinIcon"], nil];
+
     
     /* Make sure our table view resizes correctly */
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -107,11 +107,15 @@ static NSString *TableViewCellIdentifier = @"SNCells";
         
         cell = [tableView dequeueReusableCellWithIdentifier: TableViewCellIdentifier forIndexPath:indexPath];
         
-        cell.imageView.image = socialNetworkImages[indexPath.row];
+        cell.imageView.image = sharedUserManager.socialNetworkImages[indexPath.row];
+        
+        [cell.imageView setContentMode:UIViewContentModeScaleAspectFit];
+        
         cell.textLabel.text = [sharedUserManager.stalkedUserNetworks objectAtIndex: indexPath.row];
         
-        [cell.textLabel setContentMode:UIViewContentModeRight];
+       /// [cell.textLabel setContentMode:UIViewContentModeRight];
         
+       
         [cell.textLabel setFont: [UIFont fontWithName:@"Helvetica" size:12]];
         
         [cell.textLabel setTextColor: [UIColor whiteColor]];

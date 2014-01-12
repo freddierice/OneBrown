@@ -17,6 +17,8 @@
     NSString *stalkedUserName;
     UIImage *stalkedUserImage;
     NSMutableArray *stalkedUserNetworks;
+    NSMutableArray *socialNetworks;
+    NSMutableArray *socialNetworkImages;
 }
 
 @property (nonatomic, retain) NSString *userName;
@@ -26,6 +28,11 @@
 @property (nonatomic, retain) NSString *stalkedUserName;
 @property (nonatomic, retain) UIImage *stalkedUserImage;
 @property (nonatomic, retain) NSMutableArray *stalkedUserNetworks;
+
+@property (nonatomic, retain) NSMutableArray *socialNetworks;
+@property (nonatomic, retain) NSMutableArray *socialNetworkImages;
+
+
 
 
 + (id)sharedUserManager;

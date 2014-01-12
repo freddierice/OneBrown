@@ -9,11 +9,12 @@
 #import "ProfileViewController.h"
 #import "SignInViewController.h"
 #import "CAPopupWindow.h"
+#import "UserManager.h"
 
 @interface ProfileViewController ()
 {
     NSUserDefaults *defaults;
-    
+    UserManager *sharedUserManager;
 }
 @end
 
@@ -36,6 +37,8 @@
 	// Do any additional setup after loading the view.
     
     defaults = [NSUserDefaults standardUserDefaults];
+    
+    sharedUserManager = [UserManager sharedUserManager];
     
     profileImageView.layer.cornerRadius = 80;
     profileImageView.clipsToBounds = YES;
@@ -64,12 +67,13 @@
 -(void)buttonPress {
     
     CAPopupWindow* popView = [[CAPopupWindow alloc] initWithObjectList:@[
-                                                                         [CAWindowObject windowObject:@"Facebook" image:[UIImage imageNamed:@"facebookIcon"] target:nil action:nil],
-                                                                         [CAWindowObject windowObject:@"Twitter" image:[UIImage imageNamed:@"twitterIcon"] target:nil action:nil],
-                                                                         [CAWindowObject windowObject:@"Instagram" image:[UIImage imageNamed:@"instagramIcon"] target:nil action:nil],
-                                                                         [CAWindowObject windowObject:@"Snapchat" image:[UIImage imageNamed:@"snapchatIcon"] target:nil action:nil],
-                                                                         [CAWindowObject windowObject:@"Vine" image:[UIImage imageNamed:@"vineIcon"] target:nil action:nil],
-                                                                         [CAWindowObject windowObject:@"LinkedIn" image:[UIImage imageNamed:@"linkedinIcon"] target:nil action:nil]]];
+                                                                         [CAWindowObject windowObject:sharedUserManager.socialNetworks[0]
+                                                                                                image:sharedUserManager.socialNetworkImages[0]target:nil action:nil],
+                                                                         [CAWindowObject windowObject:sharedUserManager.socialNetworks[1] image:sharedUserManager.socialNetworkImages[1] target:nil action:nil],
+                                                                         [CAWindowObject windowObject:sharedUserManager.socialNetworks[2] image:sharedUserManager.socialNetworkImages[2] target:nil action:nil],
+                                                                         [CAWindowObject windowObject:sharedUserManager.socialNetworks[3] image:sharedUserManager.socialNetworkImages[3]target:nil action:nil],
+                                                                         [CAWindowObject windowObject:sharedUserManager.socialNetworks[4] image:sharedUserManager.socialNetworkImages[4] target:nil action:nil],
+                                                                         [CAWindowObject windowObject:sharedUserManager.socialNetworks[5] image:sharedUserManager.socialNetworkImages[5] target:nil action:nil]]];
     [popView presentInView:self.view];
     
 }

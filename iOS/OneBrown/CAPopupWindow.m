@@ -33,7 +33,7 @@
         [label setTextAlignment:NSTextAlignmentCenter];
         [label setBackgroundColor:[UIColor clearColor]];
         [label setTextColor:[UIColor whiteColor]];
-        [label setFont:[UIFont systemFontOfSize:19]];
+        [label setFont:[UIFont systemFontOfSize:18]];
         self.text = label;
         
         UIImageView* imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 4, 88, 58)];

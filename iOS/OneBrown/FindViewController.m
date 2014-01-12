@@ -19,6 +19,8 @@
     NSMutableArray *userPictures;
     NSMutableArray *userPictureNames;
     UserManager *sharedUserManager;
+    NSString *searchType;
+   // int segmentedControlTypeIndex;
 }
 
 @end
@@ -131,7 +133,7 @@
     
     sharedUserManager.stalkedUserImage  = userPictures[indexPath.row];
     
-    sharedUserManager.stalkedUserNetworks = [NSMutableArray arrayWithObjects:@"Facebook", @"Instagram", @"Twitter", @"Snapchat", @"Vine", @"LinkedIn", nil];
+    sharedUserManager.stalkedUserNetworks = [NSMutableArray arrayWithObjects:@"Facebook", @"Twitter", @"Instagram", @"Snapchat", @"Vine", @"LinkedIn", nil];
     
     //sharedUserManager.stalkedUserImage = [userPictures[indexPath.row] image];
     
@@ -177,4 +179,30 @@
 }
 
 
+- (IBAction)choseSearchType:(id)sender
+{
+    
+    UISegmentedControl *typeSegmentedControl = (UISegmentedControl *) sender;
+    int index = (int) typeSegmentedControl.selectedSegmentIndex;
+    
+    switch (index)
+    {
+        case 0:
+            searchType = @"Person";
+            break;
+        case 1:
+            searchType = @"Social";
+            break;
+        case 2:
+            searchType = @"Major";
+            break;
+        case 3:
+            searchType = @"Classes";
+            break;
+        default:
+            break;
+    }
+    
+    [self.collectionView reloadData];
+}
 @end
