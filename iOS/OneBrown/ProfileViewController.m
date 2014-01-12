@@ -47,10 +47,6 @@
     profileImageView.layer.borderColor = [UIColor whiteColor].CGColor;
     
     [self.addButton addTarget:self action:@selector(buttonPress) forControlEvents:UIControlEventTouchUpInside];
-    
-    
-
-
 }
 
 - (void)didReceiveMemoryWarning
