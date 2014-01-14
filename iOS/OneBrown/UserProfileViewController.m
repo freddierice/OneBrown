@@ -144,14 +144,15 @@ static NSString *TableViewCellIdentifier = @"SNCells";
     // Clicked on the Facebook icon.
     if(indexPath.row==0)
     {
-        NSURL *url = [NSURL URLWithString:@"fb://requests"];
+        //This would be the action we need. fb://profile/(fbid)/addfriend
+        NSURL *url = [NSURL URLWithString:@"fb://notifications"];
         [[UIApplication sharedApplication] openURL:url];
          
     }
     // Twitter
     else if (indexPath.row==1)
     {
-        NSString *stringURL = @"twitter://";
+        NSString *stringURL = @"twitter://user?screen_name=BrownUniversity";
         NSURL *url = [NSURL URLWithString:stringURL];
         [[UIApplication sharedApplication] openURL:url];
     }
