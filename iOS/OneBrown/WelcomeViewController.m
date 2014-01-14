@@ -7,6 +7,9 @@
 //
 
 #import "WelcomeViewController.h"
+#import "FindViewController.h"
+#import "LogInViewController.h"
+#import "UserManager.h"
 
 @interface WelcomeViewController ()
 
@@ -29,11 +32,11 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)dismissView {
-    [[NSUserDefaults standardUserDefaults] setValue:@"hi" forKey:@"sessionID"];
+- (void)dismissView {    
+    [(UserManager *)[(LogInViewController *)[self presentingViewController] userManager] setManager: [(LogInViewController *)[self presentingViewController] networkManager]];
+    
     
     [self.presentingViewController.presentingViewController dismissViewControllerAnimated:YES completion:NULL];
-    
 }
 
 @end

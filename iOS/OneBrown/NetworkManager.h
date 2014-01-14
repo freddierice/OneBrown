@@ -29,7 +29,11 @@
     CFStringRef host;
     UInt32 port;
     
+    NSMutableArray *additionalDelegates;
+    
 }
+
+@property (nonatomic, retain) NSMutableArray *additionalDelegates;
 
 @property (nonatomic, assign) CFStringRef host;
 @property (nonatomic, assign) UInt32 port;

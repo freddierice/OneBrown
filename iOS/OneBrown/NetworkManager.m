@@ -10,13 +10,7 @@
 
 @implementation NetworkManager
 
-@synthesize messages;
-@synthesize outputStream;
-@synthesize inputStream;
-@synthesize data;
-
-@synthesize host;
-@synthesize port;
+@synthesize messages, additionalDelegates, outputStream, inputStream, data, host, port;
 
 +(NetworkManager *)networkManagerWithHost:(CFStringRef)host port:(UInt32)port {
     
@@ -90,6 +84,12 @@
         [self.messages addObject:JSON];
         
         [self.delegate didReceiveJSON:JSON];
+        
+        for (id object in self.additionalDelegates) {
+            if ([object conformsToProtocol:@protocol(NetworkManagerDelegate)]) {
+                [object didReceiveJSON:JSON];
+            }
+        }
         
         self.data = [NSMutableData data];
         

@@ -8,6 +8,8 @@
 
 #import "SignInViewController.h"
 #import "LoginLogic.h"
+#import "ResizedTextField.h"
+#import "FindViewController.h"
 #import <Foundation/Foundation.h>
 
 @interface SignInViewController ()
@@ -28,6 +30,8 @@
 @property (nonatomic, weak) UIButton *resend;
 @property (nonatomic, weak) UIActivityIndicatorView *vActivity;
 
+@property (nonatomic, weak) UILabel *userExistsError;
+
 @property (nonatomic, weak) UIView *tintView;
 
 @property (nonatomic, weak) UILabel *vError;
@@ -39,7 +43,7 @@
 
 @implementation SignInViewController
 
-@synthesize manager, userField, passField, overlayView, openingScreen, loginScreen, registerScreen, tintView, activity, signInButton, enterEmail, enterPassword, confirmPassword, scrollView, registrationButton, rActivity, registrationError, verifyScreen, codeField, codeError, enterCode, resend, vActivity;
+@synthesize manager, userField, passField, overlayView, openingScreen, loginScreen, registerScreen, tintView, activity, signInButton, enterEmail, enterPassword, confirmPassword, scrollView, registrationButton, rActivity, registrationError, verifyScreen, codeField, codeError, enterCode, resend, vActivity, userExistsError, userManager;
 
 - (void)viewDidLoad
 {
@@ -88,32 +92,6 @@
     
     [self performSegueWithIdentifier:@"goWelcome" sender:self];
     
-}
-
-- (void)segueToValidate {
-    NSLog(@"Register");
-    
-    CAKeyframeAnimation * anim = [ CAKeyframeAnimation animationWithKeyPath:@"transform" ] ;
-    anim.values = @[ [ NSValue valueWithCATransform3D:CATransform3DMakeTranslation(-5.0f, 0.0f, 0.0f) ], [ NSValue valueWithCATransform3D:CATransform3DMakeTranslation(5.0f, 0.0f, 0.0f) ] ] ;
-    anim.autoreverses = YES ;
-    anim.repeatCount = 2.0f ;
-    anim.duration = 0.07f ;
-    
-    BOOL didFail = NO;
-    
-    if (![self.confirmPassword.text isEqualToString: self.enterPassword.text] || self.enterPassword.text.length == 0 || ![LoginLogic validatePassword:self.enterPassword.text]) {
-        [self.confirmPassword.layer addAnimation:anim forKey:NULL];
-        [self.enterPassword.layer addAnimation:anim forKey:NULL];
-        didFail = YES;
-    }
-    if (self.enterEmail.text.length == 0 || ![LoginLogic validateEmail:self.enterEmail.text]) {
-        [self.enterEmail.layer addAnimation:anim forKey:NULL];
-        didFail = YES;
-    }
-    
-    if (didFail) {return;}
-    
-    [self animateToVerify];
 }
 
 #pragma mark - animation implementation
@@ -241,6 +219,17 @@
     self.enterCode.enabled = NO;
     [self.enterCode setTitle:@"" forState:UIControlStateNormal];
     [self.vActivity startAnimating];
+    
+    /*
+     Test code
+    */
+    
+    if ([self.codeField.text isEqualToString:@"123456"]) {
+        [self didReceiveJSON:@{@"message":@"verify_success"}];
+    }
+    else {
+        [self didReceiveJSON:@{@"message":@"verify_failed"}];
+    }
 }
 
 - (void)resendCode {
@@ -278,7 +267,7 @@
     [self.rActivity startAnimating];
     
     NSError *e;
-    NSData *loginRequest = [NSJSONSerialization dataWithJSONObject:@{@"message":@"register"} options:kNilOptions error:&e];
+    NSData *registerRequest = [NSJSONSerialization dataWithJSONObject:@{@"message":@"register"} options:kNilOptions error:&e];
     NSDictionary *registerInformation = @{@"user":self.enterEmail.text, @"pass":self.enterPassword.text};
     NSData* information = [NSJSONSerialization dataWithJSONObject:registerInformation options:kNilOptions error:&e];
     
@@ -286,7 +275,7 @@
         NSLog(@"%@", e);
     }
     
-    BOOL success = [self.manager writeData:loginRequest];
+    BOOL success = [self.manager writeData:registerRequest];
     if (success) {
         [self.manager writeData:information];
     }
@@ -309,7 +298,7 @@
     recognizer.numberOfTouchesRequired = 1;
     [scroll addGestureRecognizer:recognizer];
     
-    UITextField *emailField = [[UITextField alloc] initWithFrame: CGRectMake(35, 0, 145, 31)];
+    ResizedTextField *emailField = [[ResizedTextField alloc] initWithFrame: CGRectMake(35, 0, 250, 31)];
     emailField.font = [UIFont systemFontOfSize:16.0f];
     emailField.backgroundColor = [UIColor colorWithWhite:255.0f alpha:0.9f];
     emailField.borderStyle = UITextBorderStyleRoundedRect;
@@ -320,9 +309,9 @@
     emailField.delegate = self;
     self.enterEmail = emailField;
     
-    UILabel *brown = [[UILabel alloc] initWithFrame:CGRectMake(180, 0, 105, 31)];
+    UILabel *brown = [[UILabel alloc] initWithFrame:CGRectMake(180, 0, 100, 31)];
     brown.textColor = [UIColor blackColor];
-    [brown setText:@" @ brown.edu"];
+    [brown setText:@"@brown.edu"];
     
     UITextField *password = [[UITextField alloc] initWithFrame: CGRectMake(35, 41, 250, 31)];
     password.font = [UIFont systemFontOfSize:16.0f];
@@ -362,24 +351,25 @@
     [registerButton setTitle:@"Register" forState:UIControlStateNormal];
     self.registrationButton = registerButton;
     
-  //  [registerButton addTarget:self action:@selector(registerUser) forControlEvents:UIControlEventTouchUpInside];
+    [registerButton addTarget:self action:@selector(registerUser) forControlEvents:UIControlEventTouchUpInside];
     
-    [registerButton addTarget:self action:@selector(segueToValidate) forControlEvents:UIControlEventTouchUpInside];
+ //   [registerButton addTarget:self action:@selector(segueToValidate) forControlEvents:UIControlEventTouchUpInside];
     
-    UILabel *agreement = [[UILabel alloc] initWithFrame:CGRectMake(35+320, 317, 250, 44)];
+    UILabel *agreement = [[UILabel alloc] initWithFrame:CGRectMake(74+320, self.view.frame.size.height-64, 211, 44)];
     agreement.text = @"By continuing, you are indicating that you have read and agree to the Terms of Service and Privacy Policy.";
     agreement.lineBreakMode = NSLineBreakByWordWrapping;
     agreement.font = [UIFont systemFontOfSize:12.0f];
     agreement.textAlignment = NSTextAlignmentCenter;
     agreement.textColor = [UIColor whiteColor];
     agreement.numberOfLines = 0;
+    agreement.layer.cornerRadius = 5.0f;
     
     UIButton *back = [UIButton buttonWithType:UIButtonTypeCustom];
     back.frame = CGRectMake(20+320, self.view.frame.size.height-64, 44, 44);
     [back setImage:[UIImage imageNamed:@"backArrow"] forState:UIControlStateNormal];
     [back addTarget:self action:@selector(animateToChoice) forControlEvents:UIControlEventTouchUpInside];
     
-    UILabel *error = [[UILabel alloc] initWithFrame:CGRectMake(35+320, 370, 250, 44)];
+    UILabel *error = [[UILabel alloc] initWithFrame:CGRectMake(35+320, 361, 250, 44)];
     error.text = @"We were unable to register you at this time. Please try again later.";
     error.lineBreakMode = NSLineBreakByWordWrapping;
     error.textAlignment = NSTextAlignmentCenter;
@@ -388,18 +378,28 @@
     error.hidden = YES;
     self.registrationError = error;
     
+    UILabel *exists = [[UILabel alloc] initWithFrame:CGRectMake(35+320, 361, 250, 44)];
+    exists.text = [NSString stringWithFormat:@"%@@brown.edu has already been registered with oneBrown. Do you need help signing in?", self.enterEmail.text];
+    exists.lineBreakMode = NSLineBreakByWordWrapping;
+    exists.textAlignment = NSTextAlignmentCenter;
+    exists.textColor = [UIColor colorWithRed:211.0f/255.0f green:71.0f/255.0f blue:42.0f/255.0f alpha:1.0f];
+    exists.numberOfLines = 0;
+    exists.hidden = YES;
+    self.userExistsError = error;
+    
     [self.view addSubview:scroll];
     [self.view addSubview:agreement];
     [self.view addSubview:back];
     [self.view addSubview:registerButton];
     [self.view addSubview:registerActivity];
     [self.view addSubview:error];
-    [scroll addSubview:brown];
+    [self.view addSubview:exists];
     [scroll addSubview:confirm];
     [scroll addSubview:password];
     [scroll addSubview:emailField];
+    [scroll addSubview:brown];
     
-    self.registerScreen = @[scroll, agreement, back, registerButton, registerActivity];
+    self.registerScreen = @[scroll, agreement, back, registerButton, registerActivity, error, exists];
 }
 
 - (void)configureBackground {
@@ -678,6 +678,19 @@
         [self.rActivity stopAnimating];
         
         self.registrationError.hidden = NO;
+        self.userExistsError.hidden = YES;
+    }
+    
+    else if ([[JSON objectForKey:@"message"] isEqualToString:@"reg_exists"]) {
+        self.enterPassword.backgroundColor = [UIColor colorWithWhite:1.0f alpha:0.9f];
+        self.enterEmail.backgroundColor = [UIColor colorWithWhite:1.0f alpha:0.9f];
+        self.confirmPassword.backgroundColor = [UIColor colorWithWhite:1.0f alpha:0.9f];
+        self.registrationButton.enabled = YES;
+        [self.registrationButton setTitle:@"Register" forState:UIControlStateNormal];
+        [self.rActivity stopAnimating];
+        
+        self.registrationError.hidden = YES;
+        self.userExistsError.hidden = NO;
     }
     
     else if ([[JSON objectForKey:@"message"] isEqualToString:@"verify_success"]) {

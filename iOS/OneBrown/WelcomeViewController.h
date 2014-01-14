@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FindViewController.h"
 
 @interface WelcomeViewController : UIViewController
 

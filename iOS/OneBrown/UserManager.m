@@ -10,7 +10,7 @@
 
 @implementation UserManager
 
-@synthesize userName, userImage, userNetworks, stalkedUserName, stalkedUserImage, stalkedUserNetworks;
+@synthesize userName, userImage, userNetworks, stalkedUserName, stalkedUserImage, stalkedUserNetworks, manager;
 
 #pragma mark Singleton Methods
 
@@ -41,6 +41,8 @@
     return self;
 }
 
-
+-(void)didReceiveJSON:(NSDictionary *)JSON {
+    
+}
 
 @end

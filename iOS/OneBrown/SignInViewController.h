@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "NetworkManager.h"
 
+@class UserManager;
+
 @interface SignInViewController : UIViewController <UITextFieldDelegate, NetworkManagerDelegate> {
 
     UIView *overlayView;
@@ -22,6 +24,7 @@
 }
 
 @property (nonatomic, retain) NetworkManager *manager;
+@property (nonatomic, weak) UserManager *userManager;
 
 @property (nonatomic, retain) UIView *overlayView;
 

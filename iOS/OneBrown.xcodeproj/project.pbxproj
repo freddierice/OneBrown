@@ -7,14 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4E06568D1884BB1B0056A897 /* LogInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E06568C1884BB1B0056A897 /* LogInViewController.m */; };
 		4E337410187A22A700B11011 /* NetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E33740F187A22A700B11011 /* NetworkManager.m */; };
+		4EAFD76F1881FB9D005F249C /* ResizedTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EAFD76E1881FB9D005F249C /* ResizedTextField.m */; };
 		4EBA21FA1875F9A3000A9BE6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EBA21F91875F9A3000A9BE6 /* Foundation.framework */; };
 		4EBA21FC1875F9A3000A9BE6 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EBA21FB1875F9A3000A9BE6 /* CoreGraphics.framework */; };
 		4EBA21FE1875F9A3000A9BE6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EBA21FD1875F9A3000A9BE6 /* UIKit.framework */; };
 		4EBA22041875F9A3000A9BE6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4EBA22021875F9A3000A9BE6 /* InfoPlist.strings */; };
 		4EBA22061875F9A3000A9BE6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EBA22051875F9A3000A9BE6 /* main.m */; };
 		4EBA220A1875F9A3000A9BE6 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EBA22091875F9A3000A9BE6 /* AppDelegate.m */; };
-		4EBA220D1875F9A3000A9BE6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4EBA220B1875F9A3000A9BE6 /* Main.storyboard */; };
+		4EBA220D1875F9A3000A9BE6 /* Main_1.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4EBA220B1875F9A3000A9BE6 /* Main_1.storyboard */; };
 		4EBA22121875F9A3000A9BE6 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4EBA22111875F9A3000A9BE6 /* Images.xcassets */; };
 		4EBA22191875F9A3000A9BE6 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EBA22181875F9A3000A9BE6 /* XCTest.framework */; };
 		4EBA221A1875F9A3000A9BE6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EBA21F91875F9A3000A9BE6 /* Foundation.framework */; };
@@ -43,8 +45,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4E06568B1884BB1B0056A897 /* LogInViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogInViewController.h; sourceTree = "<group>"; };
+		4E06568C1884BB1B0056A897 /* LogInViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogInViewController.m; sourceTree = "<group>"; };
 		4E33740E187A22A700B11011 /* NetworkManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkManager.h; sourceTree = "<group>"; };
 		4E33740F187A22A700B11011 /* NetworkManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkManager.m; sourceTree = "<group>"; };
+		4EAFD76D1881FB9D005F249C /* ResizedTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResizedTextField.h; sourceTree = "<group>"; };
+		4EAFD76E1881FB9D005F249C /* ResizedTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ResizedTextField.m; sourceTree = "<group>"; };
 		4EBA21F61875F9A3000A9BE6 /* OneBrown.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OneBrown.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4EBA21F91875F9A3000A9BE6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4EBA21FB1875F9A3000A9BE6 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -55,7 +61,7 @@
 		4EBA22071875F9A3000A9BE6 /* OneBrown-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OneBrown-Prefix.pch"; sourceTree = "<group>"; };
 		4EBA22081875F9A3000A9BE6 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		4EBA22091875F9A3000A9BE6 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		4EBA220C1875F9A3000A9BE6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		4EBA220C1875F9A3000A9BE6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_1.storyboard; sourceTree = "<group>"; };
 		4EBA22111875F9A3000A9BE6 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		4EBA22171875F9A3000A9BE6 /* OneBrownTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OneBrownTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4EBA22181875F9A3000A9BE6 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -115,6 +121,8 @@
 				4EBE0658187FBEC0002CF819 /* WelcomeViewController.m */,
 				4EBA2231187600C5000A9BE6 /* LoginLogic.h */,
 				4EBA2232187600C5000A9BE6 /* LoginLogic.m */,
+				4E06568B1884BB1B0056A897 /* LogInViewController.h */,
+				4E06568C1884BB1B0056A897 /* LogInViewController.m */,
 			);
 			name = Login;
 			sourceTree = "<group>";
@@ -126,6 +134,15 @@
 				4E33740F187A22A700B11011 /* NetworkManager.m */,
 			);
 			name = Network;
+			sourceTree = "<group>";
+		};
+		4EAFD76C1881FB65005F249C /* Supporting Classes */ = {
+			isa = PBXGroup;
+			children = (
+				4EAFD76D1881FB9D005F249C /* ResizedTextField.h */,
+				4EAFD76E1881FB9D005F249C /* ResizedTextField.m */,
+			);
+			name = "Supporting Classes";
 			sourceTree = "<group>";
 		};
 		4EBA21ED1875F9A3000A9BE6 = {
@@ -163,11 +180,12 @@
 			children = (
 				4EBA22081875F9A3000A9BE6 /* AppDelegate.h */,
 				4EBA22091875F9A3000A9BE6 /* AppDelegate.m */,
-				4EBA220B1875F9A3000A9BE6 /* Main.storyboard */,
+				4EBA220B1875F9A3000A9BE6 /* Main_1.storyboard */,
 				597AE6FD187B35DF003FE40E /* Find/Profile  */,
 				4E337411187A3B1900B11011 /* Login */,
 				4E337412187A3B2300B11011 /* Network */,
 				4EBA22111875F9A3000A9BE6 /* Images.xcassets */,
+				4EAFD76C1881FB65005F249C /* Supporting Classes */,
 				4EBA22001875F9A3000A9BE6 /* Supporting Files */,
 			);
 			path = OneBrown;
@@ -299,7 +317,7 @@
 			files = (
 				4EBA22121875F9A3000A9BE6 /* Images.xcassets in Resources */,
 				4EBA22041875F9A3000A9BE6 /* InfoPlist.strings in Resources */,
-				4EBA220D1875F9A3000A9BE6 /* Main.storyboard in Resources */,
+				4EBA220D1875F9A3000A9BE6 /* Main_1.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -318,8 +336,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4E06568D1884BB1B0056A897 /* LogInViewController.m in Sources */,
 				59C2B271187CE293009A70D4 /* UserProfileViewController.m in Sources */,
 				4EBA220A1875F9A3000A9BE6 /* AppDelegate.m in Sources */,
+				4EAFD76F1881FB9D005F249C /* ResizedTextField.m in Sources */,
 				59C2B275187DC7D5009A70D4 /* UserManager.m in Sources */,
 				4EBA22301875F9E8000A9BE6 /* SignInViewController.m in Sources */,
 				59C2B278187DEC68009A70D4 /* AddSocialNetworksViewController.m in Sources */,
@@ -360,12 +380,12 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
-		4EBA220B1875F9A3000A9BE6 /* Main.storyboard */ = {
+		4EBA220B1875F9A3000A9BE6 /* Main_1.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				4EBA220C1875F9A3000A9BE6 /* Base */,
 			);
-			name = Main.storyboard;
+			name = Main_1.storyboard;
 			sourceTree = "<group>";
 		};
 		4EBA22211875F9A3000A9BE6 /* InfoPlist.strings */ = {

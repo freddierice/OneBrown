@@ -7,6 +7,7 @@
 //
 
 #import "ProfileViewController.h"
+#import "LogInViewController.h"
 #import "SignInViewController.h"
 
 @interface ProfileViewController ()
@@ -47,10 +48,10 @@
 
 - (IBAction)clickedLogOut:(id)sender
 {
-    [defaults setBool:NO forKey:@"loggedIn"];
+    [defaults setObject:@"" forKey:@"sessionID"];
     
-    SignInViewController *signIn = [[SignInViewController alloc] init];
-    signIn = [self.storyboard instantiateViewControllerWithIdentifier:@"SignInController"];
+    LogInViewController *signIn = [[LogInViewController alloc] init];
+    signIn = [self.storyboard instantiateViewControllerWithIdentifier:@"LogInController"];
     [self presentViewController:signIn animated:YES completion:nil];
 
 }

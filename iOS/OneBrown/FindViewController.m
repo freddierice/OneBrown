@@ -8,6 +8,7 @@
 
 #import "FindViewController.h"
 #import "SignInViewController.h"
+#import "LogInViewController.h"
 #import "UserCell.h"
 #import "UserProfileViewController.h"
 #import "UserManager.h"
@@ -19,6 +20,7 @@
     NSMutableArray *userPictures;
     NSMutableArray *userPictureNames;
     UserManager *sharedUserManager;
+
 }
 
 @end
@@ -64,12 +66,16 @@
 -(void)viewDidAppear:(BOOL)animated
 {
     
+    NSLog(@"%@", [defaults objectForKey:@"sessionID"]);
+    
     // Show the sign up/log in view if the user is not loggedIn
     if([[defaults objectForKey:@"sessionID"] isEqualToString:@""])
     {
-        SignInViewController *signIn = [[SignInViewController alloc] init];
-        signIn = [self.storyboard instantiateViewControllerWithIdentifier:@"SignInController"];
-        [self presentViewController:signIn animated:YES completion:nil];
+        
+        LogInViewController *signIn = [[LogInViewController alloc] init];
+        signIn = [self.storyboard instantiateViewControllerWithIdentifier:@"LogInController"];
+        signIn.userManager = sharedUserManager;
+        [self presentViewController:signIn animated:NO completion:nil];
     }
 }
 
