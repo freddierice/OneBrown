@@ -112,20 +112,59 @@ static NSString *TableViewCellIdentifier = @"SNCells";
         [cell.imageView setContentMode:UIViewContentModeScaleAspectFit];
         
         cell.textLabel.text = [sharedUserManager.stalkedUserNetworks objectAtIndex: indexPath.row];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
-       /// [cell.textLabel setContentMode:UIViewContentModeRight];
+        cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
         
-       
+        /*
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+        [button setImage:[UIImage imageNamed:@"IconProfile"] forState:UIControlStateNormal];
+        [button addTarget:self action:@selector(tappedButton) forControlEvents:UIControlEventTouchUpInside];
+        button.tag = indexPath.row;
+        cell.accessoryView = button;
+        */
         [cell.textLabel setFont: [UIFont fontWithName:@"Helvetica" size:12]];
         
         [cell.textLabel setTextColor: [UIColor whiteColor]];
-    
+        
+
         [cell setBackgroundColor:[UIColor clearColor]];
         
     }
     return cell;
 }
+-(void) tappedButton
+{
+    NSLog(@"sacagawea");
+    
+}
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    // Clicked on the Facebook icon.
+    if(indexPath.row==0)
+    {
+        NSURL *url = [NSURL URLWithString:@"fb://requests"];
+        [[UIApplication sharedApplication] openURL:url];
+         
+    }
+    // Twitter
+    else if (indexPath.row==1)
+    {
+        NSString *stringURL = @"twitter://";
+        NSURL *url = [NSURL URLWithString:stringURL];
+        [[UIApplication sharedApplication] openURL:url];
+    }
+    else
+        NSLog(@"only fb and twitter for now");
+    
+}
+
+- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
+{
+    NSLog(@"tapped disclosure");
+    
+}
 
 // Returns a UILabel with the given NSString.
 - (UILabel *) newLabelWithTitle:( NSString *) paramTitle
