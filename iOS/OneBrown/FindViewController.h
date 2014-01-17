@@ -13,5 +13,6 @@
 
 @property (strong, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (strong, nonatomic) IBOutlet UISearchBar *searchBar;
+- (IBAction)choseSearchType:(id)sender;
 
 @end

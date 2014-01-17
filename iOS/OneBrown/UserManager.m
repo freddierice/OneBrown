@@ -10,7 +10,7 @@
 
 @implementation UserManager
 
-@synthesize userName, userImage, userNetworks, stalkedUserName, stalkedUserImage, stalkedUserNetworks;
+@synthesize userName, userImage, userNetworks, stalkedUserName, stalkedUserImage, stalkedUserNetworks, socialNetworks, socialNetworkImages;
 
 #pragma mark Singleton Methods
 
@@ -33,10 +33,13 @@
         userName = [[NSString alloc] init];
         userImage = [[UIImage alloc]init];
         userNetworks = [[NSMutableArray alloc] init];
-        
         stalkedUserName = [[NSString alloc] init];
         stalkedUserImage = [[UIImage alloc]init];
         stalkedUserNetworks = [[NSMutableArray alloc] init];
+        
+        socialNetworks = [[NSMutableArray alloc] initWithObjects:@"Facebook",@"Twitter", @"Instagram", @"Snapchat", @"Vine", @"LinkedIn", nil];
+        socialNetworkImages = [[NSMutableArray alloc]initWithObjects:[UIImage imageNamed:@"facebookIcon"], [UIImage imageNamed:@"twitterIcon"], [UIImage imageNamed:@"instagramIcon"], [UIImage imageNamed:@"snapchatIcon"], [UIImage imageNamed:@"vineIcon"], [UIImage imageNamed:@"linkedinIcon"], nil];
+
     }
     return self;
 }

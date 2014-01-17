@@ -19,6 +19,8 @@
     NSMutableArray *userPictures;
     NSMutableArray *userPictureNames;
     UserManager *sharedUserManager;
+    NSString *searchType;
+   // int segmentedControlTypeIndex;
 }
 
 @end
@@ -40,6 +42,7 @@
 	// Do any additional setup after loading the view.
     defaults = [NSUserDefaults standardUserDefaults];
    
+    
     sharedUserManager = [UserManager sharedUserManager];
     
     [self.collectionView setDataSource: self];
@@ -53,6 +56,9 @@
     
     for (NSString *name in userPictureNames)
         [userPictures addObject:[UIImage imageNamed: name]];
+   
+    // Default search type is Person.
+    searchType = @"Person";
     
 }
 
@@ -83,7 +89,18 @@
 
 - (NSInteger) collectionView:(UICollectionView *)view numberOfItemsInSection:(NSInteger)section
 {
-    return [userPictureNames count];
+    if ([searchType isEqualToString:@"Person"])
+        return [userPictureNames count];
+    
+    else if ([searchType isEqualToString:@"Social"])
+        return [sharedUserManager.socialNetworks count];
+    
+    else if ([searchType isEqualToString:@"Major"])
+        return 0;
+    
+    else
+        return 0;
+
 }
 
 
@@ -103,9 +120,34 @@
     UserCell *cell = [cv dequeueReusableCellWithReuseIdentifier:@"UserCell" forIndexPath: indexPath];
     
     // Set the appropiate image and name to it.
-    [cell.userImageView setImage: userPictures[indexPath.row]];
-    [cell.userNameLabel setText: userPictureNames[indexPath.row]];
+    if ([searchType isEqualToString:@"Person"])
+    {
+        [cell.userImageView setImage: userPictures[indexPath.row]];
+        [cell.userNameLabel setText: userPictureNames[indexPath.row]];
+        cell.fadeView.hidden = NO;
+    }
+    else if ([searchType isEqualToString:@"Social"])
+    {
+        [cell.userImageView setImage:sharedUserManager.socialNetworkImages[indexPath.row]];
+        [cell.userNameLabel setText:@""];
+        cell.fadeView.hidden = YES;
+    }
     
+    // The borders don't look cool with the social network icons.
+    if (![searchType isEqualToString:@"Social"])
+    {
+        cell.userImageView.layer.cornerRadius = 10;
+        cell.userImageView.clipsToBounds = YES;
+        cell.userImageView.layer.borderWidth = 2;
+        cell.userImageView.layer.borderColor = [UIColor whiteColor].CGColor;
+        
+        cell.fadeView.layer.cornerRadius = 10;
+        cell.fadeView.clipsToBounds = YES;
+    }
+    else
+        cell.userImageView.layer.borderColor = [UIColor clearColor].CGColor;
+
+
     return cell;
 }
 
@@ -115,33 +157,25 @@
  */
 - (void) collectionView:(UICollectionView *) cv didHighlightItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    sharedUserManager.stalkedUserName = userPictureNames[indexPath.row];
     
-    sharedUserManager.stalkedUserImage  = userPictures[indexPath.row];
-    
-    sharedUserManager.stalkedUserNetworks = [NSMutableArray arrayWithObjects:@"Facebook", @"Instagram", @"Twitter", @"Snapchat", @"Vine", @"Tumblr", @"LinkedIn", nil];
-    
-    //sharedUserManager.stalkedUserImage = [userPictures[indexPath.row] image];
-    
-    UserProfileViewController *viewController = (UserProfileViewController *) [self.storyboard instantiateViewControllerWithIdentifier:@"UserProfileController"];
-    
-    [self presentViewController:viewController animated:YES completion:nil];
-
-   
+    if ([searchType isEqualToString:@"Person"])
+    {
+        sharedUserManager.stalkedUserName = userPictureNames[indexPath.row];
+        sharedUserManager.stalkedUserImage  = userPictures[indexPath.row];
+        sharedUserManager.stalkedUserNetworks = [NSMutableArray arrayWithObjects:@"Facebook", @"Twitter", @"Instagram", @"Snapchat", @"Vine", @"LinkedIn", nil];
+        
+        UserProfileViewController *viewController = (UserProfileViewController *) [self.storyboard instantiateViewControllerWithIdentifier:@"UserProfileController"];
+        
+        [self presentViewController:viewController animated:YES completion:nil];
+    }
 }
 
 - (void) setProfileViewController: (NSString *) uName
 {
-    
-    
     UserProfileViewController *viewController = (UserProfileViewController *) [self.storyboard instantiateViewControllerWithIdentifier:@"UserProfileController"];
    
     
     [self presentViewController:viewController animated:YES completion:nil];
-
-    
-    //[viewController.userImageView setImage: userPictures[indexPath.row]];
-    
 }
 
 // Returns a UILabel with the given NSString.
@@ -165,4 +199,30 @@
 }
 
 
+- (IBAction)choseSearchType:(id)sender
+{
+    
+    UISegmentedControl *typeSegmentedControl = (UISegmentedControl *) sender;
+    int index = (int) typeSegmentedControl.selectedSegmentIndex;
+    
+    switch (index)
+    {
+        case 0:
+            searchType = @"Person";
+            break;
+        case 1:
+            searchType = @"Social";
+            break;
+        case 2:
+            searchType = @"Major";
+            break;
+        case 3:
+            searchType = @"Classes";
+            break;
+        default:
+            break;
+    }
+    
+    [self.collectionView reloadData];
+}
 @end
