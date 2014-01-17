@@ -1,0 +1,4 @@
+src/utilities/Strings.o: ../src/utilities/Strings.cpp \
+ ../src/utilities/Strings.h
+
+../src/utilities/Strings.h:
