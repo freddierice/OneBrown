@@ -141,6 +141,7 @@ static NSString *TableViewCellIdentifier = @"SNCells";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSString *userName = @"BrownUniversity";
     // Clicked on the Facebook icon.
     if(indexPath.row==0)
     {
@@ -152,12 +153,27 @@ static NSString *TableViewCellIdentifier = @"SNCells";
     // Twitter
     else if (indexPath.row==1)
     {
-        NSString *stringURL = @"twitter://user?screen_name=BrownUniversity";
+        NSString *stringURL = [NSString stringWithFormat: @"twitter://user?screen_name=%@", userName];
+        NSURL *url = [NSURL URLWithString:stringURL];
+        [[UIApplication sharedApplication] openURL:url];
+    }
+    // Instagram
+    else if (indexPath.row==2)
+    {
+        // apparently there is no normal brownuniversity instagram
+        userName = @"brownuniversitylibrary";
+        NSString *stringURL = [NSString stringWithFormat: @"instagram://user?username=%@", userName];
+        NSURL *url = [NSURL URLWithString:stringURL];
+        [[UIApplication sharedApplication] openURL:url];
+    }
+    else if (indexPath.row==3)
+    {
+        NSString *stringURL = [NSString stringWithFormat:@"snapchat://?u=%@", userName];
         NSURL *url = [NSURL URLWithString:stringURL];
         [[UIApplication sharedApplication] openURL:url];
     }
     else
-        NSLog(@"only fb and twitter for now");
+        NSLog(@"Only fb, twitter, instagram, and snapchat for now.");
     
 }
 

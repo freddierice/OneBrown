@@ -42,6 +42,7 @@
 	// Do any additional setup after loading the view.
     defaults = [NSUserDefaults standardUserDefaults];
    
+    
     sharedUserManager = [UserManager sharedUserManager];
     
     [self.collectionView setDataSource: self];
@@ -58,6 +59,7 @@
    
     // Default search type is Person.
     searchType = @"Person";
+    
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle
@@ -130,7 +132,6 @@
         [cell.userNameLabel setText:@""];
         cell.fadeView.hidden = YES;
     }
-    
     
     // The borders don't look cool with the social network icons.
     if (![searchType isEqualToString:@"Social"])
