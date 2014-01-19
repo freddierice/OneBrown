@@ -25,7 +25,7 @@ public:
     Json::Value recvJSON();
     void sendJSON(Json::Value val);
     
-    void sendBytes(char *buf, size_t len);
+    void sendBytes(const char *buf, size_t len);
     
     void start();
     void close();

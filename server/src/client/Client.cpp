@@ -25,13 +25,40 @@ void Client::start()
 void Client::run()
 {
     std::cout << "Client connected\n";
-    std::cout.flush();
-    
-    m_network->sendBytes("Hello there!\n",sizeof("Hello there!\n"));
-    Json::Value val = m_network->recvJSON();
-    std::cout << val["user"].asString() << std::endl;
+    authorize();
     
     m_cs = ClientStatus::DEAD;
+}
+
+void Client::authorize()
+{
+    std::string msg; 
+    while(m_cs == ClientStatus::NOT_AUTHORIZED){
+        msg = "";
+        while(msg == ""){
+            Json::Value val;
+            val["message"] = "login_or_register";
+            msg = m_writer.write(val);
+            m_network->sendBytes(msg.c_str(),msg.length());
+            val = m_network ->recvJSON();
+            msg = val.get("message","").asString();
+        }
+        
+        if(msg == "login")
+            login();
+        if(msg == "register")
+            reg();
+    }
+}
+
+void Client::login()
+{
+    std::cout << "Logging in..." << std::endl;
+}
+
+void Client::reg()
+{
+    std::cout << "Registering..." << std::endl;
 }
 
 void Client::close()

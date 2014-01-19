@@ -47,9 +47,9 @@ am__installdirs = "$(DESTDIR)$(bindir)"
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS)
 am__dirstamp = $(am__leading_dot)dirstamp
-am_out_OBJECTS = src/main.$(OBJEXT) src/utilities/Strings.$(OBJEXT) \
-	src/client/Client.$(OBJEXT) src/network/Network.$(OBJEXT) \
-	src/database/Database.$(OBJEXT)
+am_out_OBJECTS = src/main.$(OBJEXT) src/client/Client.$(OBJEXT) \
+	src/network/Network.$(OBJEXT) src/database/Database.$(OBJEXT) \
+	src/utilities/Utility.$(OBJEXT)
 out_OBJECTS = $(am_out_OBJECTS)
 out_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I. -I$(srcdir)
@@ -93,7 +93,7 @@ CXX = g++
 CXXDEPMODE = depmode=gcc3
 CXXFLAGS = -g -O2 -std=c++11
 CYGPATH_W = echo
-DEFS = -DPACKAGE_NAME=\"OneBrown\ Server\" -DPACKAGE_TARNAME=\"onebrown\" -DPACKAGE_VERSION=\"1.0\" -DPACKAGE_STRING=\"OneBrown\ Server\ 1.0\" -DPACKAGE_BUGREPORT=\"OneBrownNetwork@gmail.com\" -DHAVE_LIBJSON=1
+DEFS = -DPACKAGE_NAME=\"OneBrown\ Server\" -DPACKAGE_TARNAME=\"onebrown\" -DPACKAGE_VERSION=\"1.0\" -DPACKAGE_STRING=\"OneBrown\ Server\ 1.0\" -DPACKAGE_BUGREPORT=\"OneBrownNetwork@gmail.com\" -DHAVE_LIBMYSQLCPPCONN=1 -DHAVE_LIBJSON=1
 DEPDIR = .deps
 ECHO_C = \c
 ECHO_N = 
@@ -106,7 +106,7 @@ INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
 LDFLAGS = 
 LIBOBJS = 
-LIBS = -ljson 
+LIBS = -ljson -lmysqlcppconn 
 LTLIBOBJS = 
 MAKEINFO = ${SHELL} /Users/farice14/Desktop/OneBrown/server/missing --run makeinfo
 MKDIR_P = ../install-sh -c -d
@@ -166,7 +166,7 @@ top_builddir = .
 top_srcdir = ..
 AUTOMAKE_OPTIONS = subdir-objects
 ACLOCAL_AMFLAGS = ${ACLOCAL_FLAGS}
-out_SOURCES = src/main.h src/main.cpp src/utilities/Strings.h src/utilities/Strings.cpp src/client/Client.h src/client/Client.cpp src/network/Network.cpp src/network/Network.h src/database/Database.h src/database/Database.cpp
+out_SOURCES = src/main.h src/main.cpp src/client/Client.h src/client/Client.cpp src/network/Network.cpp src/network/Network.h src/database/Database.h src/database/Database.cpp src/utilities/Utility.h src/utilities/Utility.cpp
 all: all-am
 
 .SUFFIXES:
@@ -234,14 +234,6 @@ src/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) src/$(DEPDIR)
 	@: > src/$(DEPDIR)/$(am__dirstamp)
 src/main.$(OBJEXT): src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
-src/utilities/$(am__dirstamp):
-	@$(MKDIR_P) src/utilities
-	@: > src/utilities/$(am__dirstamp)
-src/utilities/$(DEPDIR)/$(am__dirstamp):
-	@$(MKDIR_P) src/utilities/$(DEPDIR)
-	@: > src/utilities/$(DEPDIR)/$(am__dirstamp)
-src/utilities/Strings.$(OBJEXT): src/utilities/$(am__dirstamp) \
-	src/utilities/$(DEPDIR)/$(am__dirstamp)
 src/client/$(am__dirstamp):
 	@$(MKDIR_P) src/client
 	@: > src/client/$(am__dirstamp)
@@ -266,6 +258,14 @@ src/database/$(DEPDIR)/$(am__dirstamp):
 	@: > src/database/$(DEPDIR)/$(am__dirstamp)
 src/database/Database.$(OBJEXT): src/database/$(am__dirstamp) \
 	src/database/$(DEPDIR)/$(am__dirstamp)
+src/utilities/$(am__dirstamp):
+	@$(MKDIR_P) src/utilities
+	@: > src/utilities/$(am__dirstamp)
+src/utilities/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) src/utilities/$(DEPDIR)
+	@: > src/utilities/$(DEPDIR)/$(am__dirstamp)
+src/utilities/Utility.$(OBJEXT): src/utilities/$(am__dirstamp) \
+	src/utilities/$(DEPDIR)/$(am__dirstamp)
 out$(EXEEXT): $(out_OBJECTS) $(out_DEPENDENCIES) 
 	@rm -f out$(EXEEXT)
 	$(CXXLINK) $(out_OBJECTS) $(out_LDADD) $(LIBS)
@@ -276,7 +276,7 @@ mostlyclean-compile:
 	-rm -f src/database/Database.$(OBJEXT)
 	-rm -f src/main.$(OBJEXT)
 	-rm -f src/network/Network.$(OBJEXT)
-	-rm -f src/utilities/Strings.$(OBJEXT)
+	-rm -f src/utilities/Utility.$(OBJEXT)
 
 distclean-compile:
 	-rm -f *.tab.c
@@ -285,7 +285,7 @@ include src/$(DEPDIR)/main.Po
 include src/client/$(DEPDIR)/Client.Po
 include src/database/$(DEPDIR)/Database.Po
 include src/network/$(DEPDIR)/Network.Po
-include src/utilities/$(DEPDIR)/Strings.Po
+include src/utilities/$(DEPDIR)/Utility.Po
 
 .cpp.o:
 	depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\

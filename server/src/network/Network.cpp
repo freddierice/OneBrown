@@ -48,7 +48,7 @@ Json::Value Network::recvJSON()
     return val;
 }
 
-void Network::sendBytes(char *buf, size_t len)
+void Network::sendBytes(const char *buf, size_t len)
 {
     send(m_sd, buf, len, 0);
 }

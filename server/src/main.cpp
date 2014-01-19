@@ -13,7 +13,7 @@ void connect()
     unsigned int clilen;
     char buffer[256];
     struct sockaddr_in serv_addr, cli_addr;
-    int  n;
+    int n;
     
     /* First call to socket() function */
     sockfd = socket(AF_INET, SOCK_STREAM, 0);

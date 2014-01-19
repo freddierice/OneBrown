@@ -21,11 +21,17 @@ public:
     void start();
     void close();
     
+    void authorize();
+    void login();
+    void reg();
+    
     ClientStatus getStatus();
     
 private:
     Client();
     void run();
+    
+    Json::FastWriter m_writer;
     
     Network *m_network;
     std::thread m_thread;
