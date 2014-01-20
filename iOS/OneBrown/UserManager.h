@@ -12,7 +12,7 @@
 {
     NSString *userName;
     UIImage *userImage;
-    NSMutableArray *userNetworks;
+    NSMutableDictionary *userNetworks;
     
     NSString *stalkedUserName;
     UIImage *stalkedUserImage;
@@ -23,7 +23,7 @@
 
 @property (nonatomic, retain) NSString *userName;
 @property (nonatomic, retain) UIImage *userImage;
-@property (nonatomic, retain) NSMutableArray *userNetworks;
+@property (nonatomic, retain) NSMutableDictionary *userNetworks;
 
 @property (nonatomic, retain) NSString *stalkedUserName;
 @property (nonatomic, retain) UIImage *stalkedUserImage;

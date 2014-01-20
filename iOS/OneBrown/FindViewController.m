@@ -162,7 +162,7 @@
     {
         sharedUserManager.stalkedUserName = userPictureNames[indexPath.row];
         sharedUserManager.stalkedUserImage  = userPictures[indexPath.row];
-        sharedUserManager.stalkedUserNetworks = [NSMutableArray arrayWithObjects:@"Facebook", @"Twitter", @"Instagram", @"Snapchat", @"Vine", @"LinkedIn", nil];
+        //sharedUserManager.stalkedUserNetworks = [NSMutableArray arrayWithObjects:@"Facebook", @"Twitter", @"Instagram", @"Snapchat", @"Vine", @"LinkedIn", nil];
         
         UserProfileViewController *viewController = (UserProfileViewController *) [self.storyboard instantiateViewControllerWithIdentifier:@"UserProfileController"];
         

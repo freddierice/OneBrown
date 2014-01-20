@@ -15,7 +15,6 @@ static NSString *TableViewCellIdentifier = @"SNCells";
 {
     UserManager *sharedUserManager;
     NSUserDefaults *defaults;
-
 }
 
 @end

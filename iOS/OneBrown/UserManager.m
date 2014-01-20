@@ -32,7 +32,7 @@
     {
         userName = [[NSString alloc] init];
         userImage = [[UIImage alloc]init];
-        userNetworks = [[NSMutableArray alloc] init];
+        userNetworks = [[NSMutableDictionary alloc] init];
         stalkedUserName = [[NSString alloc] init];
         stalkedUserImage = [[UIImage alloc]init];
         stalkedUserNetworks = [[NSMutableArray alloc] init];

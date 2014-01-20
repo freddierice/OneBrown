@@ -64,19 +64,98 @@
     
     CAPopupWindow* popView = [[CAPopupWindow alloc] initWithObjectList:@[
                                                                          [CAWindowObject windowObject:sharedUserManager.socialNetworks[0]
-                                                                                                image:sharedUserManager.socialNetworkImages[0]target:nil action:nil],
-                                                                         [CAWindowObject windowObject:sharedUserManager.socialNetworks[1] image:sharedUserManager.socialNetworkImages[1] target:nil action:nil],
-                                                                         [CAWindowObject windowObject:sharedUserManager.socialNetworks[2] image:sharedUserManager.socialNetworkImages[2] target:nil action:nil],
-                                                                         [CAWindowObject windowObject:sharedUserManager.socialNetworks[3] image:sharedUserManager.socialNetworkImages[3]target:nil action:nil],
-                                                                         [CAWindowObject windowObject:sharedUserManager.socialNetworks[4] image:sharedUserManager.socialNetworkImages[4] target:nil action:nil],
-                                                                         [CAWindowObject windowObject:sharedUserManager.socialNetworks[5] image:sharedUserManager.socialNetworkImages[5] target:nil action:nil]]];
+                                                        image:sharedUserManager.socialNetworkImages[0]target:self action:@selector(addFacebook)],
+                                                                         [CAWindowObject windowObject:sharedUserManager.socialNetworks[1] image:sharedUserManager.socialNetworkImages[1] target:self action:@selector(addTwitter)],
+                                                                         [CAWindowObject windowObject:sharedUserManager.socialNetworks[2] image:sharedUserManager.socialNetworkImages[2] target:self action:@selector(addInstagram)],
+                                                                         [CAWindowObject windowObject:sharedUserManager.socialNetworks[3] image:sharedUserManager.socialNetworkImages[3]target:self action:@selector(addSnapchat)]]];
     [popView presentInView:self.view];
     
 }
 
--(void) say {
-    NSLog(@"Hi!");
+- (void) addFacebook
+{
+    NSLog(@"adding facebook");
 }
+
+- (void) addTwitter
+{
+    NSLog(@"adding twitt");
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Enter your Twitter username:"
+                                                        message:nil
+                                                       delegate:self
+                                              cancelButtonTitle:@"Cancel"
+                                              otherButtonTitles:@"Done", nil];
+    
+    alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
+    alertView.tag = 1;
+    
+    [alertView show];
+}
+
+- (void) addInstagram
+{
+    NSLog(@"adding insta");
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Enter your Instagram username:"
+                                                        message:nil
+                                                       delegate:self
+                                              cancelButtonTitle:@"Cancel"
+                                              otherButtonTitles:@"Done", nil];
+    
+    alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
+    alertView.tag = 2;
+    
+    [alertView show];
+
+}
+
+- (void) addSnapchat
+{
+    NSLog(@"adding snap");
+
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Enter your Snapchat username:"
+                                                        message:nil
+                                                       delegate:self
+                                              cancelButtonTitle:@"Cancel"
+                                              otherButtonTitles:@"Done", nil];
+    
+    alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
+    alertView.tag = 3;
+    
+    [alertView show];
+
+}
+
+- (void) alertView: (UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    NSString *userNameWritten = [alertView textFieldAtIndex:0].text;
+
+    // If clicked the Done button. 
+    if (buttonIndex == 1)
+    {
+        switch ((int) alertView.tag)
+        {
+            case 0:
+                NSLog(@"facebook");
+                break;
+            case 1:
+                [sharedUserManager.userNetworks setObject:userNameWritten forKey:@"twitter"];
+                break;
+            case 2:
+                [sharedUserManager.userNetworks setObject:userNameWritten forKey:@"instagram"];
+                break;
+            case 3:
+                [sharedUserManager.userNetworks setObject:userNameWritten forKey:@"snapchat"];
+                break;
+            default:
+                break;
+        }
+        
+        
+        NSLog(@"username: %@  tag: %d", userNameWritten, (int)alertView.tag);
+    }
+    
+}
+
 
 
 - (IBAction)clickedLogOut:(id)sender
