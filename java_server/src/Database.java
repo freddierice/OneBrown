@@ -42,8 +42,8 @@ public class Database {
     {
         try{
             String url = "jdbc:mysql://127.0.0.1:3306/onebrown";
-            String user = "root";
-            String pass = "df9qfEZVoXl/8MW4";
+            String user = "red";
+            String pass = "password";
             Connection conn = DriverManager.getConnection(url,user,pass);
             return new Database(conn);
         } catch(SQLException ex) {
