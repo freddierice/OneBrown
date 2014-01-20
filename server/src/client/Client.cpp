@@ -5,6 +5,7 @@ Client::Client(){}
 Client::Client(int sd)
 {
     m_network = new Network(sd);
+    m_database = new Database();
     m_cs = ClientStatus::DEAD;
 }
 
@@ -32,31 +33,39 @@ void Client::run()
 
 void Client::authorize()
 {
-    std::string msg; 
+    std::string msg;
+    Json::Value val;
     while(m_cs == ClientStatus::NOT_AUTHORIZED){
         msg = "";
+        val.clear();
         while(msg == ""){
-            Json::Value val;
             val["message"] = "login_or_register";
             msg = m_writer.write(val);
             m_network->sendBytes(msg.c_str(),msg.length());
-            val = m_network ->recvJSON();
+            val = m_network->recvJSON();
             msg = val.get("message","").asString();
         }
         
         if(msg == "login")
-            login();
+            login(val);
         if(msg == "register")
-            reg();
+            reg(val);
     }
 }
 
-void Client::login()
+void Client::login(Json::Value &val)
 {
+    std::string user,pass;
+    
     std::cout << "Logging in..." << std::endl;
+    
+    user = val.get("user","").asString();
+    pass = val.get("pass","").asString();
+    
+    m_database->login(user,pass);
 }
 
-void Client::reg()
+void Client::reg(Json::Value &val)
 {
     std::cout << "Registering..." << std::endl;
 }

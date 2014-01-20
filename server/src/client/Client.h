@@ -10,6 +10,8 @@
 #include <json/json.h>
 
 #include "../network/Network.h"
+#include "../utilities/Utility.h"
+#include "../database/Database.h"
 
 enum class ClientStatus : int {DEAD=0,NOT_AUTHORIZED,AUTHORIZED};
 
@@ -22,8 +24,8 @@ public:
     void close();
     
     void authorize();
-    void login();
-    void reg();
+    void login(Json::Value &val);
+    void reg(Json::Value &val);
     
     ClientStatus getStatus();
     
@@ -34,9 +36,9 @@ private:
     Json::FastWriter m_writer;
     
     Network *m_network;
+    Database *m_database;
     std::thread m_thread;
     
-    //threadsafe
     std::atomic<ClientStatus> m_cs;
 };
 
