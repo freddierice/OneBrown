@@ -100,15 +100,15 @@ RegistrationStatus Database::reg(std::string user, std::string pass)
             Utility::sha256(message,16+pass_len,m_digest);
             
             DataBuf saltBuffer((char *)m_salt,16);
-            DataBuf hashBuffer((char *)m_hash,32);
+            DataBuf hashBuffer((char *)m_digest,32);
             std::istream saltStream(&saltBuffer);
             std::istream hashStream(&hashBuffer);
             
             delete m_stmt;
-            m_stmt = m_conn->prepareStatement("INSERT INTO users (email,hash,salt) VALUES (?,?,?)");
+            m_stmt = m_conn->prepareStatement("INSERT INTO users (email,salt,hash) VALUES (?,?,?)");
             m_stmt->setString(1,user);
-            m_stmt->setBlob(2,&hashStream);
-            m_stmt->setBlob(3,&saltStream);
+            m_stmt->setBlob(2,&saltStream);
+            m_stmt->setBlob(3,&hashStream);
             m_stmt->executeUpdate();
         }
     }catch (sql::SQLException e) {

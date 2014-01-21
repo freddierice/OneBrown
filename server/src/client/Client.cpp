@@ -62,7 +62,10 @@ void Client::login(Json::Value &val)
     user = val.get("user","").asString();
     pass = val.get("pass","").asString();
     
-    m_database->login(user,pass);
+    if(m_database->login(user,pass) == LoginStatus::SUCCESS)
+        std::cout << "Yay!" << std::endl;
+    else
+        std::cout << "Aww!" << std::endl;
 }
 
 void Client::reg(Json::Value &val)
