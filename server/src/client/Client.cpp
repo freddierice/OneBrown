@@ -67,7 +67,14 @@ void Client::login(Json::Value &val)
 
 void Client::reg(Json::Value &val)
 {
+    std::string user,pass;
+    
     std::cout << "Registering..." << std::endl;
+    
+    user = val.get("user","").asString();
+    pass = val.get("pass","").asString();
+    
+    m_database->reg(user,pass);
 }
 
 void Client::close()

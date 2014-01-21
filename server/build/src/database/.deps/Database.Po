@@ -128,6 +128,8 @@ src/database/Database.o: ../src/database/Database.cpp \
  /usr/local/Cellar/gcc48/4.8.2/lib/gcc/x86_64-apple-darwin13.0.0/4.8.2/include/c++/bits/ostream.tcc \
  /usr/local/Cellar/gcc48/4.8.2/lib/gcc/x86_64-apple-darwin13.0.0/4.8.2/include/c++/istream \
  /usr/local/Cellar/gcc48/4.8.2/lib/gcc/x86_64-apple-darwin13.0.0/4.8.2/include/c++/bits/istream.tcc \
+ /usr/local/Cellar/gcc48/4.8.2/lib/gcc/x86_64-apple-darwin13.0.0/4.8.2/include/c++/cstring \
+ /usr/include/string.h /usr/include/strings.h \
  ../src/database/../utilities/Utility.h \
  /usr/local/Cellar/gcc48/4.8.2/lib/gcc/x86_64-apple-darwin13.0.0/4.8.2/include/c++/algorithm \
  /usr/local/Cellar/gcc48/4.8.2/lib/gcc/x86_64-apple-darwin13.0.0/4.8.2/include/c++/utility \
@@ -170,6 +172,9 @@ src/database/Database.o: ../src/database/Database.cpp \
  /usr/local/Cellar/gcc48/4.8.2/lib/gcc/x86_64-apple-darwin13.0.0/4.8.2/include/c++/array \
  /usr/local/Cellar/gcc48/4.8.2/lib/gcc/x86_64-apple-darwin13.0.0/4.8.2/include/c++/stdexcept \
  /usr/local/Cellar/gcc48/4.8.2/lib/gcc/x86_64-apple-darwin13.0.0/4.8.2/include/c++/bits/uses_allocator.h \
+ /usr/local/include/openssl/sha.h /usr/local/include/openssl/e_os2.h \
+ /usr/local/include/openssl/opensslconf.h \
+ /usr/local/Cellar/gcc48/4.8.2/lib/gcc/x86_64-apple-darwin13.0.0/4.8.2/include/stddef.h \
  /usr/local/include/mysql_connection.h \
  /usr/local/include/cppconn/connection.h \
  /usr/local/Cellar/gcc48/4.8.2/lib/gcc/x86_64-apple-darwin13.0.0/4.8.2/include/c++/map \
@@ -179,7 +184,6 @@ src/database/Database.o: ../src/database/Database.cpp \
  /usr/local/include/boost/variant.hpp \
  /usr/local/include/boost/variant/variant.hpp \
  /usr/local/Cellar/gcc48/4.8.2/lib/gcc/x86_64-apple-darwin13.0.0/4.8.2/include/c++/cstddef \
- /usr/local/Cellar/gcc48/4.8.2/lib/gcc/x86_64-apple-darwin13.0.0/4.8.2/include/stddef.h \
  /usr/local/include/boost/variant/detail/config.hpp \
  /usr/local/include/boost/config.hpp \
  /usr/local/include/boost/config/user.hpp \
@@ -644,7 +648,10 @@ src/database/Database.o: ../src/database/Database.cpp \
  /usr/local/include/cppconn/resultset_metadata.h \
  /usr/local/include/cppconn/datatype.h \
  /usr/local/include/cppconn/statement.h \
- /usr/local/include/cppconn/resultset.h
+ /usr/local/include/cppconn/resultset.h \
+ /usr/local/include/cppconn/prepared_statement.h \
+ /usr/local/include/cppconn/statement.h /usr/local/include/openssl/rand.h \
+ /usr/local/include/openssl/ossl_typ.h
 
 ../src/database/Database.h:
 
@@ -984,6 +991,12 @@ src/database/Database.o: ../src/database/Database.cpp \
 
 /usr/local/Cellar/gcc48/4.8.2/lib/gcc/x86_64-apple-darwin13.0.0/4.8.2/include/c++/bits/istream.tcc:
 
+/usr/local/Cellar/gcc48/4.8.2/lib/gcc/x86_64-apple-darwin13.0.0/4.8.2/include/c++/cstring:
+
+/usr/include/string.h:
+
+/usr/include/strings.h:
+
 ../src/database/../utilities/Utility.h:
 
 /usr/local/Cellar/gcc48/4.8.2/lib/gcc/x86_64-apple-darwin13.0.0/4.8.2/include/c++/algorithm:
@@ -1068,6 +1081,14 @@ src/database/Database.o: ../src/database/Database.cpp \
 
 /usr/local/Cellar/gcc48/4.8.2/lib/gcc/x86_64-apple-darwin13.0.0/4.8.2/include/c++/bits/uses_allocator.h:
 
+/usr/local/include/openssl/sha.h:
+
+/usr/local/include/openssl/e_os2.h:
+
+/usr/local/include/openssl/opensslconf.h:
+
+/usr/local/Cellar/gcc48/4.8.2/lib/gcc/x86_64-apple-darwin13.0.0/4.8.2/include/stddef.h:
+
 /usr/local/include/mysql_connection.h:
 
 /usr/local/include/cppconn/connection.h:
@@ -1085,8 +1106,6 @@ src/database/Database.o: ../src/database/Database.cpp \
 /usr/local/include/boost/variant/variant.hpp:
 
 /usr/local/Cellar/gcc48/4.8.2/lib/gcc/x86_64-apple-darwin13.0.0/4.8.2/include/c++/cstddef:
-
-/usr/local/Cellar/gcc48/4.8.2/lib/gcc/x86_64-apple-darwin13.0.0/4.8.2/include/stddef.h:
 
 /usr/local/include/boost/variant/detail/config.hpp:
 
@@ -2037,3 +2056,11 @@ src/database/Database.o: ../src/database/Database.cpp \
 /usr/local/include/cppconn/statement.h:
 
 /usr/local/include/cppconn/resultset.h:
+
+/usr/local/include/cppconn/prepared_statement.h:
+
+/usr/local/include/cppconn/statement.h:
+
+/usr/local/include/openssl/rand.h:
+
+/usr/local/include/openssl/ossl_typ.h:
