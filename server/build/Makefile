@@ -198,7 +198,7 @@ CFLAGS = -g -O2
 CPPFLAGS = 
 CXX = g++
 CXXDEPMODE = depmode=gcc3
-CXXFLAGS = -g -O2 -std=c++11
+CXXFLAGS =  -O2 -std=c++11
 CYGPATH_W = echo
 DEFS = -DPACKAGE_NAME=\"OneBrown\ Server\" -DPACKAGE_TARNAME=\"onebrown\" -DPACKAGE_VERSION=\"1.0\" -DPACKAGE_STRING=\"OneBrown\ Server\ 1.0\" -DPACKAGE_BUGREPORT=\"OneBrownNetwork@gmail.com\" -DPACKAGE_URL=\"http://www.OneBrownNetwork.com/\" -DHAVE_LIBMYSQLCPPCONN=1 -DHAVE_LIBJSON=1 -DHAVE_LIBCRYPTO=1
 DEPDIR = .deps

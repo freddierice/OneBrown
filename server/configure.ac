@@ -2,8 +2,8 @@ AC_INIT([OneBrown Server], [1.0], [OneBrownNetwork@gmail.com],
              [onebrown], [http://www.OneBrownNetwork.com/])
 AC_PREREQ([2.59])
 AM_INIT_AUTOMAKE([1.10 -Wall no-define])
+CXXFLAGS="$CXXFLAGS -O2 -std=c++11"
 AC_PROG_CXX
-CXXFLAGS="$CXXFLAGS -std=c++11"
 
 #Mysql Library
 AC_CHECK_LIB([mysqlcppconn], [main], [], [a=0])
