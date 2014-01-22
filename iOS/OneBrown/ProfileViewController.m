@@ -17,7 +17,7 @@ static NSString *TableViewCellIdentifier = @"SNCells";
 {
     NSUserDefaults *defaults;
     UserManager *sharedUserManager;
-    NSMutableArray *currentUserNetworkCells;
+    NSMutableArray *addedSocialNetworks;
     int socNetIndex;
 }
 @end
@@ -64,6 +64,8 @@ static NSString *TableViewCellIdentifier = @"SNCells";
     
     /* Make sure our table view resizes correctly */
     self.networksTableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    
+    addedSocialNetworks = [[NSMutableArray alloc]init];
 }
 
 - (void)didReceiveMemoryWarning
@@ -169,8 +171,9 @@ static NSString *TableViewCellIdentifier = @"SNCells";
         
         socNetIndex = (int) alertView.tag;
         
-        [self.networksTableView reloadData];
+        [addedSocialNetworks insertObject:[UserManager socialNetworkForIndex:socNetIndex] atIndex:0];
         
+        [self.networksTableView reloadData];
         NSLog(@"sn added: %@", sharedUserManager.userNetworks);
 
         NSLog(@"username: %@  tag: %d", userNameWritten, (int)alertView.tag);
@@ -209,18 +212,19 @@ static NSString *TableViewCellIdentifier = @"SNCells";
     if ([tableView isEqual:self.networksTableView] && [defaults objectForKey:@"loggedIn"])
     {
         
-        if ((int)indexPath.row==0)
-        {
+        
             cell = [tableView dequeueReusableCellWithIdentifier: TableViewCellIdentifier forIndexPath:indexPath];
             [cell.imageView setContentMode:UIViewContentModeScaleAspectFit];
             
             NSString *socialNetwork = [[NSString alloc]init];
-            socialNetwork = [UserManager socialNetworkForIndex: socNetIndex];
+           // socialNetwork = [UserManager socialNetworkForIndex: [sharedUserManager.socialNetworks objectAtIndex:0]];
+            
+            socialNetwork = addedSocialNetworks[indexPath.row];
             
             cell.imageView.image = sharedUserManager.socialNetworkImages[socialNetwork];
             cell.textLabel.text = sharedUserManager.userNetworks[socialNetwork];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
+            //cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
             
             /*
              UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -233,12 +237,8 @@ static NSString *TableViewCellIdentifier = @"SNCells";
             [cell.textLabel setTextColor: [UIColor whiteColor]];
             [cell setBackgroundColor:[UIColor clearColor]];
             
-            [currentUserNetworkCells insertObject:cell atIndex:0];
-        }
-        else
-        {
-            cell = currentUserNetworkCells[indexPath.row];
-        }
+        
+       
         
     }
     return cell;
