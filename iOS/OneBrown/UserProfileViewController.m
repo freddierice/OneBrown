@@ -104,9 +104,13 @@ static NSString *TableViewCellIdentifier = @"SNCells";
     if ([tableView isEqual:self.tableView] && [defaults objectForKey:@"loggedIn"])
     {
         
+        NSString *socialNetwork = [[NSString alloc]init];
+        
+        socialNetwork = [UserManager socialNetworkForIndex:(int)indexPath.row];
+        
         cell = [tableView dequeueReusableCellWithIdentifier: TableViewCellIdentifier forIndexPath:indexPath];
         
-        cell.imageView.image = sharedUserManager.socialNetworkImages[indexPath.row];
+        cell.imageView.image = sharedUserManager.socialNetworkImages[socialNetwork];
         
         [cell.imageView setContentMode:UIViewContentModeScaleAspectFit];
         

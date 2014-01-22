@@ -11,10 +11,14 @@
 #import "CAPopupWindow.h"
 #import "UserManager.h"
 
+static NSString *TableViewCellIdentifier = @"SNCells";
+
 @interface ProfileViewController ()
 {
     NSUserDefaults *defaults;
     UserManager *sharedUserManager;
+    NSMutableArray *currentUserNetworkCells;
+    int socNetIndex;
 }
 @end
 
@@ -47,6 +51,19 @@
     profileImageView.layer.borderColor = [UIColor whiteColor].CGColor;
     
     [self.addButton addTarget:self action:@selector(buttonPress) forControlEvents:UIControlEventTouchUpInside];
+    
+    
+    // Setting up the tableView
+    [self.networksTableView setDelegate:self];
+    [self.networksTableView setDataSource:self];
+    
+    self.networksTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLineEtched;
+    self.networksTableView.separatorInset =  UIEdgeInsetsMake(5, 3, 5, 5);
+    [self.networksTableView registerClass:[ UITableViewCell class] forCellReuseIdentifier:TableViewCellIdentifier];
+    
+    
+    /* Make sure our table view resizes correctly */
+    self.networksTableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 }
 
 - (void)didReceiveMemoryWarning
@@ -60,14 +77,13 @@
     return UIStatusBarStyleLightContent;
 }
 
--(void)buttonPress {
+- (void)buttonPress {
     
     CAPopupWindow* popView = [[CAPopupWindow alloc] initWithObjectList:@[
-                                                                         [CAWindowObject windowObject:sharedUserManager.socialNetworks[0]
-                                                        image:sharedUserManager.socialNetworkImages[0]target:self action:@selector(addFacebook)],
-                                                                         [CAWindowObject windowObject:sharedUserManager.socialNetworks[1] image:sharedUserManager.socialNetworkImages[1] target:self action:@selector(addTwitter)],
-                                                                         [CAWindowObject windowObject:sharedUserManager.socialNetworks[2] image:sharedUserManager.socialNetworkImages[2] target:self action:@selector(addInstagram)],
-                                                                         [CAWindowObject windowObject:sharedUserManager.socialNetworks[3] image:sharedUserManager.socialNetworkImages[3]target:self action:@selector(addSnapchat)]]];
+                                                                         [CAWindowObject windowObject:sharedUserManager.socialNetworks[0] image:sharedUserManager.socialNetworkImages[sharedUserManager.socialNetworks[0]] target:self action:@selector(addFacebook)],
+                                                                         [CAWindowObject windowObject:sharedUserManager.socialNetworks[1] image:sharedUserManager.socialNetworkImages[sharedUserManager.socialNetworks[1]] target:self action:@selector(addTwitter)],
+                                                                         [CAWindowObject windowObject:sharedUserManager.socialNetworks[2] image:sharedUserManager.socialNetworkImages[sharedUserManager.socialNetworks[2]] target:self action:@selector(addInstagram)],
+                                                                         [CAWindowObject windowObject:sharedUserManager.socialNetworks[3] image:sharedUserManager.socialNetworkImages[sharedUserManager.socialNetworks[3]] target:self action:@selector(addSnapchat)]]];
     [popView presentInView:self.view];
     
 }
@@ -129,34 +145,104 @@
 {
     NSString *userNameWritten = [alertView textFieldAtIndex:0].text;
 
-    // If clicked the Done button. 
+    // If clicked the Done button.
     if (buttonIndex == 1)
     {
+        NSLog(@"in clicked button");
         switch ((int) alertView.tag)
         {
             case 0:
-                NSLog(@"facebook");
+                 [sharedUserManager.userNetworks setObject:@"facebookName" forKey:@"Facebook"];
                 break;
             case 1:
-                [sharedUserManager.userNetworks setObject:userNameWritten forKey:@"twitter"];
+                [sharedUserManager.userNetworks setObject:userNameWritten forKey:@"Twitter"];
                 break;
             case 2:
-                [sharedUserManager.userNetworks setObject:userNameWritten forKey:@"instagram"];
+                [sharedUserManager.userNetworks setObject:userNameWritten forKey:@"Instagram"];
                 break;
             case 3:
-                [sharedUserManager.userNetworks setObject:userNameWritten forKey:@"snapchat"];
+                [sharedUserManager.userNetworks setObject:userNameWritten forKey:@"Snapchat"];
                 break;
             default:
                 break;
         }
         
+        socNetIndex = (int) alertView.tag;
         
+        [self.networksTableView reloadData];
+        
+        NSLog(@"sn added: %@", sharedUserManager.userNetworks);
+
         NSLog(@"username: %@  tag: %d", userNameWritten, (int)alertView.tag);
     }
     
 }
 
+# pragma mark TableView Delegate Methods
+- (NSInteger) numberOfSectionsInTableView:( UITableView *) tableView
+{
+    if ([ tableView isEqual:self.networksTableView] && [defaults objectForKey:@"loggedIn"])
+    {
+        return 1;
+    }
+    return 0;
+    
+}
 
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    
+    if ([tableView isEqual:self.networksTableView] && [defaults objectForKey:@"loggedIn"])
+    {
+        if ([sharedUserManager.userNetworks count]!=0)
+            return [sharedUserManager.userNetworks  count];
+        
+        NSLog(@"sn for rows: %@", sharedUserManager.userNetworks);
+    }
+    
+    return 0;
+}
+
+- (UITableViewCell *) tableView:( UITableView *) tableView cellForRowAtIndexPath:( NSIndexPath *) indexPath
+{
+    UITableViewCell *cell = nil;
+    if ([tableView isEqual:self.networksTableView] && [defaults objectForKey:@"loggedIn"])
+    {
+        
+        if ((int)indexPath.row==0)
+        {
+            cell = [tableView dequeueReusableCellWithIdentifier: TableViewCellIdentifier forIndexPath:indexPath];
+            [cell.imageView setContentMode:UIViewContentModeScaleAspectFit];
+            
+            NSString *socialNetwork = [[NSString alloc]init];
+            socialNetwork = [UserManager socialNetworkForIndex: socNetIndex];
+            
+            cell.imageView.image = sharedUserManager.socialNetworkImages[socialNetwork];
+            cell.textLabel.text = sharedUserManager.userNetworks[socialNetwork];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
+            
+            /*
+             UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+             [button setImage:[UIImage imageNamed:@"IconProfile"] forState:UIControlStateNormal];
+             [button addTarget:self action:@selector(tappedButton) forControlEvents:UIControlEventTouchUpInside];
+             button.tag = indexPath.row;
+             cell.accessoryView = button;
+             */
+            [cell.textLabel setFont: [UIFont fontWithName:@"Helvetica" size:12]];
+            [cell.textLabel setTextColor: [UIColor whiteColor]];
+            [cell setBackgroundColor:[UIColor clearColor]];
+            
+            [currentUserNetworkCells insertObject:cell atIndex:0];
+        }
+        else
+        {
+            cell = currentUserNetworkCells[indexPath.row];
+        }
+        
+    }
+    return cell;
+}
 
 - (IBAction)clickedLogOut:(id)sender
 {

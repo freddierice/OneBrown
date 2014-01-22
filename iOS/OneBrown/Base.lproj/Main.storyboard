@@ -230,12 +230,27 @@
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="520"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="dg6-lo-g7p">
+                                <rect key="frame" x="33" y="280" width="255" height="156"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="pAn-4S-yhV">
+                                        <rect key="frame" x="0.0" y="22" width="255" height="44"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="pAn-4S-yhV" id="gI4-at-qbt">
+                                            <rect key="frame" x="0.0" y="0.0" width="255" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Valentin Perez" id="pgL-vk-rhJ">
-                                <rect key="frame" x="78" y="77" width="165" height="165"/>
+                                <rect key="frame" x="78" y="70" width="165" height="165"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Valentin Perez" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="LVV-wX-xur">
-                                <rect key="frame" x="49" y="31" width="223" height="38"/>
+                                <rect key="frame" x="49" y="24" width="223" height="38"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="21"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -254,7 +269,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="contactAdd" lineBreakMode="middleTruncation" id="WrD-14-DDQ">
-                                <rect key="frame" x="149" y="288" width="22" height="22"/>
+                                <rect key="frame" x="149" y="249" width="22" height="22"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="21"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -268,6 +283,7 @@
                     <tabBarItem key="tabBarItem" title="Profile" image="IconProfile" id="xQz-uk-1pX"/>
                     <connections>
                         <outlet property="addButton" destination="WrD-14-DDQ" id="h5t-iB-Z6I"/>
+                        <outlet property="networksTableView" destination="dg6-lo-g7p" id="85i-Lg-wNc"/>
                         <outlet property="profileImageView" destination="pgL-vk-rhJ" id="eWe-pm-YpT"/>
                         <outlet property="profileNameLabel" destination="LVV-wX-xur" id="nmO-Hh-6bw"/>
                     </connections>

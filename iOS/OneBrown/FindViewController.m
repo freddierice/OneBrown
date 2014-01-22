@@ -128,7 +128,9 @@
     }
     else if ([searchType isEqualToString:@"Social"])
     {
-        [cell.userImageView setImage:sharedUserManager.socialNetworkImages[indexPath.row]];
+        NSString *socialNetwork = [UserManager socialNetworkForIndex:(int)indexPath.row];
+
+        [cell.userImageView setImage: sharedUserManager.socialNetworkImages[socialNetwork]];
         [cell.userNameLabel setText:@""];
         cell.fadeView.hidden = YES;
     }
@@ -162,7 +164,7 @@
     {
         sharedUserManager.stalkedUserName = userPictureNames[indexPath.row];
         sharedUserManager.stalkedUserImage  = userPictures[indexPath.row];
-        //sharedUserManager.stalkedUserNetworks = [NSMutableArray arrayWithObjects:@"Facebook", @"Twitter", @"Instagram", @"Snapchat", @"Vine", @"LinkedIn", nil];
+        sharedUserManager.stalkedUserNetworks = [NSMutableArray arrayWithObjects:@"Facebook", @"Twitter", @"Instagram", @"Snapchat", @"Vine", @"LinkedIn", nil];
         
         UserProfileViewController *viewController = (UserProfileViewController *) [self.storyboard instantiateViewControllerWithIdentifier:@"UserProfileController"];
         
