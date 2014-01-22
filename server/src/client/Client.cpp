@@ -55,17 +55,25 @@ void Client::authorize()
 
 void Client::login(Json::Value &val)
 {
-    std::string user,pass;
+    std::string user,pass,msg,ses;
     
     std::cout << "Logging in..." << std::endl;
     
     user = val.get("user","").asString();
     pass = val.get("pass","").asString();
+    val.clear();
     
-    if(m_database->login(user,pass) == LoginStatus::SUCCESS)
+    if(m_database->login(user,pass) == LoginStatus::SUCCESS){
         std::cout << "Yay!" << std::endl;
-    else
+        m_cs = ClientStatus::AUTHORIZED;
+        val["message"] = "success";
+        val["session"] = m_database->getSession();
+    }else{
         std::cout << "Aww!" << std::endl;
+        val["message"] = "failure";
+    }
+    msg = m_writer.write(val);
+    m_network->sendBytes(msg.c_str(),msg.length());
 }
 
 void Client::reg(Json::Value &val)

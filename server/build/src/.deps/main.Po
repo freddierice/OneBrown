@@ -165,7 +165,13 @@ src/main.o: ../src/main.cpp ../src/main.h \
  /usr/include/openssl/sha.h /usr/include/openssl/e_os2.h \
  /usr/include/openssl/opensslconf.h \
  /usr/local/lib/gcc/x86_64-apple-darwin10.8.0/4.8.2/include/stddef.h \
- ../src/client/../database/Database.h \
+ /usr/include/openssl/bio.h /usr/include/openssl/crypto.h \
+ /usr/include/openssl/stack.h /usr/include/openssl/safestack.h \
+ /usr/include/openssl/opensslv.h /usr/include/openssl/ossl_typ.h \
+ /usr/include/openssl/symhacks.h /usr/include/openssl/evp.h \
+ /usr/include/openssl/objects.h /usr/include/openssl/obj_mac.h \
+ /usr/include/openssl/asn1.h /usr/include/openssl/bn.h \
+ /usr/include/openssl/buffer.h ../src/client/../database/Database.h \
  /usr/local/include/c++/4.8.2/cstring \
  ../src/client/../database/../utilities/Utility.h \
  /usr/local/include/mysql_connection.h \
@@ -625,7 +631,7 @@ src/main.o: ../src/main.cpp ../src/main.h \
  /usr/local/include/cppconn/resultset.h \
  /usr/local/include/cppconn/prepared_statement.h \
  /usr/local/include/cppconn/statement.h /usr/include/openssl/rand.h \
- /usr/include/openssl/ossl_typ.h ../src/network/Network.h
+ ../src/network/Network.h ../src/utilities/Utility.h
 
 ../src/main.h:
 
@@ -1048,6 +1054,32 @@ src/main.o: ../src/main.cpp ../src/main.h \
 /usr/include/openssl/opensslconf.h:
 
 /usr/local/lib/gcc/x86_64-apple-darwin10.8.0/4.8.2/include/stddef.h:
+
+/usr/include/openssl/bio.h:
+
+/usr/include/openssl/crypto.h:
+
+/usr/include/openssl/stack.h:
+
+/usr/include/openssl/safestack.h:
+
+/usr/include/openssl/opensslv.h:
+
+/usr/include/openssl/ossl_typ.h:
+
+/usr/include/openssl/symhacks.h:
+
+/usr/include/openssl/evp.h:
+
+/usr/include/openssl/objects.h:
+
+/usr/include/openssl/obj_mac.h:
+
+/usr/include/openssl/asn1.h:
+
+/usr/include/openssl/bn.h:
+
+/usr/include/openssl/buffer.h:
 
 ../src/client/../database/Database.h:
 
@@ -1979,6 +2011,6 @@ src/main.o: ../src/main.cpp ../src/main.h \
 
 /usr/include/openssl/rand.h:
 
-/usr/include/openssl/ossl_typ.h:
-
 ../src/network/Network.h:
+
+../src/utilities/Utility.h:

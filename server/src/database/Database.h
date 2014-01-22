@@ -31,6 +31,8 @@ public:
     
     RegistrationStatus reg(std::string user, std::string pass);
     
+    std::string getSession();
+    
 private:
     sql::Driver *m_driver;
     sql::Connection *m_conn;
@@ -38,6 +40,7 @@ private:
     
     sql::PreparedStatement *m_stmt;
     
+    int m_id;
     std::string m_email;
     char *m_hash, *m_salt, *m_digest, *m_session;
 };

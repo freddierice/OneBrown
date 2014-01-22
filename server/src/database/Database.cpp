@@ -44,10 +44,26 @@ LoginStatus Database::login(std::string user, std::string pass)
         m_res = m_stmt->executeQuery();
         
         if(m_res->next()){
+            m_id = m_res->getInt("id");
             m_email = m_res->getString("email");
             m_res->getBlob("hash")->read(m_hash,32);
             m_res->getBlob("salt")->read(m_salt,16);
-            
+            m_res->getBlob("session")->read(m_session,32);
+            bool fell = false;
+            for(int i = 0; i < 32; ++i)
+                if(m_session[i] == 0){
+                    fell = true;
+                    break;
+                }
+            if(!fell){
+                RAND_bytes((unsigned char *)m_session,32);
+                DataBuf sessionBuffer((char *)m_session,32);
+                std::istream sessionStream(&sessionBuffer);
+                delete m_stmt;
+                m_stmt = m_conn->prepareStatement("UPDATE users SET session=? WHERE id=?");
+                m_stmt->setBlob(1,&sessionStream);
+                m_stmt->setInt(2,m_id);
+            }
             memcpy(message,pass.c_str(),pass_len);
             memcpy(message+pass_len,m_salt,16);
             Utility::sha256(message,pass_len+16,m_digest);
@@ -125,5 +141,13 @@ RegistrationStatus Database::reg(std::string user, std::string pass)
     delete m_res;
     
     return rs;
+}
+
+
+std::string Database::getSession()
+{
+    std::string str;
+    Utility::bytesToBase64(m_session,32,str);
+    return str;
 }
 
