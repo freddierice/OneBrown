@@ -10,6 +10,7 @@
 #include <string.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <unistd.h>
 #include <netdb.h>
 #include <arpa/inet.h>
 
@@ -34,12 +35,12 @@ private:
     Network();
     void recvBytes();
     
-    std::thread m_t;
+    std::thread m_thread;
     int m_sd;
     
     std::vector<Json::Value> m_jsonValues;
     std::mutex m_jsonValuesM;
-    std::atomic<bool> m_running;
+    std::atomic<bool> m_isRunning;
 };
 
 #endif /* _NETWORK_H_ */

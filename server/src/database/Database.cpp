@@ -25,6 +25,23 @@ Database::~Database()
 LoginStatus Database::login(std::string session)
 {
     LoginStatus ls;
+    
+    Utility::base64ToBytes(m_session,32,session);
+    
+    DataBuf sessionBuffer((char *)m_session,32);
+    std::istream sessionStream(&sessionBuffer);
+    
+    m_stmt = m_conn->prepareStatement("SELECT * FROM users WHERE session=?");
+    m_stmt->setBlob(1,&sessionStream);
+    m_res = m_stmt->executeQuery();
+    if(m_res->next()){
+        m_id = m_res->getInt("id");
+        m_email = m_res->getString("email");
+        m_res->getBlob("session")->read(m_session,32);
+        ls = LoginStatus::SUCCESS;
+    }else{
+        ls = LoginStatus::FAILURE;
+    }
     return ls;
 }
 
@@ -48,14 +65,7 @@ LoginStatus Database::login(std::string user, std::string pass)
             m_email = m_res->getString("email");
             m_res->getBlob("hash")->read(m_hash,32);
             m_res->getBlob("salt")->read(m_salt,16);
-            m_res->getBlob("session")->read(m_session,32);
-            bool fell = false;
-            for(int i = 0; i < 32; ++i)
-                if(m_session[i] == 0){
-                    fell = true;
-                    break;
-                }
-            if(!fell){
+            if(!m_res->getBlob("session")->read(m_session,32)){
                 RAND_bytes((unsigned char *)m_session,32);
                 DataBuf sessionBuffer((char *)m_session,32);
                 std::istream sessionStream(&sessionBuffer);
@@ -63,6 +73,7 @@ LoginStatus Database::login(std::string user, std::string pass)
                 m_stmt = m_conn->prepareStatement("UPDATE users SET session=? WHERE id=?");
                 m_stmt->setBlob(1,&sessionStream);
                 m_stmt->setInt(2,m_id);
+                m_stmt->executeUpdate();
             }
             memcpy(message,pass.c_str(),pass_len);
             memcpy(message+pass_len,m_salt,16);
@@ -89,6 +100,13 @@ LoginStatus Database::login(std::string user, std::string pass)
     delete m_stmt;
     
     return ls;
+}
+
+void Database::logout()
+{
+    m_stmt = m_conn->prepareStatement("UPDATE users SET session=NULL WHERE id=?");
+    m_stmt->setInt(1,m_id);
+    m_stmt->executeUpdate();
 }
 
 RegistrationStatus Database::reg(std::string user, std::string pass)
@@ -126,6 +144,8 @@ RegistrationStatus Database::reg(std::string user, std::string pass)
             m_stmt->setBlob(2,&saltStream);
             m_stmt->setBlob(3,&hashStream);
             m_stmt->executeUpdate();
+            
+            rs = RegistrationStatus::SUCCESS;
         }
     }catch (sql::SQLException e) {
         std::cout << "# ERR: SQLException in " << __FILE__;

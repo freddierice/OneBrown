@@ -21,13 +21,15 @@ public:
     ~Client();
     
     void start();
-    void close();
+    bool close();
     
     void authorize();
     void login(Json::Value &val);
+    void logout(Json::Value &val);
     void reg(Json::Value &val);
     
     ClientStatus getStatus();
+    bool isRunning();
     
 private:
     Client();
@@ -40,6 +42,7 @@ private:
     std::thread m_thread;
     
     std::atomic<ClientStatus> m_cs;
+    std::atomic<bool> m_isRunning;
 };
 
 #endif /* _CLIENT_H_ */

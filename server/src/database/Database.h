@@ -28,6 +28,7 @@ public:
     
     LoginStatus login(std::string session);
     LoginStatus login(std::string user, std::string pass);
+    void logout();
     
     RegistrationStatus reg(std::string user, std::string pass);
     

@@ -5,7 +5,7 @@ Network::Network(){}
 Network::Network(int sd)
 {
     m_sd = sd;
-    m_running = false;
+    m_isRunning = false;
 }
 
 Network::~Network()
@@ -15,9 +15,9 @@ Network::~Network()
 
 void Network::start()
 {
-    if(!m_running){
-        m_running = true;
-        m_t = std::thread(&Network::recvBytes, this);
+    if(!m_isRunning){
+        m_isRunning = true;
+        m_thread = std::thread(&Network::recvBytes, this);
     }
 }
 
@@ -62,7 +62,7 @@ void Network::recvBytes()
     
     buf = new char[BUF_SIZE];
     par = 0;
-    while(m_running){
+    while(m_isRunning){
         if(par == 0){
             str = "";
         }
@@ -93,14 +93,14 @@ void Network::recvBytes()
                 str = "";
             }
         }
-        
     }
+    ::close(m_sd);
 }
 
 void Network::close()
 {
-    if(m_running){
-        m_running = false;
-        m_t.join();
+    if(m_isRunning){
+        m_isRunning = false;
+        m_thread.join();
     }
 }
