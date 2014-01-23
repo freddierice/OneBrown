@@ -171,7 +171,13 @@ static NSString *TableViewCellIdentifier = @"SNCells";
         
         socNetIndex = (int) alertView.tag;
         
-        [addedSocialNetworks insertObject:[UserManager socialNetworkForIndex:socNetIndex] atIndex:0];
+        if ([addedSocialNetworks containsObject:[UserManager socialNetworkForIndex:socNetIndex]])
+        {
+            int indexToBeChanged = (int)[addedSocialNetworks indexOfObject:[UserManager socialNetworkForIndex:socNetIndex]];
+            [addedSocialNetworks setObject:[UserManager socialNetworkForIndex:socNetIndex] atIndexedSubscript:indexToBeChanged];
+        }
+        else
+            [addedSocialNetworks insertObject:[UserManager socialNetworkForIndex:socNetIndex] atIndex:0];
         
         [self.networksTableView reloadData];
         NSLog(@"sn added: %@", sharedUserManager.userNetworks);
