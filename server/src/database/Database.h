@@ -20,6 +20,7 @@
 
 enum class RegistrationStatus : int {SUCCESS=0,FAILURE,EXISTS,DB_FAILURE};
 enum class LoginStatus : int {SUCCESS=0,FAILURE,DB_FAILURE};
+enum class VerificationStatus : int {SUCCESS=0,FAILURE,DNE,REVOKED,DB_FAILURE};
 
 class Database {
 public:
@@ -28,9 +29,12 @@ public:
     
     LoginStatus login(std::string session);
     LoginStatus login(std::string user, std::string pass);
+    
+    void createUser(std::string user, std::string pass);
     void logout();
     
     RegistrationStatus reg(std::string user, std::string pass);
+    VerificationStatus verify(std::string user, std::string code);
     
     std::string getSession();
     
@@ -41,7 +45,8 @@ private:
     
     sql::PreparedStatement *m_stmt;
     
-    int m_id;
+    int m_id, m_tries;
+    unsigned short m_code;
     std::string m_email;
     char *m_hash, *m_salt, *m_digest, *m_session;
 };

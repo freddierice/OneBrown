@@ -27,6 +27,7 @@ public:
     void login(Json::Value &val);
     void logout(Json::Value &val);
     void reg(Json::Value &val);
+    void verify(Json::Value &val);
     
     ClientStatus getStatus();
     bool isRunning();

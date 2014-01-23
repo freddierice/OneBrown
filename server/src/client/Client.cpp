@@ -76,6 +76,8 @@ void Client::authorize()
             login(val);
         else if(msg == "register")
             reg(val);
+        else if(msg == "verify")
+            verify(val);
         else if(msg == "close")
             m_cs = ClientStatus::DEAD;
     }
@@ -125,6 +127,27 @@ void Client::reg(Json::Value &val)
     else
         val["message"] = "failure";
     
+    msg = m_writer.write(val);
+    m_network->sendBytes(msg.c_str(),msg.length());
+}
+
+void Client::verify(Json::Value &val)
+{
+    std::string code,msg;
+    VerificationStatus vs;
+    
+    code = val.get("code","").asString();
+    val.clear();
+    
+    if(code == "")
+        val["message"] = "failure";
+    else{
+        vs = m_database->verify(code);
+        if(vs == VerificationStatus::SUCCESS)
+            val["message"] = "success";
+        else
+            val["message"] = "failure";
+    }
     msg = m_writer.write(val);
     m_network->sendBytes(msg.c_str(),msg.length());
 }

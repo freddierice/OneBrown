@@ -109,15 +109,37 @@ void Database::logout()
     m_stmt->executeUpdate();
 }
 
-RegistrationStatus Database::reg(std::string user, std::string pass)
+void Database::createUser(std::string user, std::string pass)
 {
-    RegistrationStatus rs;
     int pass_len;
     char *message;
     
-    Utility::sqlClean(user);
     pass_len = pass.length();
     message = new char[pass_len+16];
+    
+    RAND_bytes((unsigned char*)m_salt,16);
+    memcpy(message,pass.c_str(),pass_len);
+    memcpy(message+pass_len,m_salt,16);
+    Utility::sha256(message,16+pass_len,m_digest);
+    
+    DataBuf saltBuffer((char *)m_salt,16);
+    DataBuf hashBuffer((char *)m_digest,32);
+    std::istream saltStream(&saltBuffer);
+    std::istream hashStream(&hashBuffer);
+    
+    m_stmt = m_conn->prepareStatement("INSERT INTO users (email,salt,hash) VALUES (?,?,?)");
+    m_stmt->setString(1,user);
+    m_stmt->setBlob(2,&saltStream);
+    m_stmt->setBlob(3,&hashStream);
+    m_stmt->executeUpdate();
+    delete m_stmt;
+}
+
+RegistrationStatus Database::reg(std::string user, std::string pass)
+{
+    RegistrationStatus rs;
+    
+    Utility::sqlClean(user);
     
     try{
         m_stmt = m_conn->prepareStatement("SELECT * FROM users WHERE email=?");
@@ -127,25 +149,26 @@ RegistrationStatus Database::reg(std::string user, std::string pass)
         if(m_res->next())
             rs = RegistrationStatus::EXISTS;
         else{
-            
-            RAND_bytes((unsigned char*)m_salt,16);
-            memcpy(message,pass.c_str(),pass_len);
-            memcpy(message+pass_len,m_salt,16);
-            Utility::sha256(message,16+pass_len,m_digest);
-            
-            DataBuf saltBuffer((char *)m_salt,16);
-            DataBuf hashBuffer((char *)m_digest,32);
-            std::istream saltStream(&saltBuffer);
-            std::istream hashStream(&hashBuffer);
-            
             delete m_stmt;
-            m_stmt = m_conn->prepareStatement("INSERT INTO users (email,salt,hash) VALUES (?,?,?)");
-            m_stmt->setString(1,user);
-            m_stmt->setBlob(2,&saltStream);
-            m_stmt->setBlob(3,&hashStream);
-            m_stmt->executeUpdate();
+            delete m_res;
             
-            rs = RegistrationStatus::SUCCESS;
+            m_stmt = m_conn->prepareStatement("SELECT * FROM reg WHERE email=?");
+            m_stmt->setString(1,user);
+            m_res = m_stmt->executeQuery();
+            if(m_res->next()){
+                rs = RegistrationStatus::VERIFY;
+                m_tries = m_res->getInt("tries");
+            }else{
+                RAND_bytes((unsigned char*)&m_code,sizeof(m_code));
+                
+                delete m_stmt;
+                m_stmt = m_conn->prepareStatement("INSERT INTO reg(email,code) VALUES (?,?)");
+                m_stmt->setString(1,user);
+                m_stmt->setUInt(2,(unsigned int)m_code);
+                m_stmt->executeUpdate();
+                m_tries = 5;
+                rs = RegistrationStatus::VERIFY;
+            }
         }
     }catch (sql::SQLException e) {
         std::cout << "# ERR: SQLException in " << __FILE__;
@@ -161,6 +184,48 @@ RegistrationStatus Database::reg(std::string user, std::string pass)
     delete m_res;
     
     return rs;
+}
+
+VerificationStatus Database::verify(std::string user, std::string code)
+{
+    VerificationStatus vs;
+    
+    m_stmt = m_conn->prepareStatement("SELECT * FROM reg WHERE email=?");
+    m_res = m_stmt->executeQuery();
+    if(!m_res->next())
+        return VerificationStatus::DNE;
+    
+    if( m_res->getInt("code") == atoi(code.c_str())){
+        vs = VerificationStatus::SUCCESS;
+        
+        //todo: do something here
+    }else{
+        m_tries = m_res->getInt("tries");
+        if(--m_tries == 0){
+            VerificationStatus::RENEW;
+            RAND_bytes((unsigned char*)&m_code,sizeof(m_code));
+            m_tries = 5;
+            
+            delete m_stmt;
+            m_stmt = m_conn->prepareStatement("UPDATE reg SET (code=?,tries=5) WHERE email=?");
+            m_stmt->setUInt(1,(unsigned int)m_code);
+            m_stmt->setString(2,user);
+            m_stmt->executeUpdate();
+        }else{
+            vs = VerificationStatus::FAILURE;
+            
+            delete m_stmt;
+            m_stmt = m_conn->prepareStatement("UPDATE reg SET tries=? WHERE email=?");
+            m_stmt->setUInt(1,(unsigned int)m_code);
+            m_stmt->setString(2,user);
+            m_stmt->executeUpdate();
+        }
+    }
+    
+    delete m_stmt;
+    delete m_res;
+    
+    return vs;
 }
 
 
