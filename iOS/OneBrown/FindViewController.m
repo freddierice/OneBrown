@@ -128,7 +128,9 @@
     }
     else if ([searchType isEqualToString:@"Social"])
     {
-        [cell.userImageView setImage:sharedUserManager.socialNetworkImages[indexPath.row]];
+        NSString *socialNetwork = [UserManager socialNetworkForIndex:(int)indexPath.row];
+
+        [cell.userImageView setImage: sharedUserManager.socialNetworkImages[socialNetwork]];
         [cell.userNameLabel setText:@""];
         cell.fadeView.hidden = YES;
     }

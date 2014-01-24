@@ -12,31 +12,29 @@
 {
     NSString *userName;
     UIImage *userImage;
-    NSMutableArray *userNetworks;
+    NSMutableDictionary *userNetworks;
     
     NSString *stalkedUserName;
     UIImage *stalkedUserImage;
     NSMutableArray *stalkedUserNetworks;
     NSMutableArray *socialNetworks;
-    NSMutableArray *socialNetworkImages;
+    NSMutableDictionary *socialNetworkImages;
 }
 
 @property (nonatomic, retain) NSString *userName;
 @property (nonatomic, retain) UIImage *userImage;
-@property (nonatomic, retain) NSMutableArray *userNetworks;
+@property (nonatomic, retain) NSMutableDictionary *userNetworks;
 
 @property (nonatomic, retain) NSString *stalkedUserName;
 @property (nonatomic, retain) UIImage *stalkedUserImage;
 @property (nonatomic, retain) NSMutableArray *stalkedUserNetworks;
 
 @property (nonatomic, retain) NSMutableArray *socialNetworks;
-@property (nonatomic, retain) NSMutableArray *socialNetworkImages;
-
-
-
-
+@property (nonatomic, retain) NSMutableDictionary *socialNetworkImages;
 
 
 + (id)sharedUserManager;
++ (NSString *) socialNetworkForIndex: (int) index;
+
 
 @end

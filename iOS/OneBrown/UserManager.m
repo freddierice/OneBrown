@@ -32,18 +32,46 @@
     {
         userName = [[NSString alloc] init];
         userImage = [[UIImage alloc]init];
-        userNetworks = [[NSMutableArray alloc] init];
+        userNetworks = [[NSMutableDictionary alloc] init];
         stalkedUserName = [[NSString alloc] init];
         stalkedUserImage = [[UIImage alloc]init];
         stalkedUserNetworks = [[NSMutableArray alloc] init];
         
-        socialNetworks = [[NSMutableArray alloc] initWithObjects:@"Facebook",@"Twitter", @"Instagram", @"Snapchat", @"Vine", @"LinkedIn", nil];
-        socialNetworkImages = [[NSMutableArray alloc]initWithObjects:[UIImage imageNamed:@"facebookIcon"], [UIImage imageNamed:@"twitterIcon"], [UIImage imageNamed:@"instagramIcon"], [UIImage imageNamed:@"snapchatIcon"], [UIImage imageNamed:@"vineIcon"], [UIImage imageNamed:@"linkedinIcon"], nil];
+        socialNetworks = [[NSMutableArray alloc] initWithObjects:@"Facebook",@"Twitter", @"Instagram", @"Snapchat", nil];
+        
+        NSArray *images = [NSArray arrayWithObjects:[UIImage imageNamed:@"facebookIcon"], [UIImage imageNamed:@"twitterIcon"], [UIImage imageNamed:@"instagramIcon"], [UIImage imageNamed:@"snapchatIcon"], nil];
+        
+        socialNetworkImages = [[NSMutableDictionary alloc] initWithObjects:images forKeys: socialNetworks];
+        
 
     }
     return self;
 }
 
-
++ (NSString *) socialNetworkForIndex: (int) index
+{
+ 
+    NSString *socialNetwork = [[NSString alloc]init];
+    
+    switch ((int)index)
+    {
+        case 0:
+            socialNetwork = @"Facebook";
+            break;
+        case 1:
+            socialNetwork = @"Twitter";
+            break;
+        case 2:
+            socialNetwork = @"Instagram";
+            break;
+        case 3:
+            socialNetwork = @"Snapchat";
+            break;
+        default:
+            break;
+    }
+    
+    return socialNetwork;
+}
 
 @end

@@ -23,9 +23,9 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.contentView.backgroundColor = [UIColor clearColor];
-        self.layer.borderColor = [UIColor whiteColor].CGColor;
-        self.layer.cornerRadius = 4.0f;
-        self.layer.borderWidth = 1.0f;
+        //self.layer.borderColor = [UIColor whiteColor].CGColor;
+        //self.layer.cornerRadius = 4.0f;
+        //self.layer.borderWidth = 1.0f;
         
         
         UILabel* label = [[UILabel alloc] initWithFrame:CGRectMake(0, 62, 88, 20)];
