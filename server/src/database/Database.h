@@ -20,7 +20,7 @@
 
 enum class RegistrationStatus : int {SUCCESS=0,FAILURE,EXISTS,VERIFY,DB_FAILURE};
 enum class LoginStatus : int {SUCCESS=0,FAILURE,DB_FAILURE};
-enum class VerificationStatus : int {SUCCESS=0,FAILURE,DNE,REVOKED,RENEW,DB_FAILURE};
+enum class VerificationStatus : int {SUCCESS=0,FAILURE,DNE,RENEW,DB_FAILURE};
 
 class Database {
 public:

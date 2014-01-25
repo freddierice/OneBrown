@@ -3,15 +3,9 @@
 Database::Database()
 {
     m_driver = get_driver_instance();
-    std::cout << "Hello" << std::endl;
-    try{
     m_conn = m_driver->connect("tcp://54.200.186.84:3306","red","password");
-    } catch(sql::SQLException ex){
-        std::cout << "I'm in" << std::endl;
-    }
-    std::cout << "Hello2" << std::endl;
     m_conn->setSchema("onebrown");
-    std::cout << "Hello3" << std::endl;
+    
     m_salt = new char[16];
     m_hash = new char[32];
     m_digest = new char[32];
@@ -173,7 +167,7 @@ RegistrationStatus Database::reg(std::string user)
                 m_stmt->setUInt(2,(unsigned int)m_code);
                 m_stmt->executeUpdate();
                 m_tries = 5;
-                rs = RegistrationStatus::VERIFY;
+                rs = RegistrationStatus::SUCCESS;
             }
         }
     }catch (sql::SQLException e) {
@@ -195,44 +189,49 @@ VerificationStatus Database::verify(std::string user, std::string pass, std::str
 {
     VerificationStatus vs;
     
-    m_stmt = m_conn->prepareStatement("SELECT * FROM reg WHERE email=?");
-    m_res = m_stmt->executeQuery();
-    if(!m_res->next())
-        return VerificationStatus::DNE;
     
-    if( m_res->getInt("code") == atoi(code.c_str())){
+    m_stmt = m_conn->prepareStatement("SELECT * FROM reg WHERE email=?");
+    m_stmt->setString(1,user);
+    m_res = m_stmt->executeQuery();
+    if(!m_res->next()){
+        delete m_stmt;
+        delete m_res;
+        return VerificationStatus::DNE;
+    }
+    
+    delete m_stmt;
+    if( m_res->getUInt("code") == atoi(code.c_str())){
         vs = VerificationStatus::SUCCESS;
         
-        createUser(user,pass);
-        delete m_stmt;
         m_stmt = m_conn->prepareStatement("DELETE FROM reg WHERE email=?");
         m_stmt->setString(1,user);
         m_stmt->executeUpdate();
+        delete m_stmt;
+        delete m_res;
+        
+        createUser(user,pass); 
     }else{
         m_tries = m_res->getInt("tries");
         if(--m_tries == 0){
-            VerificationStatus::RENEW;
+            vs = VerificationStatus::RENEW;
             RAND_bytes((unsigned char*)&m_code,sizeof(m_code));
             m_tries = 5;
             
-            delete m_stmt;
-            m_stmt = m_conn->prepareStatement("UPDATE reg SET (code=?,tries=5) WHERE email=?");
+            m_stmt = m_conn->prepareStatement("UPDATE reg SET code=?, tries='5' WHERE email=?");
             m_stmt->setUInt(1,(unsigned int)m_code);
             m_stmt->setString(2,user);
             m_stmt->executeUpdate();
         }else{
             vs = VerificationStatus::FAILURE;
             
-            delete m_stmt;
             m_stmt = m_conn->prepareStatement("UPDATE reg SET tries=? WHERE email=?");
-            m_stmt->setUInt(1,(unsigned int)m_code);
+            m_stmt->setInt(1,m_tries);
             m_stmt->setString(2,user);
             m_stmt->executeUpdate();
         }
+        delete m_stmt;
+        delete m_res;
     }
-    
-    delete m_stmt;
-    delete m_res;
     
     return vs;
 }

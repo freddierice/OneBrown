@@ -112,18 +112,19 @@ void Client::login(Json::Value &val)
 void Client::reg(Json::Value &val)
 {
     RegistrationStatus status;
-    std::string user,pass,msg;
+    std::string user,msg;
     
     user = val.get("user","").asString();
-    pass = val.get("pass","").asString();
     val.clear();
     
     status = m_database->reg(user);
     
     if( status == RegistrationStatus::SUCCESS)
         val["message"] = "success";
-    else if(status == RegistrationStatus::EXISTS){
+    else if(status == RegistrationStatus::EXISTS)
         val["message"] = "exists";
+    else if(status == RegistrationStatus::VERIFY){
+        val["message"] = "verify";
         val["tries"] = m_database->getTries();
     }else
         val["message"] = "failure";
@@ -148,14 +149,15 @@ void Client::verify(Json::Value &val)
         vs = m_database->verify(user,pass,code);
         if(vs == VerificationStatus::SUCCESS)
             val["message"] = "success";
-        else if(vs == VerificationStatus::REVOKED)
-            val["message"] = "revoked";
         else if(vs == VerificationStatus::DNE)
             val["message"] = "dne";
-        else if(vs == VerificationStatus::RENEW)
-            val["message"] = "renew";
-        else
-            val["message"] = "failure";
+        else{
+            if(vs == VerificationStatus::RENEW)
+                val["message"] = "renew";
+            else
+                val["message"] = "failure";
+            val["tries"] = m_database->getTries();
+        }
     }
     msg = m_writer.write(val);
     m_network->sendBytes(msg.c_str(),msg.length());
