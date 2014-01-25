@@ -18,9 +18,9 @@
 #include <openssl/rand.h>
 
 
-enum class RegistrationStatus : int {SUCCESS=0,FAILURE,EXISTS,DB_FAILURE};
+enum class RegistrationStatus : int {SUCCESS=0,FAILURE,EXISTS,VERIFY,DB_FAILURE};
 enum class LoginStatus : int {SUCCESS=0,FAILURE,DB_FAILURE};
-enum class VerificationStatus : int {SUCCESS=0,FAILURE,DNE,REVOKED,DB_FAILURE};
+enum class VerificationStatus : int {SUCCESS=0,FAILURE,DNE,REVOKED,RENEW,DB_FAILURE};
 
 class Database {
 public:
@@ -33,10 +33,12 @@ public:
     void createUser(std::string user, std::string pass);
     void logout();
     
-    RegistrationStatus reg(std::string user, std::string pass);
-    VerificationStatus verify(std::string user, std::string code);
+    RegistrationStatus reg(std::string user);
+    VerificationStatus verify(std::string user, std::string pass, std::string code);
     
     std::string getSession();
+    std::string getCode();
+    std::string getTries();
     
 private:
     sql::Driver *m_driver;

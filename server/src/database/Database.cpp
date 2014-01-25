@@ -3,9 +3,15 @@
 Database::Database()
 {
     m_driver = get_driver_instance();
+    std::cout << "Hello" << std::endl;
+    try{
     m_conn = m_driver->connect("tcp://54.200.186.84:3306","red","password");
+    } catch(sql::SQLException ex){
+        std::cout << "I'm in" << std::endl;
+    }
+    std::cout << "Hello2" << std::endl;
     m_conn->setSchema("onebrown");
-    
+    std::cout << "Hello3" << std::endl;
     m_salt = new char[16];
     m_hash = new char[32];
     m_digest = new char[32];
@@ -135,7 +141,7 @@ void Database::createUser(std::string user, std::string pass)
     delete m_stmt;
 }
 
-RegistrationStatus Database::reg(std::string user, std::string pass)
+RegistrationStatus Database::reg(std::string user)
 {
     RegistrationStatus rs;
     
@@ -179,14 +185,13 @@ RegistrationStatus Database::reg(std::string user, std::string pass)
         rs = RegistrationStatus::DB_FAILURE;
     }
     
-    delete message;
     delete m_stmt;
     delete m_res;
     
     return rs;
 }
 
-VerificationStatus Database::verify(std::string user, std::string code)
+VerificationStatus Database::verify(std::string user, std::string pass, std::string code)
 {
     VerificationStatus vs;
     
@@ -198,7 +203,11 @@ VerificationStatus Database::verify(std::string user, std::string code)
     if( m_res->getInt("code") == atoi(code.c_str())){
         vs = VerificationStatus::SUCCESS;
         
-        //todo: do something here
+        createUser(user,pass);
+        delete m_stmt;
+        m_stmt = m_conn->prepareStatement("DELETE FROM reg WHERE email=?");
+        m_stmt->setString(1,user);
+        m_stmt->executeUpdate();
     }else{
         m_tries = m_res->getInt("tries");
         if(--m_tries == 0){
@@ -234,5 +243,15 @@ std::string Database::getSession()
     std::string str;
     Utility::bytesToBase64(m_session,32,str);
     return str;
+}
+
+std::string Database::getCode()
+{
+    return std::to_string(m_code);
+}
+
+std::string Database::getTries()
+{
+    return std::to_string(m_tries);
 }
 

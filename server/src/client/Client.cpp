@@ -118,13 +118,14 @@ void Client::reg(Json::Value &val)
     pass = val.get("pass","").asString();
     val.clear();
     
-    status = m_database->reg(user,pass);
+    status = m_database->reg(user);
     
     if( status == RegistrationStatus::SUCCESS)
         val["message"] = "success";
-    else if(status == RegistrationStatus::EXISTS)
+    else if(status == RegistrationStatus::EXISTS){
         val["message"] = "exists";
-    else
+        val["tries"] = m_database->getTries();
+    }else
         val["message"] = "failure";
     
     msg = m_writer.write(val);
@@ -133,18 +134,26 @@ void Client::reg(Json::Value &val)
 
 void Client::verify(Json::Value &val)
 {
-    std::string code,msg;
+    std::string code,user,pass,msg;
     VerificationStatus vs;
     
     code = val.get("code","").asString();
+    user = val.get("user","").asString();
+    pass = val.get("pass","").asString();
     val.clear();
     
-    if(code == "")
+    if(code == "" || user == "" || pass == "")
         val["message"] = "failure";
     else{
-        vs = m_database->verify(code);
+        vs = m_database->verify(user,pass,code);
         if(vs == VerificationStatus::SUCCESS)
             val["message"] = "success";
+        else if(vs == VerificationStatus::REVOKED)
+            val["message"] = "revoked";
+        else if(vs == VerificationStatus::DNE)
+            val["message"] = "dne";
+        else if(vs == VerificationStatus::RENEW)
+            val["message"] = "renew";
         else
             val["message"] = "failure";
     }

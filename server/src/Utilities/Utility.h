@@ -6,6 +6,8 @@
 #include <streambuf>
 #include <string>
 #include <algorithm>
+#include <locale>
+#include <cctype>
 
 #include <cmath>
 
