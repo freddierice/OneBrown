@@ -51,7 +51,7 @@
     [defaults setObject:@"" forKey:@"sessionID"];
     
     LogInViewController *signIn = [[LogInViewController alloc] init];
-    signIn = [self.storyboard instantiateViewControllerWithIdentifier:@"LogInController"];
+    signIn = [self.storyboard instantiateViewControllerWithIdentifier:@"InitialViewController"];
     [self presentViewController:signIn animated:YES completion:nil];
 
 }

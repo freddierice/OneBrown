@@ -21,6 +21,10 @@
     UserManager *userManager;
 }
 
+@property (nonatomic, assign) NSInteger activeScreen;
+
+@property (nonatomic, retain) CAKeyframeAnimation *shakeAnimation;
+
 @property (nonatomic, retain) NetworkManager *networkManager;
 @property (nonatomic, retain) UserManager *userManager;
 
