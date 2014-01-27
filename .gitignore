@@ -2,3 +2,6 @@
 *.xcuserstate
 *.o
 server/build/*
+server/depcomp
+server/install-sh
+server/missing
