@@ -35,7 +35,7 @@ Json::Value Network::recvJSON()
     s = m_jsonValues.size();
     m_jsonValuesM.unlock();
     while( s == 0){
-        std::this_thread::sleep_for(std::chrono::microseconds(100));
+        std::this_thread::sleep_for(std::chrono::microseconds(1000));
         m_jsonValuesM.lock();
         s = m_jsonValues.size();
         if(s == 0)
@@ -68,7 +68,7 @@ void Network::recvBytes()
         }
         len = recv(m_sd, buf, BUF_SIZE, 0);
         if(len <= 0){
-            std::this_thread::sleep_for(std::chrono::microseconds(100));
+            std::this_thread::sleep_for(std::chrono::microseconds(1000));
             continue;
         }
         i = 0;
