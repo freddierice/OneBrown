@@ -224,6 +224,10 @@ VerificationStatus Database::verify(std::string user, std::string pass, std::str
             RAND_bytes((unsigned char*)&m_code,sizeof(m_code));
             m_tries = 5;
             
+            Email *e = new Email();
+            bool good = e->sendCode(user,std::to_string(m_code));
+            delete e;
+            
             m_stmt = m_conn->prepareStatement("UPDATE reg SET code=?, tries='5' WHERE email=?");
             m_stmt->setUInt(1,(unsigned int)m_code);
             m_stmt->setString(2,user);
