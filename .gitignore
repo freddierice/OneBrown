@@ -1,3 +1,4 @@
 .xcuserstate
 *.xcuserstate
 *.o
+server/build/*
