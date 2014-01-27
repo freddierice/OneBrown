@@ -6,4 +6,4 @@ server/depcomp
 server/install-sh
 server/missing
 server/aclocal.m4
-server/autom4te.cache
+server/autom4te.cache/*
