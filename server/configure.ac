@@ -20,11 +20,18 @@ then
     AC_MSG_ERROR([CppJson library is missing. Look at the README to install.])
 fi
 
-#OpenSSL Library
+#OpenSSL Library SSL
+AC_CHECK_LIB([ssl], [main], [], [a=0])
+if test "$a" == "0"
+then
+    AC_MSG_ERROR([OpenSSL SSL library is missing. Your native ssh client should depend on this...])
+fi
+
+#OpenSSL Library Crypto
 AC_CHECK_LIB([crypto], [main], [], [a=0])
 if test "$a" == "0"
 then
-    AC_MSG_ERROR([OpenSSL library is missing. Your native ssh client should depend on this...])
+    AC_MSG_ERROR([OpenSSL crypto library is missing. Your native ssh client should depend on this...])
 fi
 
 AC_CONFIG_FILES([Makefile])

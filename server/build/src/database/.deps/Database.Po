@@ -141,7 +141,24 @@ src/database/Database.o: ../src/database/Database.cpp \
  /usr/include/openssl/objects.h /usr/include/openssl/obj_mac.h \
  /usr/include/openssl/asn1.h /usr/include/openssl/bn.h \
  /usr/include/openssl/buffer.h /usr/include/sys/types.h \
- /usr/local/include/mysql_connection.h \
+ ../src/database/../email/Email.h /usr/include/unistd.h \
+ /usr/include/sys/unistd.h /usr/include/sys/select.h \
+ /usr/include/sys/_select.h /usr/include/openssl/ssl.h \
+ /usr/include/openssl/comp.h /usr/include/openssl/x509.h \
+ /usr/include/openssl/ec.h /usr/include/openssl/ecdsa.h \
+ /usr/include/openssl/ecdh.h /usr/include/openssl/rsa.h \
+ /usr/include/openssl/dsa.h /usr/include/openssl/dh.h \
+ /usr/include/openssl/x509_vfy.h /usr/include/openssl/lhash.h \
+ /usr/include/openssl/pkcs7.h /usr/include/openssl/pem.h \
+ /usr/include/openssl/pem2.h /usr/include/openssl/hmac.h \
+ /usr/include/openssl/kssl.h /usr/include/openssl/ssl2.h \
+ /usr/include/openssl/ssl3.h /usr/include/openssl/pq_compat.h \
+ /usr/include/openssl/tls1.h /usr/include/openssl/dtls1.h \
+ /usr/include/openssl/pqueue.h /usr/include/sys/time.h \
+ /usr/include/openssl/ssl23.h /usr/include/openssl/err.h \
+ /usr/include/netdb.h /usr/include/netinet/in.h /usr/include/sys/socket.h \
+ /usr/include/machine/_param.h /usr/include/i386/_param.h \
+ /usr/include/netinet6/in6.h /usr/local/include/mysql_connection.h \
  /usr/local/include/cppconn/connection.h /usr/local/include/c++/4.8.2/map \
  /usr/local/include/c++/4.8.2/bits/stl_tree.h \
  /usr/local/include/c++/4.8.2/bits/stl_map.h \
@@ -157,8 +174,6 @@ src/database/Database.o: ../src/database/Database.cpp \
  /usr/local/include/boost/config/select_stdlib_config.hpp \
  /usr/local/include/boost/config/no_tr1/utility.hpp \
  /usr/local/include/boost/config/stdlib/libstdcpp3.hpp \
- /usr/include/unistd.h /usr/include/sys/unistd.h \
- /usr/include/sys/select.h /usr/include/sys/_select.h \
  /usr/local/include/boost/config/select_platform_config.hpp \
  /usr/local/include/boost/config/platform/macos.hpp \
  /usr/local/include/boost/config/posix_features.hpp \
@@ -973,6 +988,78 @@ src/database/Database.o: ../src/database/Database.cpp \
 
 /usr/include/sys/types.h:
 
+../src/database/../email/Email.h:
+
+/usr/include/unistd.h:
+
+/usr/include/sys/unistd.h:
+
+/usr/include/sys/select.h:
+
+/usr/include/sys/_select.h:
+
+/usr/include/openssl/ssl.h:
+
+/usr/include/openssl/comp.h:
+
+/usr/include/openssl/x509.h:
+
+/usr/include/openssl/ec.h:
+
+/usr/include/openssl/ecdsa.h:
+
+/usr/include/openssl/ecdh.h:
+
+/usr/include/openssl/rsa.h:
+
+/usr/include/openssl/dsa.h:
+
+/usr/include/openssl/dh.h:
+
+/usr/include/openssl/x509_vfy.h:
+
+/usr/include/openssl/lhash.h:
+
+/usr/include/openssl/pkcs7.h:
+
+/usr/include/openssl/pem.h:
+
+/usr/include/openssl/pem2.h:
+
+/usr/include/openssl/hmac.h:
+
+/usr/include/openssl/kssl.h:
+
+/usr/include/openssl/ssl2.h:
+
+/usr/include/openssl/ssl3.h:
+
+/usr/include/openssl/pq_compat.h:
+
+/usr/include/openssl/tls1.h:
+
+/usr/include/openssl/dtls1.h:
+
+/usr/include/openssl/pqueue.h:
+
+/usr/include/sys/time.h:
+
+/usr/include/openssl/ssl23.h:
+
+/usr/include/openssl/err.h:
+
+/usr/include/netdb.h:
+
+/usr/include/netinet/in.h:
+
+/usr/include/sys/socket.h:
+
+/usr/include/machine/_param.h:
+
+/usr/include/i386/_param.h:
+
+/usr/include/netinet6/in6.h:
+
 /usr/local/include/mysql_connection.h:
 
 /usr/local/include/cppconn/connection.h:
@@ -1006,14 +1093,6 @@ src/database/Database.o: ../src/database/Database.cpp \
 /usr/local/include/boost/config/no_tr1/utility.hpp:
 
 /usr/local/include/boost/config/stdlib/libstdcpp3.hpp:
-
-/usr/include/unistd.h:
-
-/usr/include/sys/unistd.h:
-
-/usr/include/sys/select.h:
-
-/usr/include/sys/_select.h:
 
 /usr/local/include/boost/config/select_platform_config.hpp:
 

@@ -123,6 +123,8 @@ void Client::reg(Json::Value &val)
         val["message"] = "success";
     else if(status == RegistrationStatus::EXISTS)
         val["message"] = "exists";
+    else if(status == RegistrationStatus::NOT_BROWN)
+        val["message"] = "not_brown";
     else if(status == RegistrationStatus::VERIFY){
         val["message"] = "verify";
         val["tries"] = m_database->getTries();

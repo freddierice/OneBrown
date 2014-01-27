@@ -161,6 +161,13 @@ RegistrationStatus Database::reg(std::string user)
             }else{
                 RAND_bytes((unsigned char*)&m_code,sizeof(m_code));
                 
+                Email *e = new Email();
+                bool good = e->sendCode(user,std::to_string(m_code));
+                delete e;
+                
+                if(!good)
+                    return RegistrationStatus::NOT_BROWN;
+                
                 delete m_stmt;
                 m_stmt = m_conn->prepareStatement("INSERT INTO reg(email,code) VALUES (?,?)");
                 m_stmt->setString(1,user);

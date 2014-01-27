@@ -1,7 +1,5 @@
 #include "main.h"
 
-#include "utilities/Utility.h"
-
 int main()
 {
     connect();
