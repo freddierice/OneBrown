@@ -16,7 +16,7 @@
 #include "client/Client.h"
 #include "network/Network.h"
 
-#define PORT 20001
+#define PORT 20000
 
 std::vector<Client *> clients;
 

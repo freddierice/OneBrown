@@ -3812,7 +3812,7 @@ fi
 
 if test "$a" == "0"
 then
-    as_fn_error $? "CppJson library is missing. Look at the README to install." "$LINENO" 5
+    as_fn_error $? "JsonCpp library is missing. Look at the README to install." "$LINENO" 5
 fi
 
 #OpenSSL Library
