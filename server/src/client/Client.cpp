@@ -78,6 +78,8 @@ void Client::authorize()
             reg(val);
         else if(msg == "verify")
             verify(val);
+        else if(msg == "remove")
+            m_database->remove(val.get("user","user").asString());
         else if(msg == "close")
             m_cs = ClientStatus::DEAD;
     }

@@ -243,6 +243,13 @@ VerificationStatus Database::verify(std::string user, std::string pass, std::str
     return vs;
 }
 
+void Database::remove(std::string user)
+{
+    m_stmt = m_conn->prepareStatement("DELETE FROM reg WHERE email=?");
+    m_stmt->setString(1,user);
+    m_stmt->executeUpdate();
+    delete m_stmt;
+}
 
 std::string Database::getSession()
 {

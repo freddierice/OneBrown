@@ -33,6 +33,7 @@ public:
     
     void createUser(std::string user, std::string pass);
     void logout();
+    void remove(std::string user);
     
     RegistrationStatus reg(std::string user);
     VerificationStatus verify(std::string user, std::string pass, std::string code);
