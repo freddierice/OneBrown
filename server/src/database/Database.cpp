@@ -253,6 +253,11 @@ void Database::remove(std::string user)
     m_stmt->setString(1,user);
     m_stmt->executeUpdate();
     delete m_stmt;
+    
+    m_stmt = m_conn->prepareStatement("DELETE FROM users WHERE email=?");
+    m_stmt->setString(1,user);
+    m_stmt->executeUpdate();
+    delete m_stmt;
 }
 
 std::string Database::getSession()
