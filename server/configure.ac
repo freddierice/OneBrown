@@ -17,7 +17,7 @@ fi
 AC_CHECK_LIB([json], [main], [], [a=0])
 if test "$a" == "0"
 then
-    AC_MSG_ERROR([CppJson library is missing. Look at the README to install.])
+    AC_MSG_ERROR([JsonCpp library is missing. Look at the README to install.])
 fi
 
 #OpenSSL Library SSL
