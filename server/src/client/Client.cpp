@@ -2,9 +2,9 @@
 
 Client::Client(){}
 
-Client::Client(int sd)
+Client::Client(BIO *sock)
 {
-    m_network = new Network(sd);
+    m_network = new Network(sock);
     m_database = new Database();
     m_cs = ClientStatus::DEAD;
     m_isRunning = false;

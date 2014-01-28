@@ -2,9 +2,9 @@
 
 Network::Network(){}
 
-Network::Network(int sd)
+Network::Network(BIO *sock)
 {
-    m_sd = sd;
+    m_sock = sock;
     m_isRunning = false;
 }
 
@@ -50,7 +50,7 @@ Json::Value Network::recvJSON()
 
 void Network::sendBytes(const char *buf, size_t len)
 {
-    send(m_sd, buf, len, 0);
+    BIO_write(m_sock,buf,len);
 }
 
 void Network::recvBytes()
@@ -66,7 +66,7 @@ void Network::recvBytes()
         if(par == 0){
             str = "";
         }
-        len = recv(m_sd, buf, BUF_SIZE, 0);
+        len = BIO_read(m_sock, (void *)buf, BUF_SIZE);
         if(len <= 0){
             std::this_thread::sleep_for(std::chrono::microseconds(1000));
             continue;
@@ -94,7 +94,8 @@ void Network::recvBytes()
             }
         }
     }
-    ::close(m_sd);
+    ::close(BIO_get_fd(m_sock,BIO_NOCLOSE));
+    BIO_free_all(m_sock);
 }
 
 void Network::close()

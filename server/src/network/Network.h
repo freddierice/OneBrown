@@ -5,14 +5,13 @@
 #include <thread>
 #include <mutex>
 #include <atomic>
+#include <chrono>
 
 #include <stdlib.h>
 #include <string.h>
-#include <sys/types.h>
-#include <sys/socket.h>
 #include <unistd.h>
-#include <netdb.h>
-#include <arpa/inet.h>
+
+#include <openssl/bio.h>
 
 #include <json/json.h>
 
@@ -20,7 +19,7 @@
 
 class Network {
 public:
-    Network(int sd);
+    Network(BIO *sock);
     ~Network();
     
     Json::Value recvJSON();
@@ -36,7 +35,7 @@ private:
     void recvBytes();
     
     std::thread m_thread;
-    int m_sd;
+    BIO *m_sock;
     
     std::vector<Json::Value> m_jsonValues;
     std::mutex m_jsonValuesM;

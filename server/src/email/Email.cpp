@@ -38,12 +38,6 @@ bool Email::sendCode(std::string user, std::string code)
     if(m_buf[0] != '2')
         return false;
 
-    CRYPTO_malloc_init(); 
-    SSL_library_init(); 
-    SSL_load_error_strings(); 
-    ERR_load_BIO_strings(); 
-    OpenSSL_add_all_algorithms(); 
-    
     SSL_CTX* ctx = SSL_CTX_new(SSLv23_client_method());
     SSL* ssl;
     
@@ -81,6 +75,7 @@ bool Email::sendCode(std::string user, std::string code)
     BIO_free_all(bio);
     
     SSL_CTX_free(ctx);
+    return true;
 }
 
 void Email::send(std::string s)
