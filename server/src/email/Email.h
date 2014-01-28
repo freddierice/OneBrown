@@ -26,6 +26,7 @@ public:
     ~Email();
     
     bool sendCode(std::string user, std::string code);
+    bool testUser(std::string user);
     void send(std::string s);
     void recv();
     

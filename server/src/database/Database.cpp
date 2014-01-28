@@ -2,9 +2,18 @@
 
 Database::Database()
 {
-    m_driver = get_driver_instance();
-    m_conn = m_driver->connect("tcp://54.200.186.84:3306","red","password");
-    m_conn->setSchema("onebrown");
+    try{
+        m_driver = get_driver_instance();
+        m_conn = m_driver->connect("tcp://54.200.186.84:3306","red","password");
+        m_conn->setSchema("onebrown");
+    }catch (sql::SQLException e) {
+        std::cout << "# ERR: SQLException in " << __FILE__;
+        std::cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << std::endl;
+        std::cout << "# ERR: " << e.what();
+        std::cout << " (MySQL error code: " << e.getErrorCode();
+        std::cout << ", SQLState: " << e.getSQLState() << " )" << std::endl;
+        throw "Database could not construct due to database connection error.";
+    }
     
     m_salt = new char[16];
     m_hash = new char[32];
@@ -31,16 +40,24 @@ LoginStatus Database::login(std::string session)
     DataBuf sessionBuffer((char *)m_session,32);
     std::istream sessionStream(&sessionBuffer);
     
-    m_stmt = m_conn->prepareStatement("SELECT * FROM users WHERE session=?");
-    m_stmt->setBlob(1,&sessionStream);
-    m_res = m_stmt->executeQuery();
-    if(m_res->next()){
-        m_id = m_res->getInt("id");
-        m_email = m_res->getString("email");
-        m_res->getBlob("session")->read(m_session,32);
-        ls = LoginStatus::SUCCESS;
-    }else{
-        ls = LoginStatus::FAILURE;
+    try{
+        m_stmt.reset(m_conn->prepareStatement("SELECT * FROM users WHERE session=?"));
+        m_stmt->setBlob(1,&sessionStream);
+        m_res.reset(m_stmt->executeQuery());
+        if(m_res->next()){
+            m_id = m_res->getInt("id");
+            m_email = m_res->getString("email");
+            m_res->getBlob("session")->read(m_session,32);
+            ls = LoginStatus::SUCCESS;
+        }else
+            ls = LoginStatus::FAILURE;
+    }catch (sql::SQLException e) {
+        std::cout << "# ERR: SQLException in " << __FILE__;
+        std::cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << std::endl;
+        std::cout << "# ERR: " << e.what();
+        std::cout << " (MySQL error code: " << e.getErrorCode();
+        std::cout << ", SQLState: " << e.getSQLState() << " )" << std::endl;
+        ls = LoginStatus::DB_FAILURE;
     }
     return ls;
 }
@@ -56,9 +73,9 @@ LoginStatus Database::login(std::string user, std::string pass)
     message = new char[pass_len+16];
     
     try{
-        m_stmt = m_conn->prepareStatement("SELECT * FROM users WHERE email=?");
+        m_stmt.reset(m_conn->prepareStatement("SELECT * FROM users WHERE email=?"));
         m_stmt->setString(1,user);
-        m_res = m_stmt->executeQuery();
+        m_res.reset(m_stmt->executeQuery());
         
         if(m_res->next()){
             m_id = m_res->getInt("id");
@@ -69,8 +86,8 @@ LoginStatus Database::login(std::string user, std::string pass)
                 RAND_bytes((unsigned char *)m_session,32);
                 DataBuf sessionBuffer((char *)m_session,32);
                 std::istream sessionStream(&sessionBuffer);
-                delete m_stmt;
-                m_stmt = m_conn->prepareStatement("UPDATE users SET session=? WHERE id=?");
+                
+                m_stmt.reset(m_conn->prepareStatement("UPDATE users SET session=? WHERE id=?"));
                 m_stmt->setBlob(1,&sessionStream);
                 m_stmt->setInt(2,m_id);
                 m_stmt->executeUpdate();
@@ -92,24 +109,32 @@ LoginStatus Database::login(std::string user, std::string pass)
         std::cout << "# ERR: " << e.what();
         std::cout << " (MySQL error code: " << e.getErrorCode();
         std::cout << ", SQLState: " << e.getSQLState() << " )" << std::endl;
-        ls = LoginStatus::DB_FAILURE;
+        return LoginStatus::DB_FAILURE;
     }
     
     delete message;
-    delete m_res;
-    delete m_stmt;
     
     return ls;
 }
 
-void Database::logout()
+bool Database::logout()
 {
-    m_stmt = m_conn->prepareStatement("UPDATE users SET session=NULL WHERE id=?");
-    m_stmt->setInt(1,m_id);
-    m_stmt->executeUpdate();
+    try{
+        m_stmt.reset(m_conn->prepareStatement("UPDATE users SET session=NULL WHERE id=?"));
+        m_stmt->setInt(1,m_id);
+        m_stmt->executeUpdate();
+    }catch (sql::SQLException e) {
+        std::cout << "# ERR: SQLException in " << __FILE__;
+        std::cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << std::endl;
+        std::cout << "# ERR: " << e.what();
+        std::cout << " (MySQL error code: " << e.getErrorCode();
+        std::cout << ", SQLState: " << e.getSQLState() << " )" << std::endl;
+        return false;
+    }
+    return true;
 }
 
-void Database::createUser(std::string user, std::string pass)
+bool Database::createUser(std::string user, std::string pass)
 {
     int pass_len;
     char *message;
@@ -127,12 +152,22 @@ void Database::createUser(std::string user, std::string pass)
     std::istream saltStream(&saltBuffer);
     std::istream hashStream(&hashBuffer);
     
-    m_stmt = m_conn->prepareStatement("INSERT INTO users (email,salt,hash) VALUES (?,?,?)");
-    m_stmt->setString(1,user);
-    m_stmt->setBlob(2,&saltStream);
-    m_stmt->setBlob(3,&hashStream);
-    m_stmt->executeUpdate();
-    delete m_stmt;
+    try{
+        m_stmt.reset(m_conn->prepareStatement("INSERT INTO users (email,salt,hash) VALUES (?,?,?)"));
+        m_stmt->setString(1,user);
+        m_stmt->setBlob(2,&saltStream);
+        m_stmt->setBlob(3,&hashStream);
+        m_stmt->executeUpdate();
+    }catch (sql::SQLException e) {
+        std::cout << "# ERR: SQLException in " << __FILE__;
+        std::cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << std::endl;
+        std::cout << "# ERR: " << e.what();
+        std::cout << " (MySQL error code: " << e.getErrorCode();
+        std::cout << ", SQLState: " << e.getSQLState() << " )" << std::endl;
+        return false;
+    }
+    
+    return true;
 }
 
 RegistrationStatus Database::reg(std::string user)
@@ -142,34 +177,33 @@ RegistrationStatus Database::reg(std::string user)
     Utility::sqlClean(user);
     
     try{
-        m_stmt = m_conn->prepareStatement("SELECT * FROM users WHERE email=?");
+        m_stmt.reset(m_conn->prepareStatement("SELECT * FROM users WHERE email=?"));
         m_stmt->setString(1,user);
-        m_res = m_stmt->executeQuery();
+        m_res.reset(m_stmt->executeQuery());
         
         if(m_res->next())
             rs = RegistrationStatus::EXISTS;
         else{
-            delete m_stmt;
-            delete m_res;
-            
-            m_stmt = m_conn->prepareStatement("SELECT * FROM reg WHERE email=?");
+            m_stmt.reset(m_conn->prepareStatement("SELECT * FROM reg WHERE email=?"));
             m_stmt->setString(1,user);
-            m_res = m_stmt->executeQuery();
+            m_res.reset(m_stmt->executeQuery());
             if(m_res->next()){
                 rs = RegistrationStatus::VERIFY;
                 m_tries = m_res->getInt("tries");
             }else{
                 RAND_bytes((unsigned char*)&m_code,sizeof(m_code));
                 
-                Email *e = new Email();
-                bool good = e->sendCode(user,std::to_string(m_code));
-                delete e;
-                
+                Email e;
+                bool good = e.testUser(user);
                 if(!good)
                     return RegistrationStatus::NOT_BROWN;
                 
-                delete m_stmt;
-                m_stmt = m_conn->prepareStatement("INSERT INTO reg(email,code) VALUES (?,?)");
+                int i;
+                for(i = 0; i < 5 && !e.sendCode(user,std::to_string(m_code)); ++i)
+                    std::this_thread::sleep_for(std::chrono::microseconds(1000));
+                if(i == 5)
+                    return RegistrationStatus::DB_FAILURE;
+                m_stmt.reset(m_conn->prepareStatement("INSERT INTO reg(email,code) VALUES (?,?)"));
                 m_stmt->setString(1,user);
                 m_stmt->setUInt(2,(unsigned int)m_code);
                 m_stmt->executeUpdate();
@@ -183,11 +217,8 @@ RegistrationStatus Database::reg(std::string user)
         std::cout << "# ERR: " << e.what();
         std::cout << " (MySQL error code: " << e.getErrorCode();
         std::cout << ", SQLState: " << e.getSQLState() << " )" << std::endl;
-        rs = RegistrationStatus::DB_FAILURE;
+        return RegistrationStatus::DB_FAILURE;
     }
-    
-    delete m_stmt;
-    delete m_res;
     
     return rs;
 }
@@ -195,82 +226,107 @@ RegistrationStatus Database::reg(std::string user)
 VerificationStatus Database::verify(std::string user, std::string pass, std::string code)
 {
     VerificationStatus vs;
-    
-    m_stmt = m_conn->prepareStatement("SELECT * FROM reg WHERE email=?");
-    m_stmt->setString(1,user);
-    m_res = m_stmt->executeQuery();
-    if(!m_res->next()){
-        delete m_stmt;
-        delete m_res;
-        return VerificationStatus::DNE;
-    }
-    
-    delete m_stmt;
-    if( m_res->getUInt("code") == atoi(code.c_str())){
-        vs = VerificationStatus::SUCCESS;
-        
-        if(m_res->getInt("tries") != 0){
-            m_stmt = m_conn->prepareStatement("DELETE FROM reg WHERE email=?");
-            m_stmt->setString(1,user);
-            m_stmt->executeUpdate();
-            delete m_stmt;
-        }else{
-            delete m_res;
-            return VerificationStatus::RENEW;
+    try{
+        m_stmt.reset(m_conn->prepareStatement("SELECT * FROM reg WHERE email=?"));
+        m_stmt->setString(1,user);
+        m_res.reset(m_stmt->executeQuery());
+        if(!m_res->next()){
+            return VerificationStatus::DNE;
         }
         
-        delete m_res;
-        createUser(user,pass); 
-    }else{
-        m_tries = m_res->getInt("tries");
-        if(--m_tries == 0){
-            vs = VerificationStatus::RENEW;
+        if( m_res->getUInt("code") == atoi(code.c_str())){
+            vs = VerificationStatus::SUCCESS;
             
-            m_stmt = m_conn->prepareStatement("UPDATE reg SET tries='0' WHERE email=?");
-            m_stmt->setString(1,user);
-            m_stmt->executeUpdate();
+            if(m_res->getInt("tries") != 0){
+                m_stmt.reset(m_conn->prepareStatement("DELETE FROM reg WHERE email=?"));
+                m_stmt->setString(1,user);
+                m_stmt->executeUpdate();
+            }else{
+                return VerificationStatus::RENEW;
+            }
+            
+            int i;
+            for(i = 0; i<5 && !createUser(user,pass); ++i)
+                std::this_thread::sleep_for(std::chrono::microseconds(1000));
+            if(i == 5)
+                return VerificationStatus::DB_FAILURE;
         }else{
-            vs = VerificationStatus::FAILURE;
-            
-            m_stmt = m_conn->prepareStatement("UPDATE reg SET tries=? WHERE email=?");
-            m_stmt->setInt(1,m_tries);
-            m_stmt->setString(2,user);
-            m_stmt->executeUpdate();
+            m_tries = m_res->getInt("tries");
+            if(--m_tries == 0){
+                vs = VerificationStatus::RENEW;
+                
+                m_stmt.reset(m_conn->prepareStatement("UPDATE reg SET tries='0' WHERE email=?"));
+                m_stmt->setString(1,user);
+                m_stmt->executeUpdate();
+            }else{
+                vs = VerificationStatus::FAILURE;
+                
+                m_stmt.reset(m_conn->prepareStatement("UPDATE reg SET tries=? WHERE email=?"));
+                m_stmt->setInt(1,m_tries);
+                m_stmt->setString(2,user);
+                m_stmt->executeUpdate();
+            }
         }
-        delete m_stmt;
-        delete m_res;
+    }catch (sql::SQLException e) {
+        std::cout << "# ERR: SQLException in " << __FILE__;
+        std::cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << std::endl;
+        std::cout << "# ERR: " << e.what();
+        std::cout << " (MySQL error code: " << e.getErrorCode();
+        std::cout << ", SQLState: " << e.getSQLState() << " )" << std::endl;
+        return VerificationStatus::DB_FAILURE;
     }
     
     return vs;
 }
 
-void Database::renew(std::string user)
+bool Database::renew(std::string user)
 {
+    Email e;
+    int i;
+    
     RAND_bytes((unsigned char*)&m_code,sizeof(m_code));
     m_tries = 5;
     
-    Email *e = new Email();
-    bool good = e->sendCode(user,std::to_string(m_code));
-    delete e;
+    for(i = 0; i<5 && !e.sendCode(user,std::to_string(m_code)); ++i)
+        std::this_thread::sleep_for(std::chrono::microseconds(1000));
+    if(i == 5)
+        return false;
     
-    m_stmt = m_conn->prepareStatement("UPDATE reg SET code=?, tries='5' WHERE email=?");
-    m_stmt->setUInt(1,(unsigned int)m_code);
-    m_stmt->setString(2,user);
-    m_stmt->executeUpdate();
-    delete m_stmt;
+    try{
+        m_stmt.reset(m_conn->prepareStatement("UPDATE reg SET code=?, tries='5' WHERE email=?"));
+        m_stmt->setUInt(1,(unsigned int)m_code);
+        m_stmt->setString(2,user);
+        m_stmt->executeUpdate();
+    }catch (sql::SQLException e) {
+        std::cout << "# ERR: SQLException in " << __FILE__;
+        std::cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << std::endl;
+        std::cout << "# ERR: " << e.what();
+        std::cout << " (MySQL error code: " << e.getErrorCode();
+        std::cout << ", SQLState: " << e.getSQLState() << " )" << std::endl;
+        return false;
+    }
+    return true;
 }
 
-void Database::remove(std::string user)
+bool Database::remove(std::string user)
 {
-    m_stmt = m_conn->prepareStatement("DELETE FROM reg WHERE email=?");
-    m_stmt->setString(1,user);
-    m_stmt->executeUpdate();
-    delete m_stmt;
-    
-    m_stmt = m_conn->prepareStatement("DELETE FROM users WHERE email=?");
-    m_stmt->setString(1,user);
-    m_stmt->executeUpdate();
-    delete m_stmt;
+    try{
+        m_stmt.reset(m_conn->prepareStatement("DELETE FROM reg WHERE email=?"));
+        m_stmt->setString(1,user);
+        m_stmt->executeUpdate();
+        
+        m_stmt.reset(m_conn->prepareStatement("DELETE FROM users WHERE email=?"));
+        m_stmt->setString(1,user);
+        m_stmt->executeUpdate();
+    }catch (sql::SQLException e) {
+        std::cout << "# ERR: SQLException in " << __FILE__;
+        std::cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << std::endl;
+        std::cout << "# ERR: " << e.what();
+        std::cout << " (MySQL error code: " << e.getErrorCode();
+        std::cout << ", SQLState: " << e.getSQLState() << " )" << std::endl;
+        return false;
+    }
+    return true;
 }
 
 std::string Database::getSession()
@@ -289,4 +345,3 @@ std::string Database::getTries()
 {
     return std::to_string(m_tries);
 }
-

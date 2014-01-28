@@ -6,6 +6,7 @@
 #include <thread>
 #include <atomic>
 #include <vector>
+#include <chrono>
 
 #include <json/json.h>
 
@@ -23,18 +24,20 @@ public:
     void start();
     bool close();
     
-    void authorize();
-    void login(Json::Value &val);
-    void logout(Json::Value &val);
-    void reg(Json::Value &val);
-    void verify(Json::Value &val);
-    
     ClientStatus getStatus();
     bool isRunning();
     
 private:
     Client();
     void run();
+    
+    void authorize();
+    void login(Json::Value &val);
+    void logout(Json::Value &val);
+    void reg(Json::Value &val);
+    void verify(Json::Value &val);
+    void renew(Json::Value &val);
+    void remove(Json::Value &val);
     
     Json::FastWriter m_writer;
     

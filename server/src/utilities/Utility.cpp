@@ -7,6 +7,8 @@ void Utility::sqlClean(std::string &str){
     for(rit = str.rbegin(); rit != str.rend(); ++rit)
         if(!isalnum(*rit) && *rit != '_')
             str.erase((rit+1).base());
+        else if(isupper(*rit))
+            *rit = tolower(*rit);
 }
 
 void Utility::sha256(const char *buf, size_t len, char *hash)

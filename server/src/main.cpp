@@ -22,7 +22,11 @@ void connect()
             std::cout << "ERROR on accept" << std::endl;
             continue;
         }
-        c = new Client(BIO_new_socket(newsock,BIO_NOCLOSE));
+        try{
+            c = new Client(BIO_new_socket(newsock,BIO_NOCLOSE));
+        }catch( std::string str ){
+            std::cout << "Error: " << str << std::endl;
+        }
         c->start();
         clients.push_back(c);
     } 

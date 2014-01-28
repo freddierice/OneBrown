@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include <string>
+#include <chrono>
+#include <thread>
 #include <cstring>
 
 #include "../utilities/Utility.h"
@@ -30,25 +32,24 @@ public:
     
     LoginStatus login(std::string session);
     LoginStatus login(std::string user, std::string pass);
-    
-    void createUser(std::string user, std::string pass);
-    void logout();
-    void remove(std::string user);
-    void renew(std::string user);
-    
     RegistrationStatus reg(std::string user);
     VerificationStatus verify(std::string user, std::string pass, std::string code);
+    
+    bool logout();
+    bool remove(std::string user);
+    bool renew(std::string user);
     
     std::string getSession();
     std::string getCode();
     std::string getTries();
     
 private:
+    bool createUser(std::string user, std::string pass);
+    
     sql::Driver *m_driver;
     sql::Connection *m_conn;
-    sql::ResultSet *m_res;
-    
-    sql::PreparedStatement *m_stmt;
+    std::unique_ptr<sql::ResultSet> m_res;
+    std::unique_ptr<sql::PreparedStatement> m_stmt;
     
     int m_id, m_tries;
     unsigned short m_code;

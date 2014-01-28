@@ -79,9 +79,9 @@ void Client::authorize()
         else if(msg == "verify")
             verify(val);
         else if(msg == "remove")
-            m_database->remove(val.get("user","user").asString());
+            remove(val);
         else if(msg == "renew")
-            m_database->renew(val.get("user","user").asString());
+            renew(val);
         else if(msg == "close")
             m_cs = ClientStatus::DEAD;
     }
@@ -89,6 +89,7 @@ void Client::authorize()
 
 void Client::login(Json::Value &val)
 {
+    LoginStatus ls;
     std::string user,pass,msg,ses;
     bool authorized;
     
@@ -98,17 +99,19 @@ void Client::login(Json::Value &val)
     val.clear();
     
     if(ses != "")
-        authorized = m_database->login(ses) == LoginStatus::SUCCESS;
+        ls = m_database->login(ses);
     else
-        authorized = m_database->login(user,pass) == LoginStatus::SUCCESS;
+        ls = m_database->login(user,pass);
     
-    if(authorized){
+    if(ls == LoginStatus::SUCCESS){
         m_cs = ClientStatus::AUTHORIZED;
         val["message"] = "success";
         val["session"] = m_database->getSession();
-    }else{
+    }else if(ls == LoginStatus::DB_FAILURE)
+        val["message"] = "db_failure";
+    else
         val["message"] = "failure";
-    }
+    
     msg = m_writer.write(val);
     m_network->sendBytes(msg.c_str(),msg.length());
 }
@@ -132,7 +135,9 @@ void Client::reg(Json::Value &val)
     else if(status == RegistrationStatus::VERIFY){
         val["message"] = "verify";
         val["tries"] = m_database->getTries();
-    }else
+    }else if(status == RegistrationStatus::DB_FAILURE)
+        val["message"] = "db_failure";
+    else
         val["message"] = "failure";
     
     msg = m_writer.write(val);
@@ -172,6 +177,52 @@ void Client::logout(Json::Value &val)
 {
     m_database->logout();
     m_cs = ClientStatus::NOT_AUTHORIZED;
+}
+
+void Client::renew(Json::Value &val)
+{
+    std::string user,msg;
+    int i;
+    
+    user = val.get("user","").asString();
+    val.clear();
+    
+    if(user == "")
+        val["message"] = "failure";
+    else{
+        for(i = 0; i < 5 && !m_database->renew(user); ++i)
+            std::this_thread::sleep_for(std::chrono::microseconds(1000));
+        if(i == 5)
+            val["message"] = "db_failure";
+        else
+            val["message"] = "success";
+    }
+    
+    msg = m_writer.write(val);
+    m_network->sendBytes(msg.c_str(),msg.length());
+}
+
+void Client::remove(Json::Value &val)
+{
+    std::string user,msg;
+    int i;
+    
+    user = val.get("user","").asString();
+    val.clear();
+    
+    if(user == "")
+        val["message"] = "failure";
+    else{
+        for(i = 0; i < 5 && !m_database->remove(user); ++i)
+            std::this_thread::sleep_for(std::chrono::microseconds(1000));
+        if(i == 5)
+            val["message"] = "db_failure";
+        else
+            val["message"] = "success";
+    }
+    
+    msg = m_writer.write(val);
+    m_network->sendBytes(msg.c_str(),msg.length());
 }
 
 bool Client::close()

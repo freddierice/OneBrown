@@ -21,33 +21,30 @@ Email::~Email()
 
 bool Email::sendCode(std::string user, std::string code)
 {
-    std::string to,msg,tmp;
+    std::string msg,to;
     
-    to = m_to1 + user + m_to2;
     msg = m_m1 + code + m_m2;
+    to = m_to1 + user + m_to3;
     
-    setup(m_brownHostname);
-    recv();
-    send("HELO\n");
-    recv();
-    tmp = "MAIL FROM:<person@person.com>\n";
-    send(tmp.c_str());
-    recv();
-    send(to);
-    recv();
-    if(m_buf[0] != '2')
-        return false;
-
     SSL_CTX* ctx = SSL_CTX_new(SSLv23_client_method());
     SSL* ssl;
     
     BIO* bio = BIO_new_ssl_connect(ctx);
     BIO_get_ssl(bio, &ssl);
     SSL_set_mode(ssl, SSL_MODE_AUTO_RETRY);
-    
     BIO_set_conn_hostname(bio, m_amazonHostname.c_str());
-    BIO_do_connect(bio);
-    BIO_do_handshake(bio);
+    
+    if(BIO_do_connect(bio) <= 0){
+        BIO_free_all(bio);
+        SSL_CTX_free(ctx);
+        return false;
+    }
+    
+    if(BIO_do_handshake(bio) <= 0){
+        BIO_free_all(bio);
+        SSL_CTX_free(ctx);
+        return false;
+    }
 
     m_len = BIO_read(bio, m_buf, BUF_LEN) - 1;
     BIO_puts(bio, "HELO localhost\r\n");
@@ -60,7 +57,6 @@ bool Email::sendCode(std::string user, std::string code)
     m_len = BIO_read(bio,m_buf,BUF_LEN) - 1;
     BIO_puts(bio,"MAIL FROM:OneBrownNetwork@gmail.com\r\n"); 
     m_len = BIO_read(bio,m_buf,BUF_LEN) - 1;
-    to = m_to1 + user + m_to3;
     BIO_puts(bio,to.c_str()); 
     m_len = BIO_read(bio,m_buf,BUF_LEN) - 1;
     BIO_puts(bio,"DATA\r\n"); 
@@ -73,8 +69,27 @@ bool Email::sendCode(std::string user, std::string code)
     m_len = BIO_read(bio,m_buf,BUF_LEN) - 1;
     
     BIO_free_all(bio);
-    
     SSL_CTX_free(ctx);
+    
+    return true;
+}
+
+bool Email::testUser(std::string user)
+{
+    std::string to;
+    
+    to = m_to1 + user + m_to2;
+    
+    setup(m_brownHostname);
+    recv();
+    send("HELO\n");
+    recv();
+    send("MAIL FROM:<person@person.com>\n");
+    recv();
+    send(to);
+    recv();
+    if(m_buf[0] != '2')
+        return false;
     return true;
 }
 
