@@ -9,6 +9,8 @@
 #import "SignInViewController.h"
 #import "LoginLogic.h"
 #import <Foundation/Foundation.h>
+#import "AppDelegate.h"
+#import "FindViewController.h"
 
 @interface SignInViewController ()
 
@@ -283,10 +285,20 @@
     NSLog(@"%@", JSON); 
 }
 
+
 - (IBAction)clickedTemporaryButton:(id)sender
 {
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"loggedIn"];
-    [self dismissViewControllerAnimated:YES completion:nil];
+
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+    FindViewController *findViewControler = (FindViewController *)[mainStoryboard instantiateViewControllerWithIdentifier:@"findController"];
+    
+    UITabBarController *tabBarController = (UITabBarController *)[mainStoryboard instantiateViewControllerWithIdentifier:@"tabBarController"];
+    
+    AppDelegate *app = [[UIApplication sharedApplication] delegate];
+    
+    [self presentViewController:findViewControler animated:YES completion:nil];
+    [app.window setRootViewController:tabBarController];
 }
 
 @end

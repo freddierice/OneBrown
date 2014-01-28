@@ -67,16 +67,6 @@
     return UIStatusBarStyleLightContent;
 }
 
--(void)viewDidAppear:(BOOL)animated
-{
-    // Show the sign up/log in view if the user is not loggedIn
-    if(![defaults boolForKey:@"loggedIn"])
-    {
-        SignInViewController *signIn = [[SignInViewController alloc] init];
-        signIn = [self.storyboard instantiateViewControllerWithIdentifier:@"SignInController"];
-        [self presentViewController:signIn animated:YES completion:nil];
-    }
-}
 
 - (void)didReceiveMemoryWarning
 {
@@ -164,7 +154,7 @@
     {
         sharedUserManager.stalkedUserName = userPictureNames[indexPath.row];
         sharedUserManager.stalkedUserImage  = userPictures[indexPath.row];
-        sharedUserManager.stalkedUserNetworks = [NSMutableArray arrayWithObjects:@"Facebook", @"Twitter", @"Instagram", @"Snapchat", @"Vine", @"LinkedIn", nil];
+        sharedUserManager.stalkedUserNetworks = [NSMutableArray arrayWithObjects:@"Facebook", @"Twitter", @"Instagram", @"Snapchat", nil];
         
         UserProfileViewController *viewController = (UserProfileViewController *) [self.storyboard instantiateViewControllerWithIdentifier:@"UserProfileController"];
         
