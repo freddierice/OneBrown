@@ -25,12 +25,7 @@ public class Database {
     
     int id;
     String email;
-    byte session[];
-    
-    static final int NO_ERR = 0;
-    static final int ACCOUNT_EXISTS = 1;
-    static final int DATABASE_ERR = 2;
-    
+    String session;
     
     boolean loggedInWithSession = false;
 
@@ -42,8 +37,8 @@ public class Database {
     {
         try{
             String url = "jdbc:mysql://127.0.0.1:3306/onebrown";
-            String user = "red";
-            String pass = "password";
+            String user = "root";
+            String pass = "df9qfEZVoXl/8MW4";
             Connection conn = DriverManager.getConnection(url,user,pass);
             return new Database(conn);
         } catch(SQLException ex) {
@@ -59,12 +54,12 @@ public class Database {
     {
         try{
             stmt = conn.createStatement();
-            sql = "SELECT * FROM users WHERE session=FROM_BASE64('" + session + "')";
+            sql = "SELECT * FROM users WHERE session='" + session + "'";
             rs = stmt.executeQuery(sql);
             if(rs.next()){
                 id = rs.getInt("id");
                 email = rs.getString("email");
-                this.session = Utility.stringToBase64(session);
+                session = rs.getString("session");
                 loggedInWithSession = true;
                 return true;
             }else{
@@ -98,11 +93,11 @@ public class Database {
                 email = rs.getString("email");
                 hash = rs.getBytes("hash");
                 salt = rs.getBytes("salt");
-                session = rs.getBytes("session");
+                session = rs.getString("session");
                 if(session == null){
-                    session = Utility.stringToBase64(Utility.runCommand("openssl rand -base64 32"));
+                    session = Utility.runCommand("openssl rand -base64 24");
                     try{
-                        sql = "UPDATE users SET session=FROM_BASE64('" + Utility.bytesToBase64(session) + "') WHERE id='" + ((Integer)id).toString() + "'";
+                        sql = "UPDATE users SET session='" + session + "' WHERE id='" + ((Integer)id).toString() + "'";
                         stmt.executeUpdate(sql);
                     } catch(SQLException ex) {
                         System.out.println("SQLException: " + ex.getMessage());
@@ -127,54 +122,6 @@ public class Database {
         digest = md.digest();
         
         return Arrays.equals(hash,digest);
-    }
-    
-    public int addAccount(String user, String pass)
-    {
-        String hashString = null;
-        String saltString = null;
-        byte hash[] = null;
-        byte salt[] = null;
-        MessageDigest md = null;
-        
-        try{
-            md = MessageDigest.getInstance("SHA-256");
-        } catch(NoSuchAlgorithmException e){}
-        
-        try{
-            user = Utility.cleanSQL(user); 
-            stmt = conn.createStatement();
-            sql = "SELECT * FROM users WHERE email='" + user + "'";
-            rs = stmt.executeQuery(sql);
-            if(rs.next()){
-                return ACCOUNT_EXISTS;
-            }
-        } catch(SQLException ex) {
-            System.out.println("SQLException: " + ex.getMessage());
-            System.out.println("SQLState: " + ex.getSQLState());
-            System.out.println("VendorError: " + ex.getErrorCode());
-            return DATABASE_ERR;
-        }
-        
-        email = user;
-        
-        saltString = Utility.runCommand("openssl rand -base64 16");
-        salt = Utility.stringToBase64(saltString);
-        
-        pass += new String(salt);
-        md.update(pass.getBytes());
-        hash = md.digest();
-
-        try{
-            sql = "INSERT INTO users (email,hash,salt) VALUES ('" + email + "',FROM_BASE64('" + Utility.bytesToBase64(hash) + "'),FROM_BASE64('" + saltString + "'))";
-            stmt.executeUpdate(sql);
-            return NO_ERR;
-        } catch(SQLException ex) {
-            System.out.println("SQLException: " + ex.getMessage());
-            System.out.println("SQLState: " + ex.getSQLState());
-            System.out.println("VendorError: " + ex.getErrorCode());
-        }
-        return DATABASE_ERR;
     }
     
     public boolean closeSession()

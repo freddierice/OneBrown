@@ -28,14 +28,4 @@ public class Utility {
         }catch(IOException e){}
         return str;
     }
-    
-    public static String bytesToBase64(byte b[])
-    {
-        return new String(Base64.encodeToByte(b,false));
-    }
-    
-    public static byte[] stringToBase64(String s)
-    {
-        return Base64.decode(s.getBytes());
-    }
 }

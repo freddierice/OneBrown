@@ -90,7 +90,6 @@ static NSString *TableViewCellIdentifier = @"SNCells";
     
 }
 
-// I'm guessing there will be different, specific methods for adding each social network. 
 - (void) addFacebook
 {
     NSLog(@"adding facebook");

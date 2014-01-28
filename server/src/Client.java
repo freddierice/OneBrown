@@ -124,29 +124,7 @@ public class Client extends Thread {
     
     public void register()
     {
-        JSONObject json = network.pullJSONObject();
-        String user = null;
-        String pass = null;
         
-        if(json == null){
-            sendReg("reg_failed");
-            return;
-        }
-        user = (String)json.get("user");
-        pass = (String)json.get("pass");
-        
-        if(user == null || pass == null){
-            sendReg("reg_failed");
-            return;
-        }
-        
-        int res = database.addAccount(user,pass);
-        if(res == Database.NO_ERR)
-            sendReg("reg_success");
-        else if(res == Database.ACCOUNT_EXISTS)
-            sendReg("reg_exists");
-        else if(res == Database.DATABASE_ERR)
-            sendReg("reg_failed");
     }
     
     public void logout()
@@ -162,18 +140,11 @@ public class Client extends Thread {
             cs = ClientStatus.AUTHORIZED;
             json.put("message","auth_success");
             if(!database.loggedInWithSession)
-                json.put("session",Utility.bytesToBase64(database.session));
+                json.put("session",database.session);
         }else{
                 System.out.println("Failed!");
                 json.put("message","auth_failed");
         }
-        network.sendJSONObject(json,false);
-    }
-    
-    public void sendReg(String str)
-    {
-        JSONObject json = new JSONObject();
-        json.put("message",str);
         network.sendJSONObject(json,false);
     }
     
