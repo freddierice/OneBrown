@@ -21,7 +21,6 @@
     
     
     defaults = [NSUserDefaults standardUserDefaults];
-    
     // Create an NSDictionary with the default settings (for the first time the user enters the app)
     NSDictionary *defaultSettings = @{@"loggedIn" : @NO};
     
@@ -29,6 +28,14 @@
     [defaults registerDefaults: defaultSettings];
     [defaults synchronize];
     
+    if (![defaults objectForKey:@"loggedIn"])
+    {
+        UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+        SignInViewController *signInViewController = (SignInViewController *)[mainStoryboard instantiateViewControllerWithIdentifier:@"SignInController"];
+        
+        // Set the root controller to the signInVC so that there is no glimpse of the findVC
+        self.window.rootViewController = signInViewController;
+    }
     return YES;
 }
 							
