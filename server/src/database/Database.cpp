@@ -196,7 +196,6 @@ VerificationStatus Database::verify(std::string user, std::string pass, std::str
 {
     VerificationStatus vs;
     
-    
     m_stmt = m_conn->prepareStatement("SELECT * FROM reg WHERE email=?");
     m_stmt->setString(1,user);
     m_res = m_stmt->executeQuery();
@@ -210,27 +209,25 @@ VerificationStatus Database::verify(std::string user, std::string pass, std::str
     if( m_res->getUInt("code") == atoi(code.c_str())){
         vs = VerificationStatus::SUCCESS;
         
-        m_stmt = m_conn->prepareStatement("DELETE FROM reg WHERE email=?");
-        m_stmt->setString(1,user);
-        m_stmt->executeUpdate();
-        delete m_stmt;
-        delete m_res;
+        if(m_res->getInt("tries") != 0){
+            m_stmt = m_conn->prepareStatement("DELETE FROM reg WHERE email=?");
+            m_stmt->setString(1,user);
+            m_stmt->executeUpdate();
+            delete m_stmt;
+        }else{
+            delete m_res;
+            return VerificationStatus::RENEW;
+        }
         
+        delete m_res;
         createUser(user,pass); 
     }else{
         m_tries = m_res->getInt("tries");
         if(--m_tries == 0){
             vs = VerificationStatus::RENEW;
-            RAND_bytes((unsigned char*)&m_code,sizeof(m_code));
-            m_tries = 5;
             
-            Email *e = new Email();
-            bool good = e->sendCode(user,std::to_string(m_code));
-            delete e;
-            
-            m_stmt = m_conn->prepareStatement("UPDATE reg SET code=?, tries='5' WHERE email=?");
-            m_stmt->setUInt(1,(unsigned int)m_code);
-            m_stmt->setString(2,user);
+            m_stmt = m_conn->prepareStatement("UPDATE reg SET tries='0' WHERE email=?");
+            m_stmt->setString(1,user);
             m_stmt->executeUpdate();
         }else{
             vs = VerificationStatus::FAILURE;
@@ -245,6 +242,22 @@ VerificationStatus Database::verify(std::string user, std::string pass, std::str
     }
     
     return vs;
+}
+
+void Database::renew(std::string user)
+{
+    RAND_bytes((unsigned char*)&m_code,sizeof(m_code));
+    m_tries = 5;
+    
+    Email *e = new Email();
+    bool good = e->sendCode(user,std::to_string(m_code));
+    delete e;
+    
+    m_stmt = m_conn->prepareStatement("UPDATE reg SET code=?, tries='5' WHERE email=?");
+    m_stmt->setUInt(1,(unsigned int)m_code);
+    m_stmt->setString(2,user);
+    m_stmt->executeUpdate();
+    delete m_stmt;
 }
 
 void Database::remove(std::string user)

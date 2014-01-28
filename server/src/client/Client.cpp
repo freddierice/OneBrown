@@ -80,6 +80,8 @@ void Client::authorize()
             verify(val);
         else if(msg == "remove")
             m_database->remove(val.get("user","user").asString());
+        else if(msg == "renew")
+            m_database->renew(val.get("user","user").asString());
         else if(msg == "close")
             m_cs = ClientStatus::DEAD;
     }
@@ -155,11 +157,10 @@ void Client::verify(Json::Value &val)
             val["message"] = "success";
         else if(vs == VerificationStatus::DNE)
             val["message"] = "dne";
+        else if(vs == VerificationStatus::RENEW)
+            val["message"] = "renew";
         else{
-            if(vs == VerificationStatus::RENEW)
-                val["message"] = "renew";
-            else
-                val["message"] = "failure";
+            val["message"] = "failure";
             val["tries"] = m_database->getTries();
         }
     }
