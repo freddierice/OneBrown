@@ -23,7 +23,6 @@
 		4EBA221B1875F9A3000A9BE6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EBA21FD1875F9A3000A9BE6 /* UIKit.framework */; };
 		4EBA22231875F9A3000A9BE6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4EBA22211875F9A3000A9BE6 /* InfoPlist.strings */; };
 		4EBA22251875F9A3000A9BE6 /* OneBrownTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EBA22241875F9A3000A9BE6 /* OneBrownTests.m */; };
-		4EBA22301875F9E8000A9BE6 /* SignInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EBA222F1875F9E8000A9BE6 /* SignInViewController.m */; };
 		4EBA2233187600C5000A9BE6 /* LoginLogic.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EBA2232187600C5000A9BE6 /* LoginLogic.m */; };
 		4EBE0659187FBEC0002CF819 /* WelcomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EBE0658187FBEC0002CF819 /* WelcomeViewController.m */; };
 		4ED2D99F18948C78002E3652 /* OneBrownCommon.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ED2D99E18948C78002E3652 /* OneBrownCommon.m */; };
@@ -69,8 +68,6 @@
 		4EBA22201875F9A3000A9BE6 /* OneBrownTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "OneBrownTests-Info.plist"; sourceTree = "<group>"; };
 		4EBA22221875F9A3000A9BE6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4EBA22241875F9A3000A9BE6 /* OneBrownTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OneBrownTests.m; sourceTree = "<group>"; };
-		4EBA222E1875F9E8000A9BE6 /* SignInViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignInViewController.h; sourceTree = "<group>"; };
-		4EBA222F1875F9E8000A9BE6 /* SignInViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignInViewController.m; sourceTree = "<group>"; };
 		4EBA2231187600C5000A9BE6 /* LoginLogic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginLogic.h; sourceTree = "<group>"; };
 		4EBA2232187600C5000A9BE6 /* LoginLogic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginLogic.m; sourceTree = "<group>"; };
 		4EBE0657187FBEC0002CF819 /* WelcomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WelcomeViewController.h; sourceTree = "<group>"; };
@@ -118,8 +115,6 @@
 		4E337411187A3B1900B11011 /* Login */ = {
 			isa = PBXGroup;
 			children = (
-				4EBA222E1875F9E8000A9BE6 /* SignInViewController.h */,
-				4EBA222F1875F9E8000A9BE6 /* SignInViewController.m */,
 				4EBE0657187FBEC0002CF819 /* WelcomeViewController.h */,
 				4EBE0658187FBEC0002CF819 /* WelcomeViewController.m */,
 				4EBA2231187600C5000A9BE6 /* LoginLogic.h */,
@@ -346,7 +341,6 @@
 				4EBA220A1875F9A3000A9BE6 /* AppDelegate.m in Sources */,
 				4EAFD76F1881FB9D005F249C /* ResizedTextField.m in Sources */,
 				59C2B275187DC7D5009A70D4 /* UserManager.m in Sources */,
-				4EBA22301875F9E8000A9BE6 /* SignInViewController.m in Sources */,
 				59C2B278187DEC68009A70D4 /* AddSocialNetworksViewController.m in Sources */,
 				4EBE0659187FBEC0002CF819 /* WelcomeViewController.m in Sources */,
 				4EBA2233187600C5000A9BE6 /* LoginLogic.m in Sources */,

@@ -8,7 +8,6 @@
 
 #import "ProfileViewController.h"
 #import "LogInViewController.h"
-#import "SignInViewController.h"
 
 @interface ProfileViewController ()
 {

@@ -17,9 +17,12 @@
     NSMutableArray *registration;
     NSMutableArray *code;
     
+    UIView *overlay;
+    
     NetworkManager *networkManager;
     UserManager *userManager;
 }
+@property (nonatomic, retain) UIView *overlay;
 
 @property (nonatomic, assign) NSInteger activeScreen;
 
@@ -63,6 +66,9 @@
 -(IBAction)switchToLoginOrRegister: (id)sender;
 -(IBAction)switchToLogin: (id)sender;
 -(IBAction)switchToRegister: (id)sender;
+
+-(IBAction)overlayActivated:(id)sender;
+
 -(void)switchToVerify;
 
 -(void)createNetworkManager;

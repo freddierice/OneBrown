@@ -14,6 +14,7 @@
 #define LOGIN ((NSInteger) 1)
 #define REGISTER ((NSInteger) 2)
 #define VERIFY ((NSInteger) 3)
+#define LOGIN_AFTER_VERIFY ((NSInteger) 4)
 
 @interface LogInViewController () {
     NSUserDefaults *defaults;
@@ -23,7 +24,7 @@
 
 @implementation LogInViewController
 
-@synthesize logInOrRegister, logIn, registration, code;
+@synthesize logInOrRegister, logIn, registration, code, overlay;
 @synthesize networkManager, userManager;
 @synthesize shakeAnimation;
 
@@ -51,12 +52,35 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     
+    self.alreadyRegistered.hidden = YES;
+    self.errorRegistering.hidden = YES;
+    self.errorVerifying.hidden = YES;
+    
+    self.overlay = [[UIView alloc] initWithFrame:self.view.frame];
+    overlay.backgroundColor = [UIColor clearColor];
+    
+    UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(overlayActivated:)];
+    recognizer.numberOfTapsRequired = 1;
+    recognizer.numberOfTouchesRequired = 1;
+    [self.overlay addGestureRecognizer:recognizer];
+    
+    for (UIButton *button in @[self.signInButton, self.registerButton,
+                               self.submitCodeButton, self.resendCodeButton]) {
+        button.layer.cornerRadius = 5.0f;
+    }
+    
     [self createNetworkManager];
+    
+    NSDictionary *information = @{@"message": @"remove", @"user":@"benjamin_murphy"};
+    NSData *dataToWrite = [NSJSONSerialization dataWithJSONObject:information options:kNilOptions error:NULL];
+    [self.networkManager writeData:dataToWrite];
     
     self.logInOrRegister = [NSMutableArray array];
     self.logIn = [NSMutableArray array];
     self.registration = [NSMutableArray array];
     self.code = [NSMutableArray array];
+    
+    self.enterCode.frame = CGRectMake(self.enterCode.frame.origin.x, self.enterCode.frame.origin.y, self.enterCode.frame.size.width, self.enterCode.frame.size.height+14);
     
     self.passwordField.frame = CGRectMake(self.passwordField.frame.origin.x, self.passwordField.frame.origin.y, self.passwordField.frame.size.width, 44);
     
@@ -100,6 +124,9 @@
     
     self.activeScreen = LOGIN;
     
+    [self.overlay removeFromSuperview];
+    [self.view insertSubview:self.overlay belowSubview:self.usernameField];
+    
     [UIView animateWithDuration:0.3f animations:^{
         for (UIView *view in self.logIn) {
             CGRect frame = view.frame;
@@ -116,6 +143,8 @@
 -(void)switchToLoginOrRegister:(id)sender {
     
     self.activeScreen = CHOICE;
+    
+    [self.overlay removeFromSuperview];
     
     [UIView animateWithDuration:0.3f animations:^{
         
@@ -142,6 +171,9 @@
     
     self.activeScreen = REGISTER;
     
+    [self.overlay removeFromSuperview];
+    [self.view insertSubview:self.overlay belowSubview:self.scrollView];
+    
     [UIView animateWithDuration:0.3f animations:^{
         
         for (UIView *view in self.registration) {
@@ -159,6 +191,9 @@
 -(void)switchToVerify {
     
     self.activeScreen = VERIFY;
+    
+    [self.overlay removeFromSuperview];
+    [self.view insertSubview:self.overlay belowSubview:self.enterCode];
     
     [UIView animateWithDuration:0.3f animations:^{
         
@@ -200,14 +235,8 @@
 
 -(void)submitCode:(id)sender {
     
-    CAKeyframeAnimation * anim = [ CAKeyframeAnimation animationWithKeyPath:@"transform" ] ;
-    anim.values = @[ [ NSValue valueWithCATransform3D:CATransform3DMakeTranslation(-5.0f, 0.0f, 0.0f) ], [ NSValue valueWithCATransform3D:CATransform3DMakeTranslation(5.0f, 0.0f, 0.0f) ] ] ;
-    anim.autoreverses = YES ;
-    anim.repeatCount = 2.0f ;
-    anim.duration = 0.07f ;
-    
-    if (self.enterCode.text.length < 6) {
-        [self.enterCode.layer addAnimation:anim forKey:NULL];
+    if (self.enterCode.text.length == 0) {
+        [self shake:self.enterCode];
         return;
     }
     
@@ -216,17 +245,10 @@
     [self.submitCodeButton setTitle:@"" forState:UIControlStateNormal];
     [self.verifyActivity startAnimating];
     
-    /*
-     Test code
-     */
+    NSDictionary *information = @{@"message":@"verify",@"user":self.enterUsername.text,@"pass":self.enterPassword.text,@"code":self.enterCode.text};
+    NSData *dataToWrite = [NSJSONSerialization dataWithJSONObject:information options:kNilOptions error:NULL];
     
-    if ([self.enterCode.text isEqualToString:@"123456"]) {
-        [self didReceiveJSON:@{@"message":@"verify_success"}];
-    }
-    else {
-        [self didReceiveJSON:@{@"message":@"verify_failed"}];
-    }
-    
+    [self.networkManager writeData:dataToWrite];
 }
 
 -(void)registerUser:(id)sender {
@@ -259,26 +281,21 @@
     [self.registerActivity startAnimating];
     
     NSError *e;
-    NSData *registerRequest = [NSJSONSerialization dataWithJSONObject:@{@"message":@"register"} options:kNilOptions error:&e];
-    NSDictionary *registerInformation = @{@"user":self.enterUsername.text, @"pass":self.enterPassword.text};
-    NSData* information = [NSJSONSerialization dataWithJSONObject:registerInformation options:kNilOptions error:&e];
+    NSData *registerRequest = [NSJSONSerialization dataWithJSONObject:@{@"message":@"register", @"user":self.enterUsername.text} options:kNilOptions error:&e];
     
     if (e) {
         NSLog(@"%@", e);
     }
     
-    BOOL success = [self.networkManager writeData:registerRequest];
-    if (success) {
-        [self.networkManager writeData:information];
-    }
-    else {
-        NSLog(@"Error writing to server.");
-    }
+    [self.networkManager writeData:registerRequest];
     
 }
 
 -(void)resendCode:(id)sender {
     
+    NSDictionary *information = @{@"message":@"renew", @"user":self.enterUsername.text};
+    NSData *dataToWrite = [NSJSONSerialization dataWithJSONObject:information options:kNilOptions error:NULL];
+    [self.networkManager writeData:dataToWrite];
 }
 
 #pragma mark - UITextFieldDelegate protocol implementation
@@ -286,7 +303,7 @@
 -(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     if (textField == self.enterCode) {
         NSUInteger newLength = [textField.text length] + [string length] - range.length;
-        return (newLength > 6) ? NO : YES;
+        return (newLength > 5) ? NO : YES;
     }
     return YES;
 }
@@ -358,18 +375,25 @@
             }
             case VERIFY: {
                 
-                self.activeScreen = LOGIN;
+                self.activeScreen = LOGIN_AFTER_VERIFY;
                 
                 NSDictionary *reply = @{@"message":@"login", @"user":self.enterUsername.text, @"pass":self.enterPassword.text};
                 NSData *data = [NSJSONSerialization dataWithJSONObject:reply options:kNilOptions error:NULL];
                 [self.networkManager writeData:data];
                 
-                // DOESN'T SWITCH TO WELCOME SCREEN
+                break;
+            }
+            case LOGIN_AFTER_VERIFY: {
+                
+                NSString *session = [JSON objectForKey:@"session"];
+                [defaults setObject:session forKey:@"sessionID"];
+                
+                [self performSegueWithIdentifier:@"goWelcome" sender:self];
                 
                 break;
             }
             default: {
-                NSLog(@"Unknown screen: %u", self.activeScreen);
+                NSLog(@"Unknown screen: %ld", (long)self.activeScreen);
                 break;
             }
         }
@@ -378,7 +402,7 @@
     else if ([message isEqualToString:@"failure"]) {
         
         switch (self.activeScreen) {
-            case LOGIN:
+            case LOGIN: {
                 
                 self.usernameField.backgroundColor = [OneBrownCommon transparentWhiteColor];
                 self.passwordField.backgroundColor = [OneBrownCommon transparentWhiteColor];
@@ -393,8 +417,8 @@
                 self.passwordField.textColor = [OneBrownCommon brightOrangeColor];
                 
                 break;
-                
-            case REGISTER:
+            }
+            case REGISTER: {
                 
                 self.enterPassword.backgroundColor = [OneBrownCommon transparentWhiteColor];
                 self.enterUsername.backgroundColor = [OneBrownCommon transparentWhiteColor];
@@ -407,8 +431,8 @@
                 self.alreadyRegistered.hidden = YES;
                 
                 break;
-                
-            case VERIFY:
+            }
+            case VERIFY: {
                 
                 self.enterCode.backgroundColor = [UIColor colorWithWhite:1.0f alpha:0.9f];
                 [self.submitCodeButton setTitle:@"Submit" forState:UIControlStateNormal];
@@ -419,10 +443,21 @@
                     self.submitCodeButton.enabled = YES;
                 }
                 
-                break;
+                [self shake:self.enterCode];
                 
+                break;
+            }
+            case LOGIN_AFTER_VERIFY: {
+                
+                self.enterCode.backgroundColor = [UIColor colorWithWhite:1.0f alpha:0.9f];
+                [self.submitCodeButton setTitle:@"Submit" forState:UIControlStateNormal];
+                [self.verifyActivity stopAnimating];
+                self.errorVerifying.hidden = NO;
+                
+                break;
+            }
             default:
-                NSLog(@"Unknown screen: %u", self.activeScreen);
+                NSLog(@"Unknown screen: %ld", (long)self.activeScreen);
                 break;
                 
         }
@@ -444,8 +479,22 @@
         
     }
     
+    else if ([message isEqualToString:@"not_brown"]) {
+        
+        NSLog(@"NOT A BROWN EMAIL ADDRESS");
+        
+        self.enterPassword.backgroundColor = [OneBrownCommon transparentWhiteColor];
+        self.enterUsername.backgroundColor = [OneBrownCommon transparentWhiteColor];
+        self.verifyPassword.backgroundColor = [OneBrownCommon transparentWhiteColor];
+        self.registerButton.enabled = YES;
+        [self.registerButton setTitle:@"Register" forState:UIControlStateNormal];
+        [self.registerActivity stopAnimating];
+        
+    }
+    
     else {
         NSLog(@"Unknown message: %@", message);
+        NSLog(@"%@", JSON);
     }
 }
 
@@ -454,6 +503,15 @@
 -(void)shake: (UIView *)view {
     
     [view.layer addAnimation:self.shakeAnimation forKey:NULL];
+    
+}
+
+-(void)overlayActivated:(id)sender {
+    
+    for (UIView *view in @[self.enterUsername, self.enterPassword, self.enterCode,
+                           self.passwordField, self.usernameField, self.verifyPassword]) {
+        [view resignFirstResponder];
+    }
     
 }
 
