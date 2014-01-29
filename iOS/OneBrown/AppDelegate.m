@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "LogInViewController.h"
 
 @implementation AppDelegate
 {
@@ -29,8 +30,8 @@
     
     if (![defaults objectForKey:@"loggedIn"])
     {
-        UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
-        SignInViewController *signInViewController = (SignInViewController *)[mainStoryboard instantiateViewControllerWithIdentifier:@"SignInController"];
+        UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_1" bundle: nil];
+        LogInViewController *signInViewController = (LogInViewController *)[mainStoryboard instantiateViewControllerWithIdentifier:@"LogInViewController"];
         
         // Set the root controller to the signInVC so that there is no glimpse of the findVC
         self.window.rootViewController = signInViewController;
