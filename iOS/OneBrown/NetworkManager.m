@@ -8,19 +8,11 @@
 
 #import "NetworkManager.h"
 
-#define kNewline [@"\n" dataUsingEncoding: NSUTF8StringEncoding]
-
 @implementation NetworkManager
 
-@synthesize messages;
-@synthesize outputStream;
-@synthesize inputStream;
-@synthesize data;
+@synthesize messages, additionalDelegates, outputStream, inputStream, data, host, port;
 
-@synthesize host;
-@synthesize port;
-
-+(NetworkManager *)networkManagerWithHost:(CFStringRef)host port:(NSUInteger)port {
++(NetworkManager *)networkManagerWithHost:(CFStringRef)host port:(UInt32)port {
     
     NetworkManager *manager = [NetworkManager new];
     
@@ -40,8 +32,6 @@
     
     manager.data = [NSMutableData data];
     manager.messages = [NSMutableArray array];
-    
-    [manager addObserver:manager forKeyPath:@"data" options:NSKeyValueObservingOptionNew context:NULL];
     
     return manager;
 }
@@ -72,34 +62,40 @@
 -(BOOL)writeData:(NSData *)msg {
     
     NSUInteger written = [self.outputStream write:[msg bytes] maxLength:[msg length]];
-    
-    [self.outputStream write:[kNewline bytes] maxLength:[kNewline length]];
-    
     return written == [msg length];
 }
 
 -(void)appendBytes: (const void *)bytes length:(NSUInteger)length {
-    [self willChangeValueForKey:@"data"];
     [self.data appendBytes:bytes length:length];
-    [self didChangeValueForKey:@"data"];
-}
-
--(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-
-    if ([keyPath isEqualToString:@"data"] && self.data.length > 0) {
+    
+    NSString *stringRepresentation = [[NSString alloc] initWithData:self.data encoding:NSASCIIStringEncoding];
+    NSArray *stringArray = [stringRepresentation componentsSeparatedByString:@"\n"];
+    
+    for (NSString *s in stringArray) {
         
-        NSError *e;
-        
-        NSDictionary *JSON = [NSJSONSerialization JSONObjectWithData:self.data options:kNilOptions error:&e];
-        
-        [self.messages addObject:JSON];
-        
-        [self.delegate didReceiveJSON:JSON];
-        
-        self.data = [NSMutableData data];
+        if (s.length > 0) {
+            NSData *newData = [s dataUsingEncoding:NSUTF8StringEncoding];
+            
+            NSError *e;
+            
+            NSDictionary *JSON = [NSJSONSerialization JSONObjectWithData:newData options:kNilOptions error:&e];
+            
+            if (e) { NSLog(@"%@", e); }
+            
+            [self.messages addObject:JSON];
+            [self.delegate didReceiveJSON:JSON];
+            
+            for (id object in self.additionalDelegates) {
+                if ([object conformsToProtocol:@protocol(NetworkManagerDelegate)]) {
+                    [object didReceiveJSON:JSON];
+                }
+            }
+            
+            self.data = [NSMutableData data];
+            
+        }
         
     }
-    
 }
 
 #pragma mark - NSStreamDelegate protocol implementation
@@ -109,6 +105,9 @@
     switch (eventCode) {
             
         case NSStreamEventOpenCompleted: {
+            
+            NSLog(@"Opened");
+            
             break;
         }
             
@@ -118,14 +117,15 @@
             }
             
             if (aStream == self.inputStream) {
-                
                 uint8_t buffer[1024];
-                int len;
+                long len;
                 while ([inputStream hasBytesAvailable]) {
                     len = [inputStream read:buffer maxLength:sizeof(buffer)];
                     if (len > 0) {
+                        NSLog(@"%lu", len);
                         [self appendBytes:buffer length:len];
                     }
+                    NSLog(@"Bytes: %ld", len);
                 }
             }
             

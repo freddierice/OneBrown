@@ -7,22 +7,25 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4E06568D1884BB1B0056A897 /* LogInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E06568C1884BB1B0056A897 /* LogInViewController.m */; };
 		4E337410187A22A700B11011 /* NetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E33740F187A22A700B11011 /* NetworkManager.m */; };
+		4EAFD76F1881FB9D005F249C /* ResizedTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EAFD76E1881FB9D005F249C /* ResizedTextField.m */; };
 		4EBA21FA1875F9A3000A9BE6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EBA21F91875F9A3000A9BE6 /* Foundation.framework */; };
 		4EBA21FC1875F9A3000A9BE6 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EBA21FB1875F9A3000A9BE6 /* CoreGraphics.framework */; };
 		4EBA21FE1875F9A3000A9BE6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EBA21FD1875F9A3000A9BE6 /* UIKit.framework */; };
 		4EBA22041875F9A3000A9BE6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4EBA22021875F9A3000A9BE6 /* InfoPlist.strings */; };
 		4EBA22061875F9A3000A9BE6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EBA22051875F9A3000A9BE6 /* main.m */; };
 		4EBA220A1875F9A3000A9BE6 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EBA22091875F9A3000A9BE6 /* AppDelegate.m */; };
-		4EBA220D1875F9A3000A9BE6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4EBA220B1875F9A3000A9BE6 /* Main.storyboard */; };
+		4EBA220D1875F9A3000A9BE6 /* Main_1.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4EBA220B1875F9A3000A9BE6 /* Main_1.storyboard */; };
 		4EBA22121875F9A3000A9BE6 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4EBA22111875F9A3000A9BE6 /* Images.xcassets */; };
 		4EBA22191875F9A3000A9BE6 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EBA22181875F9A3000A9BE6 /* XCTest.framework */; };
 		4EBA221A1875F9A3000A9BE6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EBA21F91875F9A3000A9BE6 /* Foundation.framework */; };
 		4EBA221B1875F9A3000A9BE6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EBA21FD1875F9A3000A9BE6 /* UIKit.framework */; };
 		4EBA22231875F9A3000A9BE6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4EBA22211875F9A3000A9BE6 /* InfoPlist.strings */; };
 		4EBA22251875F9A3000A9BE6 /* OneBrownTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EBA22241875F9A3000A9BE6 /* OneBrownTests.m */; };
-		4EBA22301875F9E8000A9BE6 /* SignInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EBA222F1875F9E8000A9BE6 /* SignInViewController.m */; };
 		4EBA2233187600C5000A9BE6 /* LoginLogic.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EBA2232187600C5000A9BE6 /* LoginLogic.m */; };
+		4EBE0659187FBEC0002CF819 /* WelcomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EBE0658187FBEC0002CF819 /* WelcomeViewController.m */; };
+		4ED2D99F18948C78002E3652 /* OneBrownCommon.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ED2D99E18948C78002E3652 /* OneBrownCommon.m */; };
 		597AE6F9187B35BD003FE40E /* FindViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 597AE6F8187B35BD003FE40E /* FindViewController.m */; };
 		597AE6FC187B35D0003FE40E /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 597AE6FB187B35D0003FE40E /* ProfileViewController.m */; };
 		597AE704187B5B02003FE40E /* UserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 597AE703187B5B02003FE40E /* UserCell.m */; };
@@ -43,8 +46,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4E06568B1884BB1B0056A897 /* LogInViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogInViewController.h; sourceTree = "<group>"; };
+		4E06568C1884BB1B0056A897 /* LogInViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogInViewController.m; sourceTree = "<group>"; };
 		4E33740E187A22A700B11011 /* NetworkManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkManager.h; sourceTree = "<group>"; };
 		4E33740F187A22A700B11011 /* NetworkManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkManager.m; sourceTree = "<group>"; };
+		4EAFD76D1881FB9D005F249C /* ResizedTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResizedTextField.h; sourceTree = "<group>"; };
+		4EAFD76E1881FB9D005F249C /* ResizedTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ResizedTextField.m; sourceTree = "<group>"; };
 		4EBA21F61875F9A3000A9BE6 /* OneBrown.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OneBrown.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4EBA21F91875F9A3000A9BE6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4EBA21FB1875F9A3000A9BE6 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -55,17 +62,19 @@
 		4EBA22071875F9A3000A9BE6 /* OneBrown-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OneBrown-Prefix.pch"; sourceTree = "<group>"; };
 		4EBA22081875F9A3000A9BE6 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		4EBA22091875F9A3000A9BE6 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		4EBA220C1875F9A3000A9BE6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		4EBA220C1875F9A3000A9BE6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_1.storyboard; sourceTree = "<group>"; };
 		4EBA22111875F9A3000A9BE6 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		4EBA22171875F9A3000A9BE6 /* OneBrownTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OneBrownTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4EBA22181875F9A3000A9BE6 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		4EBA22201875F9A3000A9BE6 /* OneBrownTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "OneBrownTests-Info.plist"; sourceTree = "<group>"; };
 		4EBA22221875F9A3000A9BE6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4EBA22241875F9A3000A9BE6 /* OneBrownTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OneBrownTests.m; sourceTree = "<group>"; };
-		4EBA222E1875F9E8000A9BE6 /* SignInViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignInViewController.h; sourceTree = "<group>"; };
-		4EBA222F1875F9E8000A9BE6 /* SignInViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignInViewController.m; sourceTree = "<group>"; };
 		4EBA2231187600C5000A9BE6 /* LoginLogic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginLogic.h; sourceTree = "<group>"; };
 		4EBA2232187600C5000A9BE6 /* LoginLogic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginLogic.m; sourceTree = "<group>"; };
+		4EBE0657187FBEC0002CF819 /* WelcomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WelcomeViewController.h; sourceTree = "<group>"; };
+		4EBE0658187FBEC0002CF819 /* WelcomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WelcomeViewController.m; sourceTree = "<group>"; };
+		4ED2D99D18948C78002E3652 /* OneBrownCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OneBrownCommon.h; sourceTree = "<group>"; };
+		4ED2D99E18948C78002E3652 /* OneBrownCommon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OneBrownCommon.m; sourceTree = "<group>"; };
 		597AE6F7187B35BD003FE40E /* FindViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FindViewController.h; sourceTree = "<group>"; };
 		597AE6F8187B35BD003FE40E /* FindViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FindViewController.m; sourceTree = "<group>"; };
 		597AE6FA187B35D0003FE40E /* ProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileViewController.h; sourceTree = "<group>"; };
@@ -109,10 +118,12 @@
 		4E337411187A3B1900B11011 /* Login */ = {
 			isa = PBXGroup;
 			children = (
-				4EBA222E1875F9E8000A9BE6 /* SignInViewController.h */,
-				4EBA222F1875F9E8000A9BE6 /* SignInViewController.m */,
+				4EBE0657187FBEC0002CF819 /* WelcomeViewController.h */,
+				4EBE0658187FBEC0002CF819 /* WelcomeViewController.m */,
 				4EBA2231187600C5000A9BE6 /* LoginLogic.h */,
 				4EBA2232187600C5000A9BE6 /* LoginLogic.m */,
+				4E06568B1884BB1B0056A897 /* LogInViewController.h */,
+				4E06568C1884BB1B0056A897 /* LogInViewController.m */,
 			);
 			name = Login;
 			sourceTree = "<group>";
@@ -124,6 +135,15 @@
 				4E33740F187A22A700B11011 /* NetworkManager.m */,
 			);
 			name = Network;
+			sourceTree = "<group>";
+		};
+		4EAFD76C1881FB65005F249C /* Supporting Classes */ = {
+			isa = PBXGroup;
+			children = (
+				4EAFD76D1881FB9D005F249C /* ResizedTextField.h */,
+				4EAFD76E1881FB9D005F249C /* ResizedTextField.m */,
+			);
+			name = "Supporting Classes";
 			sourceTree = "<group>";
 		};
 		4EBA21ED1875F9A3000A9BE6 = {
@@ -161,11 +181,14 @@
 			children = (
 				4EBA22081875F9A3000A9BE6 /* AppDelegate.h */,
 				4EBA22091875F9A3000A9BE6 /* AppDelegate.m */,
-				4EBA220B1875F9A3000A9BE6 /* Main.storyboard */,
+				4EBA220B1875F9A3000A9BE6 /* Main_1.storyboard */,
+				4ED2D99D18948C78002E3652 /* OneBrownCommon.h */,
+				4ED2D99E18948C78002E3652 /* OneBrownCommon.m */,
 				597AE6FD187B35DF003FE40E /* Find/Profile  */,
 				4E337411187A3B1900B11011 /* Login */,
 				4E337412187A3B2300B11011 /* Network */,
 				4EBA22111875F9A3000A9BE6 /* Images.xcassets */,
+				4EAFD76C1881FB65005F249C /* Supporting Classes */,
 				4EBA22001875F9A3000A9BE6 /* Supporting Files */,
 			);
 			path = OneBrown;
@@ -215,8 +238,8 @@
 				597AE703187B5B02003FE40E /* UserCell.m */,
 				59C2B26F187CE293009A70D4 /* UserProfileViewController.h */,
 				59C2B270187CE293009A70D4 /* UserProfileViewController.m */,
-				59C2B276187DEC68009A70D4 /* AddSocialNetworksViewController.h */,
 				59C2B277187DEC68009A70D4 /* AddSocialNetworksViewController.m */,
+				59C2B276187DEC68009A70D4 /* AddSocialNetworksViewController.h */,
 			);
 			name = "Find/Profile ";
 			sourceTree = "<group>";
@@ -299,7 +322,7 @@
 			files = (
 				4EBA22121875F9A3000A9BE6 /* Images.xcassets in Resources */,
 				4EBA22041875F9A3000A9BE6 /* InfoPlist.strings in Resources */,
-				4EBA220D1875F9A3000A9BE6 /* Main.storyboard in Resources */,
+				4EBA220D1875F9A3000A9BE6 /* Main_1.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -318,11 +341,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4E06568D1884BB1B0056A897 /* LogInViewController.m in Sources */,
 				59C2B271187CE293009A70D4 /* UserProfileViewController.m in Sources */,
 				4EBA220A1875F9A3000A9BE6 /* AppDelegate.m in Sources */,
+				4EAFD76F1881FB9D005F249C /* ResizedTextField.m in Sources */,
 				59C2B275187DC7D5009A70D4 /* UserManager.m in Sources */,
-				4EBA22301875F9E8000A9BE6 /* SignInViewController.m in Sources */,
 				59C2B278187DEC68009A70D4 /* AddSocialNetworksViewController.m in Sources */,
+				4EBE0659187FBEC0002CF819 /* WelcomeViewController.m in Sources */,
 				4EBA2233187600C5000A9BE6 /* LoginLogic.m in Sources */,
 				597AE6F9187B35BD003FE40E /* FindViewController.m in Sources */,
 				597AE704187B5B02003FE40E /* UserCell.m in Sources */,
@@ -330,6 +355,7 @@
 				4E337410187A22A700B11011 /* NetworkManager.m in Sources */,
 				59C2B27B1881F28A009A70D4 /* CAPopupWindow.m in Sources */,
 				4EBA22061875F9A3000A9BE6 /* main.m in Sources */,
+				4ED2D99F18948C78002E3652 /* OneBrownCommon.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -360,12 +386,12 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
-		4EBA220B1875F9A3000A9BE6 /* Main.storyboard */ = {
+		4EBA220B1875F9A3000A9BE6 /* Main_1.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				4EBA220C1875F9A3000A9BE6 /* Base */,
 			);
-			name = Main.storyboard;
+			name = Main_1.storyboard;
 			sourceTree = "<group>";
 		};
 		4EBA22211875F9A3000A9BE6 /* InfoPlist.strings */ = {

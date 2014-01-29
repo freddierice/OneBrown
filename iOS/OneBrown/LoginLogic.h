@@ -12,5 +12,6 @@
 
 + (BOOL)validateUsername: (NSString *)username;
 + (BOOL)validatePassword: (NSString *)password;
++ (BOOL)validateEmail: (NSString *)email;
 
 @end

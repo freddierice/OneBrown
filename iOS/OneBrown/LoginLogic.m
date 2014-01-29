@@ -11,10 +11,29 @@
 @implementation LoginLogic
 
 + (BOOL)validateUsername:(NSString *)username {
+    
+    if (username.length == 0) {
+        return NO;
+    }
+    
     return YES;
 }
 
 + (BOOL)validatePassword:(NSString *)password {
+    
+    if (password.length == 0) {
+        return NO;
+    }
+    
+    return YES;
+}
+
++ (BOOL)validateEmail:(NSString *)email {
+    
+    if (email.length == 0) {
+        return NO;
+    }
+    
     return YES;
 }
 
