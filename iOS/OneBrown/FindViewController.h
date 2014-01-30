@@ -9,11 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "UserProfileViewController.h"
 
-@class UserManager;
-
-@interface FindViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate> {
-
-}
+@interface FindViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate>
 
 @property (strong, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (strong, nonatomic) IBOutlet UISearchBar *searchBar;
