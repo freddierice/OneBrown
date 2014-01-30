@@ -7,25 +7,32 @@
 #include <atomic>
 #include <vector>
 #include <chrono>
+#include <mutex>
 
 #include <json/json.h>
 
+#include "ClientCollector.h"
 #include "../network/Network.h"
 #include "../utilities/Utility.h"
 #include "../database/Database.h"
 
 enum class ClientStatus : int {DEAD=0,NOT_AUTHORIZED,AUTHORIZED};
 
+class ClientCollector;
 class Client{
 public:
-    Client(BIO *sock);
+    Client(BIO *sock, ClientCollector *cc);
     ~Client();
     
     void start();
+    void reinit(BIO *sock);
     bool close();
     
     ClientStatus getStatus();
     bool isRunning();
+    
+    std::string getSession();
+    std::chrono::time_point<std::chrono::system_clock> getTime();
     
 private:
     Client();
@@ -38,13 +45,18 @@ private:
     void verify(Json::Value &val);
     void renew(Json::Value &val);
     void remove(Json::Value &val);
+    void close(Json::Value &val);
     
     Json::FastWriter m_writer;
+    bool m_hashed;
     
+    ClientCollector *m_cc;
     Network *m_network;
     Database *m_database;
     std::thread m_thread;
-        
+    std::chrono::time_point<std::chrono::system_clock> m_time;
+    std::string m_session;
+    
     std::atomic<ClientStatus> m_cs;
     std::atomic<bool> m_isRunning;
 };

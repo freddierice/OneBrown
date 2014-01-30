@@ -39,6 +39,7 @@ public:
     bool remove(std::string user);
     bool renew(std::string user);
     
+    std::string getEmail();
     std::string getSession();
     std::string getCode();
     std::string getTries();

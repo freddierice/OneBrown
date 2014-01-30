@@ -2,12 +2,14 @@
 
 Client::Client(){}
 
-Client::Client(BIO *sock)
+Client::Client(BIO *sock, ClientCollector *cc)
 {
+    m_cc = cc;
     m_network = new Network(sock);
     m_database = new Database();
-    m_cs = ClientStatus::DEAD;
+    m_cs = ClientStatus::NOT_AUTHORIZED;
     m_isRunning = false;
+    m_hashed = false;
 }
 
 Client::~Client()
@@ -19,11 +21,19 @@ Client::~Client()
 void Client::start()
 {
     if(!m_isRunning){
-        m_cs = ClientStatus::NOT_AUTHORIZED;
         m_isRunning = true;
         m_network->start();
+        m_time = std::chrono::system_clock::now();
         m_thread = std::thread(&Client::run,this);
     }
+}
+
+void Client::reinit(BIO *sock)
+{
+    delete m_network;
+    m_network = new Network(sock);
+    m_cs = ClientStatus::AUTHORIZED;
+    start();
 }
 
 void Client::run()
@@ -31,11 +41,12 @@ void Client::run()
     std::string msg;
     Json::Value val;
     
-    std::cout << "Client connected\n";
-    
-    while(m_cs != ClientStatus::DEAD){
+    std::cout << "Client connected." << std::endl;
+    while(m_isRunning){
         authorize();
-        while(m_cs == ClientStatus::AUTHORIZED)
+        if(m_hashed)
+           std::cout << "[" << m_database->getEmail() << "]" << " authorized." << std::endl;
+        while(m_cs == ClientStatus::AUTHORIZED && m_isRunning)
         {
             msg = "";
             val.clear();
@@ -43,6 +54,7 @@ void Client::run()
                 val["message"] = "cmd";
                 msg = m_writer.write(val);
                 m_network->sendBytes(msg.c_str(),msg.length());
+                m_time = std::chrono::system_clock::now();
                 val = m_network->recvJSON();
                 msg = val.get("message","").asString();
             }
@@ -50,7 +62,7 @@ void Client::run()
             if(msg == "logout")
                 logout(val);
             else if(msg == "close")
-                m_cs = ClientStatus::DEAD;
+                close(val);
         }
     }
     
@@ -83,7 +95,11 @@ void Client::authorize()
         else if(msg == "renew")
             renew(val);
         else if(msg == "close")
-            m_cs = ClientStatus::DEAD;
+            close(val);
+    }
+    if(!m_hashed && m_cs == ClientStatus::AUTHORIZED){
+        m_cc->hash(this);
+        m_hashed = true;
     }
 }
 
@@ -225,6 +241,16 @@ void Client::remove(Json::Value &val)
     m_network->sendBytes(msg.c_str(),msg.length());
 }
 
+void Client::close(Json::Value &val)
+{
+    m_cs = ClientStatus::DEAD;
+    m_isRunning = false;
+    if(m_hashed)
+        std::cout << "[" << m_database->getEmail() << "]" << " closed session." << std::endl;
+    else
+        std::cout << "Client disconnected." << std::endl;
+}
+
 bool Client::close()
 {
     if(m_isRunning){
@@ -237,3 +263,5 @@ bool Client::close()
 
 ClientStatus Client::getStatus(){ return m_cs; }
 bool Client::isRunning(){return m_isRunning;}
+std::string Client::getSession(){return m_database->getSession();}
+std::chrono::time_point<std::chrono::system_clock> Client::getTime(){return m_time; }

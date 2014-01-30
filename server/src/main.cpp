@@ -11,9 +11,10 @@ int main()
 
 void connect()
 {
-    Client *c;
+    ClientCollector *cc;
     int newsock;
     
+    cc = new ClientCollector();
     listen(sock,500);
     while(true) 
     {
@@ -22,13 +23,7 @@ void connect()
             std::cout << "ERROR on accept" << std::endl;
             continue;
         }
-        try{
-            c = new Client(BIO_new_socket(newsock,BIO_NOCLOSE));
-        }catch( std::string str ){
-            std::cout << "Error: " << str << std::endl;
-        }
-        c->start();
-        clients.push_back(c);
+        cc->addClient(BIO_new_socket(newsock,BIO_NOCLOSE));
     } 
 }
 

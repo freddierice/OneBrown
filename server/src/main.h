@@ -22,7 +22,6 @@
 
 #define PORT 20000
 
-std::vector<Client *> clients;
 int sock;
 
 void connect();

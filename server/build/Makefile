@@ -94,8 +94,10 @@ CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
 am__dirstamp = $(am__leading_dot)dirstamp
-am_out_OBJECTS = src/main.$(OBJEXT) src/client/Client.$(OBJEXT) \
-	src/network/Network.$(OBJEXT) src/database/Database.$(OBJEXT) \
+am_out_OBJECTS = src/main.$(OBJEXT) \
+	src/client/ClientCollector.$(OBJEXT) \
+	src/client/Client.$(OBJEXT) src/network/Network.$(OBJEXT) \
+	src/database/Database.$(OBJEXT) \
 	src/utilities/Utility.$(OBJEXT) src/email/Email.$(OBJEXT)
 out_OBJECTS = $(am_out_OBJECTS)
 out_LDADD = $(LDADD)
@@ -275,7 +277,7 @@ top_builddir = .
 top_srcdir = ..
 AUTOMAKE_OPTIONS = subdir-objects
 ACLOCAL_AMFLAGS = ${ACLOCAL_FLAGS}
-out_SOURCES = src/main.h src/main.cpp src/client/Client.h src/client/Client.cpp src/network/Network.cpp src/network/Network.h src/database/Database.h src/database/Database.cpp src/utilities/Utility.h src/utilities/Utility.cpp src/email/Email.h src/email/Email.cpp
+out_SOURCES = src/main.h src/main.cpp src/client/ClientCollector.h src/client/ClientCollector.cpp src/client/Client.h src/client/Client.cpp src/network/Network.cpp src/network/Network.h src/database/Database.h src/database/Database.cpp src/utilities/Utility.h src/utilities/Utility.cpp src/email/Email.h src/email/Email.cpp
 all: all-am
 
 .SUFFIXES:
@@ -369,6 +371,8 @@ src/client/$(am__dirstamp):
 src/client/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) src/client/$(DEPDIR)
 	@: > src/client/$(DEPDIR)/$(am__dirstamp)
+src/client/ClientCollector.$(OBJEXT): src/client/$(am__dirstamp) \
+	src/client/$(DEPDIR)/$(am__dirstamp)
 src/client/Client.$(OBJEXT): src/client/$(am__dirstamp) \
 	src/client/$(DEPDIR)/$(am__dirstamp)
 src/network/$(am__dirstamp):
@@ -422,6 +426,7 @@ distclean-compile:
 
 include src/$(DEPDIR)/main.Po
 include src/client/$(DEPDIR)/Client.Po
+include src/client/$(DEPDIR)/ClientCollector.Po
 include src/database/$(DEPDIR)/Database.Po
 include src/email/$(DEPDIR)/Email.Po
 include src/network/$(DEPDIR)/Network.Po

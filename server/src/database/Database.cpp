@@ -345,3 +345,8 @@ std::string Database::getTries()
 {
     return std::to_string(m_tries);
 }
+
+std::string Database::getEmail()
+{
+    return m_email;
+}
