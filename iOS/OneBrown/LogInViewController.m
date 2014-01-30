@@ -9,6 +9,8 @@
 #import "LogInViewController.h"
 #import "LoginLogic.h"
 #import "OneBrownCommon.h"
+#import "FindViewController.h"
+#import "AppDelegate.h"
 
 #define CHOICE ((NSInteger) 0)
 #define LOGIN ((NSInteger) 1)
@@ -232,6 +234,23 @@
     }
     
 }
+
+- (void) updateViewControllers
+{
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"loggedIn"];
+
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+    FindViewController *findViewControler = (FindViewController *)[mainStoryboard instantiateViewControllerWithIdentifier:@"findController"];
+
+    UITabBarController *tabBarController = (UITabBarController *)[mainStoryboard instantiateViewControllerWithIdentifier:@"tabBarController"];
+
+    AppDelegate *app = [[UIApplication sharedApplication] delegate];
+
+    [self presentViewController:findViewControler animated:YES completion:nil];
+    [app.window setRootViewController:tabBarController];
+    
+}
+
 
 -(void)submitCode:(id)sender {
     

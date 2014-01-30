@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Benjamin Murphy. All rights reserved.
 //
 
-#import "SignInViewController.h"
+#import "LogInViewController.h"
 #import "LoginLogic.h"
 #import <Foundation/Foundation.h>
 #import "AppDelegate.h"
