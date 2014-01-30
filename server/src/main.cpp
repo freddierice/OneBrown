@@ -20,6 +20,8 @@ void connect()
         newsock = accept(sock, NULL, 0);
         if (newsock < 0){
             std::cout << "ERROR on accept" << std::endl;
+            close(sock);
+            initializeSocket();
             continue;
         }
         try{
