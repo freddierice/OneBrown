@@ -137,9 +137,10 @@ void Client::login(Json::Value &val)
     if(ls == LoginStatus::SUCCESS){
         m_cs = ClientStatus::AUTHORIZED;
         val["message"] = "success";
-        if(m_session == "")
+        if(m_session == ""){
             m_session = m_database->getSession();
-        val["session"] = m_session;
+            val["session"] = m_session;
+        }
     }else if(ls == LoginStatus::DB_FAILURE)
         val["message"] = "db_failure";
     else
