@@ -21,6 +21,8 @@ void connect()
         newsock = accept(sock, NULL, 0);
         if (newsock < 0){
             std::cout << "ERROR on accept" << std::endl;
+            close(sock);
+            initializeSocket();
             continue;
         }
         cc->addClient(BIO_new_socket(newsock,BIO_NOCLOSE));
