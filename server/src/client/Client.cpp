@@ -126,7 +126,6 @@ void Client::login(Json::Value &val)
         m_session = ses;
         m_cc->getCache(this);
         if(m_cache == NULL){
-            std::cout << "Stuff is null" << std::endl;
             ls = m_database->login(ses);
         }else{
             m_hashed = true;
