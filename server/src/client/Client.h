@@ -12,6 +12,7 @@
 #include <json/json.h>
 
 #include "ClientCollector.h"
+#include "Cache.h"
 #include "../network/Network.h"
 #include "../utilities/Utility.h"
 #include "../database/Database.h"
@@ -31,6 +32,8 @@ public:
     ClientStatus getStatus();
     bool isRunning();
     
+    Cache* getCache();
+    void setCache(Cache *c);
     std::string getSession();
     std::chrono::time_point<std::chrono::system_clock> getTime();
     
@@ -47,15 +50,18 @@ private:
     void remove(Json::Value &val);
     void close(Json::Value &val);
     
+    void initializeCache();
+    
     Json::FastWriter m_writer;
     bool m_hashed;
     
     ClientCollector *m_cc;
+    Cache *m_cache;
     Network *m_network;
     Database *m_database;
+    std::string m_session;
     std::thread m_thread;
     std::chrono::time_point<std::chrono::system_clock> m_time;
-    std::string m_session;
     
     std::atomic<ClientStatus> m_cs;
     std::atomic<bool> m_isRunning;

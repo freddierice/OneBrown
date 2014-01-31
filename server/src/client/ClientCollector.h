@@ -12,6 +12,7 @@
 #include <unistd.h>
 
 #include "Client.h"
+#include "Cache.h"
 
 #include <openssl/bio.h>
 #include <openssl/ssl.h>
@@ -24,7 +25,9 @@ public:
     void start();
     
     void addClient(BIO *sock);
-    void hash(Client *c);
+    void hashCache(Client *c);
+    void getCache(Client *c);
+    void killCache(Client *c);
     
 private:
     void addClientP(BIO *sock);
@@ -37,7 +40,7 @@ private:
     std::mutex m_hashM;
     
     std::vector<Client *> m_unauthed_clients;
-    std::unordered_map<std::string,Client *> m_hashmap;
+    std::unordered_map<std::string,Cache *> m_hashmap;
 };
 
 
