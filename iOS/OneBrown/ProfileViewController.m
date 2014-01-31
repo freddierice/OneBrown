@@ -256,7 +256,8 @@ static NSString *TableViewCellIdentifier = @"SNCells";
     [defaults setBool:NO forKey:@"loggedIn"];
     
     LogInViewController *signIn = [[LogInViewController alloc] init];
-    signIn = [self.storyboard instantiateViewControllerWithIdentifier:@"InitialViewController"];
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_1" bundle: nil];
+    signIn = [mainStoryboard instantiateViewControllerWithIdentifier:@"InitialViewController"];
     [self presentViewController:signIn animated:YES completion:nil];
     
 }
