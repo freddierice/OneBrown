@@ -7,8 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "NetworkManager.h"
 
-@interface UserManager : NSObject
+@interface UserManager : NSObject <NetworkManagerDelegate>
 {
     NSString *userName;
     UIImage *userImage;
@@ -19,9 +20,11 @@
     NSMutableArray *stalkedUserNetworks;
     NSMutableArray *socialNetworks;
     NSMutableDictionary *socialNetworkImages;
+    NetworkManager *manager;
     
 }
 
+@property (nonatomic, retain) NetworkManager *manager;
 @property (nonatomic, retain) NSString *userName;
 @property (nonatomic, retain) UIImage *userImage;
 @property (nonatomic, retain) NSMutableDictionary *userNetworks;

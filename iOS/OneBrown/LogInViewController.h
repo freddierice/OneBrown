@@ -73,4 +73,6 @@
 
 -(void)createNetworkManager;
 
+- (IBAction)loggedInCheating:(id)sender;
+
 @end

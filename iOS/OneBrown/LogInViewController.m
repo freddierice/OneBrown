@@ -120,6 +120,12 @@
     self.networkManager = nManager;
 }
 
+// Again, just to simulate log in without the server.
+- (IBAction)loggedInCheating:(id)sender
+{
+    [self updateViewControllers];
+}
+
 #pragma mark - screen animation
 
 -(void)switchToLogin:(id)sender {
@@ -232,6 +238,7 @@
     if (![self.networkManager writeData:information]) {
         NSLog(@"Error writing to server.");
     }
+   
     
 }
 
@@ -415,6 +422,10 @@
                 NSLog(@"Unknown screen: %ld", (long)self.activeScreen);
                 break;
             }
+                
+            // I'm assuming this is where the user actually signs in successfully
+            [self updateViewControllers];
+            
         }
     }
     

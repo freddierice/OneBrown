@@ -28,14 +28,14 @@
     [defaults registerDefaults: defaultSettings];
     [defaults synchronize];
     
-    if (![defaults objectForKey:@"loggedIn"])
-    {
+    //if (![defaults objectForKey:@"loggedIn"])
+    //{
         UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_1" bundle: nil];
-        LogInViewController *signInViewController = (LogInViewController *)[mainStoryboard instantiateViewControllerWithIdentifier:@"LogInViewController"];
+        LogInViewController *signInViewController = (LogInViewController *)[mainStoryboard instantiateViewControllerWithIdentifier:@"InitialViewController"];
         
         // Set the root controller to the signInVC so that there is no glimpse of the findVC
         self.window.rootViewController = signInViewController;
-    }
+   // }
     return YES;
 }
 							
