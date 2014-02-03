@@ -246,7 +246,7 @@
 {
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"loggedIn"];
 
-    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_1" bundle: nil];
     FindViewController *findViewControler = (FindViewController *)[mainStoryboard instantiateViewControllerWithIdentifier:@"findController"];
 
     UITabBarController *tabBarController = (UITabBarController *)[mainStoryboard instantiateViewControllerWithIdentifier:@"tabBarController"];
