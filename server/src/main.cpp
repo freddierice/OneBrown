@@ -15,6 +15,7 @@ void connect()
     int newsock;
     
     cc = new ClientCollector();
+    cc->start();
     listen(sock,500);
     while(true) 
     {
