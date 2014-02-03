@@ -13,14 +13,18 @@ void ClientCollector::start()
 void ClientCollector::run()
 {
     std::chrono::time_point<std::chrono::system_clock> now;
-    std::string user = "";
+    std::string user;
+    
+    std::cout << "Entered ClientCollector::run" << std::endl;
     while(true)
     {
+        std::cout << "Before lock" << std::endl;
         m_vecM.lock();
 
+        std::cout << "Checking for dead clients" << std::endl;
         now = std::chrono::system_clock::now();
         for(auto it = m_unauthed_clients.begin(); it != m_unauthed_clients.end();)
-            if(std::chrono::duration_cast<std::chrono::minutes>( now - (*it)->getTime()).count() >= 60){ //wait for 60 minutes
+            if(std::chrono::duration_cast<std::chrono::minutes>( now - (*it)->getTime()).count() >= 5){ //wait for 5 minutes
                 user = (*it)->getCache()->getValue("email");
                 (*it)->close();
                 delete *it;
@@ -32,8 +36,9 @@ void ClientCollector::run()
             }else{
                 ++it;
             }
-        
         m_vecM.unlock();
+        
+        std::cout << "Gave back lock" << std::endl;
         
         std::this_thread::sleep_for(std::chrono::minutes(10));
     }
