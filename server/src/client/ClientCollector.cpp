@@ -13,6 +13,7 @@ void ClientCollector::start()
 void ClientCollector::run()
 {
     std::chrono::time_point<std::chrono::system_clock> now;
+    std::string user = "";
     while(true)
     {
         m_vecM.lock();
@@ -20,9 +21,14 @@ void ClientCollector::run()
         now = std::chrono::system_clock::now();
         for(auto it = m_unauthed_clients.begin(); it != m_unauthed_clients.end();)
             if(std::chrono::duration_cast<std::chrono::minutes>( now - (*it)->getTime()).count() >= 60){ //wait for 60 minutes
+                user = (*it)->getCache()->getValue("email");
                 (*it)->close();
                 delete *it;
                 it = m_unauthed_clients.erase(it);
+                if(user == "")
+                    std::cout << "Client instance removed." << std::endl;
+                else
+                    std::cout << "[" << user << "] " << "instance removed." << std::endl;
             }else{
                 ++it;
             }
