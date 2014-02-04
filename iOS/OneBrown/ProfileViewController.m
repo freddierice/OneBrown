@@ -50,8 +50,9 @@ static NSString *TableViewCellIdentifier = @"SNCells";
     //UIColor *brownColor = [UIColor colorWithRed:89 green:38 blue:11 alpha:1];
     profileImageView.layer.borderColor = [UIColor whiteColor].CGColor;
     
-    [self.addButton addTarget:self action:@selector(buttonPress) forControlEvents:UIControlEventTouchUpInside];
+    [self.addButton addTarget:self action:@selector(addSNButtonPress) forControlEvents:UIControlEventTouchUpInside];
     
+    [self.settingsButton addTarget:self action:@selector(gearSettingsPress) forControlEvents:UIControlEventTouchUpInside];
     
     // Setting up the tableView
     [self.networksTableView setDelegate:self];
@@ -79,7 +80,7 @@ static NSString *TableViewCellIdentifier = @"SNCells";
     return UIStatusBarStyleLightContent;
 }
 
-- (void)buttonPress {
+- (void)addSNButtonPress {
     
     CAPopupWindow* popView = [[CAPopupWindow alloc] initWithObjectList:@[
                                                                          [CAWindowObject windowObject:sharedUserManager.socialNetworks[0] image:sharedUserManager.socialNetworkImages[sharedUserManager.socialNetworks[0]] target:self action:@selector(addFacebook)],
@@ -88,6 +89,22 @@ static NSString *TableViewCellIdentifier = @"SNCells";
                                                                          [CAWindowObject windowObject:sharedUserManager.socialNetworks[3] image:sharedUserManager.socialNetworkImages[sharedUserManager.socialNetworks[3]] target:self action:@selector(addSnapchat)]]];
     [popView presentInView:self.view];
     
+}
+
+- (void) gearSettingsPress
+{
+    CAPopupWindow *settingsView = [[CAPopupWindow alloc] initWithObjectList:@[ [CAWindowObject windowObject: @"Log Out" image:nil target:self action:@selector(logOut)]]];
+    [settingsView presentInView:self.view];
+}
+
+- (void) logOut
+{
+    [defaults setBool:NO forKey:@"loggedIn"];
+    
+    LogInViewController *signIn = [[LogInViewController alloc] init];
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_1" bundle: nil];
+    signIn = [mainStoryboard instantiateViewControllerWithIdentifier:@"InitialViewController"];
+    [self presentViewController:signIn animated:YES completion:nil];
 }
 
 // I'm guessing there will be different, specific methods for adding each social network.
@@ -250,7 +267,7 @@ static NSString *TableViewCellIdentifier = @"SNCells";
     }
     return cell;
 }
-
+                                                                                                                                            
 - (IBAction)clickedLogOut:(id)sender
 {
     [defaults setBool:NO forKey:@"loggedIn"];
@@ -261,6 +278,11 @@ static NSString *TableViewCellIdentifier = @"SNCells";
     [self presentViewController:signIn animated:YES completion:nil];
     
 }
+                                                                                                                                                              
+                                                                                                                                            
+                                                                                                                                                        
+                                                                                                                                                              
+                                                                                                                                                              
 @end
 
 
