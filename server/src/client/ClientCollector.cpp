@@ -24,7 +24,7 @@ void ClientCollector::run()
         std::cout << "Checking for dead clients" << std::endl;
         now = std::chrono::system_clock::now();
         for(auto it = m_unauthed_clients.begin(); it != m_unauthed_clients.end();)
-            if(std::chrono::duration_cast<std::chrono::minutes>( now - (*it)->getTime()).count() >= 5){ //wait for 5 minutes
+            if(std::chrono::duration_cast<std::chrono::minutes>( now - (*it)->getTime()).count() >= 1){ //wait for 5 minutes
                 user = (*it)->getCache()->getValue("email");
                 (*it)->close();
                 delete *it;
@@ -40,7 +40,7 @@ void ClientCollector::run()
         
         std::cout << "Gave back lock" << std::endl;
         
-        std::this_thread::sleep_for(std::chrono::minutes(10));
+        std::this_thread::sleep_for(std::chrono::minutes(1));
     }
 }
 

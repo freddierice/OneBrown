@@ -80,6 +80,7 @@ void Client::authorize()
             val["message"] = "login_or_register";
             msg = m_writer.write(val);
             m_network->sendBytes(msg.c_str(),msg.length());
+            m_time = std::chrono::system_clock::now();
             val = m_network->recvJSON();
             msg = val.get("message","").asString();
         }
@@ -273,7 +274,6 @@ void Client::initializeCache()
 void Client::close(Json::Value &val)
 {
     m_cs = ClientStatus::DEAD;
-    m_isRunning = false;
     if(m_hashed)
         std::cout << "[" << m_cache->getValue("email") << "]" << " closed session." << std::endl;
     else
