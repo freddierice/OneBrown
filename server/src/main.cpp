@@ -26,7 +26,7 @@ void connect()
             initializeSocket();
             continue;
         }
-        cc->addClient(BIO_new_socket(newsock,BIO_NOCLOSE));
+        std::async(std::launch::async,&ClientCollector::addClient,cc,BIO_new_socket(newsock,BIO_NOCLOSE));
     } 
 }
 

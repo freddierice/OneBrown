@@ -105,7 +105,7 @@ void Client::authorize()
             m_cc->getCache(this);
             if(m_cache == NULL){
                 initializeCache();
-                m_cc->hashCache(this);
+                std::async(std::launch::async,&ClientCollector::hashCache,m_cc,this);
             }
             m_hashed = true;
         }

@@ -47,12 +47,6 @@ void ClientCollector::run()
 
 void ClientCollector::addClient(BIO *sock)
 {
-    std::thread t(&ClientCollector::addClientP,this,sock);
-    t.detach();
-}
-
-void ClientCollector::addClientP(BIO *sock)
-{
     Client *c;
     try{
         c = new Client(sock,this);
@@ -67,8 +61,9 @@ void ClientCollector::addClientP(BIO *sock)
 
 void ClientCollector::hashCache(Client *c)
 {
-    std::thread t(&ClientCollector::hashP,this,c);
-    t.detach();
+    m_hashM.lock();
+    m_hashmap[c->getSession()] = c->getCache();
+    m_hashM.unlock();
 }
 
 void ClientCollector::getCache(Client *c)
@@ -87,11 +82,4 @@ void ClientCollector::killCache(Client *c)
         m_hashM.unlock();
         delete cache;
     }
-}
-
-void ClientCollector::hashP(Client *c)
-{
-    m_hashM.lock();
-    m_hashmap[c->getSession()] = c->getCache();
-    m_hashM.unlock();
 }

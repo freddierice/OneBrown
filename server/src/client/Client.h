@@ -8,6 +8,7 @@
 #include <vector>
 #include <chrono>
 #include <mutex>
+#include <future>
 
 #include <json/json.h>
 

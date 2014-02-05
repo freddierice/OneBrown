@@ -30,8 +30,6 @@ public:
     void killCache(Client *c);
     
 private:
-    void addClientP(BIO *sock);
-    void hashP(Client *c);
     void run();
     
     std::thread m_thread;
