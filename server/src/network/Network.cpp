@@ -44,10 +44,8 @@ Json::Value Network::recvJSON()
     }
     
     if(!m_isRunning){
-        val["message"] = "close";
         return val;
     }
-    
     
     val = m_jsonValues.at(0);
     m_jsonValues.erase(m_jsonValues.begin());

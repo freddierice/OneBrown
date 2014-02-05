@@ -13,9 +13,6 @@
 
 #include <netdb.h>
 #include <netinet/in.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-
 
 
 #define BUF_LEN 1024

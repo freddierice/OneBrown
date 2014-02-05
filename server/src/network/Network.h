@@ -7,7 +7,6 @@
 #include <atomic>
 #include <chrono>
 
-#include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 

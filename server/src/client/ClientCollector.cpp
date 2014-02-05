@@ -19,13 +19,10 @@ void ClientCollector::run()
     std::cout << "Entered ClientCollector::run" << std::endl;
     while(true)
     {
-        std::cout << "Before lock" << std::endl;
         m_vecM.lock();
-
-        std::cout << "Checking for dead clients" << std::endl;
         now = std::chrono::system_clock::now();
         for(auto it = m_unauthed_clients.begin(); it != m_unauthed_clients.end();)
-            if(std::chrono::duration_cast<std::chrono::minutes>( now - (*it)->getTime()).count() >= 1){ //wait for 5 minutes
+            if(std::chrono::duration_cast<std::chrono::minutes>( now - (*it)->getTime()).count() >= 30){ //wait for 30 minutes
                 c = (*it)->getCache();
                 if(c)
                     user = c->getValue("email");
@@ -43,9 +40,8 @@ void ClientCollector::run()
             }
         m_vecM.unlock();
         
-        std::cout << "Gave back lock" << std::endl;
-        
-        std::this_thread::sleep_for(std::chrono::minutes(1));
+        //let the locks be absorbed by another process.
+        std::this_thread::sleep_for(std::chrono::minutes(5));
     }
 }
 
