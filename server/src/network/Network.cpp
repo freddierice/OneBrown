@@ -17,7 +17,8 @@ void Network::start()
 {
     if(!m_isRunning){
         m_isRunning = true;
-        m_thread = std::thread(&Network::recvBytes, this);
+        std::thread t(&Network::recvBytes, this);
+        t.detach();
     }
 }
 
@@ -34,12 +35,16 @@ Json::Value Network::recvJSON()
     m_jsonValuesM.lock();
     s = m_jsonValues.size();
     m_jsonValuesM.unlock();
-    while( s == 0){
+    while( s == 0 && m_isRunning){
         std::this_thread::sleep_for(std::chrono::microseconds(1000));
         m_jsonValuesM.lock();
         s = m_jsonValues.size();
         if(s == 0)
             m_jsonValuesM.unlock();
+    }
+    
+    if(!m_isRunning){
+        return val;
     }
     
     val = m_jsonValues.at(0);
@@ -102,6 +107,5 @@ void Network::close()
 {
     if(m_isRunning){
         m_isRunning = false;
-        m_thread.join();
     }
 }

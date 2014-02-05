@@ -35,12 +35,14 @@ public:
     RegistrationStatus reg(std::string user);
     VerificationStatus verify(std::string user, std::string pass, std::string code);
     
-    bool logout();
+    bool logout(int i);
     bool remove(std::string user);
     bool renew(std::string user);
     
+    std::string getEmail();
     std::string getSession();
     std::string getCode();
+    std::string getId();
     std::string getTries();
     
 private:

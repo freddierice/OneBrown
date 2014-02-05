@@ -7,7 +7,6 @@
 #include <atomic>
 #include <chrono>
 
-#include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 
@@ -34,7 +33,6 @@ private:
     Network();
     void recvBytes();
     
-    std::thread m_thread;
     BIO *m_sock;
     
     std::vector<Json::Value> m_jsonValues;

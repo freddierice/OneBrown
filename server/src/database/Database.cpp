@@ -117,11 +117,11 @@ LoginStatus Database::login(std::string user, std::string pass)
     return ls;
 }
 
-bool Database::logout()
+bool Database::logout(int i)
 {
     try{
         m_stmt.reset(m_conn->prepareStatement("UPDATE users SET session=NULL WHERE id=?"));
-        m_stmt->setInt(1,m_id);
+        m_stmt->setInt(1,i);
         m_stmt->executeUpdate();
     }catch (sql::SQLException e) {
         std::cout << "# ERR: SQLException in " << __FILE__;
@@ -336,6 +336,11 @@ std::string Database::getSession()
     return str;
 }
 
+std::string Database::getId()
+{
+    return std::to_string(m_id);
+}
+
 std::string Database::getCode()
 {
     return std::to_string(m_code);
@@ -344,4 +349,9 @@ std::string Database::getCode()
 std::string Database::getTries()
 {
     return std::to_string(m_tries);
+}
+
+std::string Database::getEmail()
+{
+    return m_email;
 }
