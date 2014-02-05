@@ -54,7 +54,7 @@ static NSString *TableViewCellIdentifier = @"SNCells";
     [self.tableView setDelegate:self];
     [self.tableView setDataSource:self];
     
-     self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLineEtched;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLineEtched;
     self.tableView.separatorInset =  UIEdgeInsetsMake(5, 3, 5, 5);
     [self.tableView registerClass:[ UITableViewCell class] forCellReuseIdentifier:TableViewCellIdentifier];
 

@@ -434,26 +434,61 @@
             </objects>
             <point key="canvasLocation" x="703" y="316"/>
         </scene>
-        <!--View Controller-->
+        <!--Social Network View Controller-->
         <scene sceneID="BAD-8b-ylV">
             <objects>
-                <viewController id="PNa-vw-Na4" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SocialNetworkController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="PNa-vw-Na4" customClass="SocialNetworkViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="YpJ-yo-gdv">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="KA2-Tj-8Yz">
-                                <rect key="frame" x="0.0" y="66" width="320" height="502"/>
+                                <rect key="frame" x="0.0" y="88" width="320" height="480"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="Qom-AJ-uuo">
+                                        <rect key="frame" x="0.0" y="22" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Qom-AJ-uuo" id="vgq-kv-0ZD">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
                             </tableView>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="m9U-1K-mC6">
+                                <rect key="frame" x="83" y="36" width="206" height="33"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="2OB-Xq-Ajm">
+                                <rect key="frame" x="20" y="25" width="55" height="55"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="QMZ-32-Rne">
+                                <rect key="frame" x="265" y="38" width="35" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Back">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="clickedBack:" destination="PNa-vw-Na4" eventType="touchUpInside" id="4Ug-Dv-QeH"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
+                    <connections>
+                        <outlet property="networkImageView" destination="2OB-Xq-Ajm" id="OVZ-0k-iR6"/>
+                        <outlet property="networkNameLabel" destination="m9U-1K-mC6" id="MnO-9F-qh1"/>
+                        <outlet property="usersInNetworkTableView" destination="KA2-Tj-8Yz" id="GE5-oV-GUN"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hiJ-9n-ADL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1120" y="-396"/>
+            <point key="canvasLocation" x="1120" y="-351"/>
         </scene>
         <!--User Profile View Controller-->
         <scene sceneID="JHr-Le-uSi">

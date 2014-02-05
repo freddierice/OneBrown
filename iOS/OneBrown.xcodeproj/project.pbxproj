@@ -26,6 +26,7 @@
 		4EBA2233187600C5000A9BE6 /* LoginLogic.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EBA2232187600C5000A9BE6 /* LoginLogic.m */; };
 		4EBE0659187FBEC0002CF819 /* WelcomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EBE0658187FBEC0002CF819 /* WelcomeViewController.m */; };
 		4ED2D99F18948C78002E3652 /* OneBrownCommon.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ED2D99E18948C78002E3652 /* OneBrownCommon.m */; };
+		5975629018A06C2E004F7403 /* SocialNetworkViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5975628F18A06C2E004F7403 /* SocialNetworkViewController.m */; };
 		597AE6F9187B35BD003FE40E /* FindViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 597AE6F8187B35BD003FE40E /* FindViewController.m */; };
 		597AE6FC187B35D0003FE40E /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 597AE6FB187B35D0003FE40E /* ProfileViewController.m */; };
 		597AE704187B5B02003FE40E /* UserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 597AE703187B5B02003FE40E /* UserCell.m */; };
@@ -75,6 +76,8 @@
 		4EBE0658187FBEC0002CF819 /* WelcomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WelcomeViewController.m; sourceTree = "<group>"; };
 		4ED2D99D18948C78002E3652 /* OneBrownCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OneBrownCommon.h; sourceTree = "<group>"; };
 		4ED2D99E18948C78002E3652 /* OneBrownCommon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OneBrownCommon.m; sourceTree = "<group>"; };
+		5975628E18A06C2E004F7403 /* SocialNetworkViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocialNetworkViewController.h; sourceTree = "<group>"; };
+		5975628F18A06C2E004F7403 /* SocialNetworkViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocialNetworkViewController.m; sourceTree = "<group>"; };
 		597AE6F7187B35BD003FE40E /* FindViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FindViewController.h; sourceTree = "<group>"; };
 		597AE6F8187B35BD003FE40E /* FindViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FindViewController.m; sourceTree = "<group>"; };
 		597AE6FA187B35D0003FE40E /* ProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileViewController.h; sourceTree = "<group>"; };
@@ -184,6 +187,10 @@
 				4EBA220B1875F9A3000A9BE6 /* Main_1.storyboard */,
 				4ED2D99D18948C78002E3652 /* OneBrownCommon.h */,
 				4ED2D99E18948C78002E3652 /* OneBrownCommon.m */,
+				59C2B2791881F28A009A70D4 /* CAPopupWindow.h */,
+				59C2B27A1881F28A009A70D4 /* CAPopupWindow.m */,
+				59C2B273187DC7D5009A70D4 /* UserManager.h */,
+				59C2B274187DC7D5009A70D4 /* UserManager.m */,
 				597AE6FD187B35DF003FE40E /* Find/Profile  */,
 				4E337411187A3B1900B11011 /* Login */,
 				4E337412187A3B2300B11011 /* Network */,
@@ -228,16 +235,14 @@
 			children = (
 				597AE6F7187B35BD003FE40E /* FindViewController.h */,
 				597AE6F8187B35BD003FE40E /* FindViewController.m */,
-				59C2B273187DC7D5009A70D4 /* UserManager.h */,
-				59C2B274187DC7D5009A70D4 /* UserManager.m */,
 				597AE6FA187B35D0003FE40E /* ProfileViewController.h */,
 				597AE6FB187B35D0003FE40E /* ProfileViewController.m */,
-				59C2B2791881F28A009A70D4 /* CAPopupWindow.h */,
-				59C2B27A1881F28A009A70D4 /* CAPopupWindow.m */,
 				597AE702187B5B02003FE40E /* UserCell.h */,
 				597AE703187B5B02003FE40E /* UserCell.m */,
 				59C2B26F187CE293009A70D4 /* UserProfileViewController.h */,
 				59C2B270187CE293009A70D4 /* UserProfileViewController.m */,
+				5975628E18A06C2E004F7403 /* SocialNetworkViewController.h */,
+				5975628F18A06C2E004F7403 /* SocialNetworkViewController.m */,
 				59C2B277187DEC68009A70D4 /* AddSocialNetworksViewController.m */,
 				59C2B276187DEC68009A70D4 /* AddSocialNetworksViewController.h */,
 			);
@@ -353,6 +358,7 @@
 				597AE704187B5B02003FE40E /* UserCell.m in Sources */,
 				597AE6FC187B35D0003FE40E /* ProfileViewController.m in Sources */,
 				4E337410187A22A700B11011 /* NetworkManager.m in Sources */,
+				5975629018A06C2E004F7403 /* SocialNetworkViewController.m in Sources */,
 				59C2B27B1881F28A009A70D4 /* CAPopupWindow.m in Sources */,
 				4EBA22061875F9A3000A9BE6 /* main.m in Sources */,
 				4ED2D99F18948C78002E3652 /* OneBrownCommon.m in Sources */,

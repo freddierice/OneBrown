@@ -9,6 +9,7 @@
 #import "FindViewController.h"
 #import "UserCell.h"
 #import "UserProfileViewController.h"
+#import "SocialNetworkViewController.h"
 #import "UserManager.h"
 
 @interface FindViewController ()
@@ -58,7 +59,6 @@
     
     // Default search type is Person.
     searchType = @"Person";
-    
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle
@@ -124,7 +124,7 @@
         cell.fadeView.hidden = YES;
     }
     
-    // The borders don't look cool with the social network icons.
+    // The borders don't look good with the social network icons.
     if (![searchType isEqualToString:@"Social"])
     {
         cell.userImageView.layer.cornerRadius = 10;
@@ -151,13 +151,27 @@
     
     if ([searchType isEqualToString:@"Person"])
     {
+        //[self setProfileViewController:@"tomate"];
         sharedUserManager.stalkedUserName = userPictureNames[indexPath.row];
         sharedUserManager.stalkedUserImage  = userPictures[indexPath.row];
         sharedUserManager.stalkedUserNetworks = [NSMutableArray arrayWithObjects:@"Facebook", @"Twitter", @"Instagram", @"Snapchat", nil];
         
-        UserProfileViewController *viewController = (UserProfileViewController *) [self.storyboard instantiateViewControllerWithIdentifier:@"UserProfileController"];
+        UserProfileViewController *uPViewController = (UserProfileViewController *) [self.storyboard instantiateViewControllerWithIdentifier:@"UserProfileController"];
+        [self presentViewController:uPViewController animated:YES completion:nil];
+    }
+    
+    else if ([searchType isEqualToString:@"Social"])
+    {
+        // Get the name from userManager's socialNetworks array.
+        sharedUserManager.stalkedNetworkName = sharedUserManager.socialNetworks[indexPath.row];
+        // Get the picture from userManager's dictionary.
+        sharedUserManager.stalkedNetworkImage = sharedUserManager.socialNetworkImages[sharedUserManager.socialNetworks[indexPath.row]];
         
-        [self presentViewController:viewController animated:YES completion:nil];
+        // Set some falsa data.
+        sharedUserManager.stalkedNetworkUsers = [NSMutableArray arrayWithObjects:@"Valentin Perez", @"Ben Murphy", @"sara", nil];
+        
+        SocialNetworkViewController *sNViewController = (SocialNetworkViewController *) [self.storyboard instantiateViewControllerWithIdentifier:@"SocialNetworkController"];
+        [self presentViewController: sNViewController animated: YES completion:nil];
     }
 }
 
@@ -165,6 +179,7 @@
 {
     UserProfileViewController *viewController = (UserProfileViewController *) [self.storyboard instantiateViewControllerWithIdentifier:@"UserProfileController"];
     
+    viewController.nameLabel.text = uName;
     
     [self presentViewController:viewController animated:YES completion:nil];
 }
