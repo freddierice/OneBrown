@@ -34,7 +34,6 @@ private:
     Network();
     void recvBytes();
     
-    std::thread m_thread;
     BIO *m_sock;
     
     std::vector<Json::Value> m_jsonValues;

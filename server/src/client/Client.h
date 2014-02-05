@@ -59,8 +59,8 @@ private:
     Cache *m_cache;
     Network *m_network;
     Database *m_database;
-    std::string m_session;
     std::thread m_thread;
+    std::string m_session;
     std::chrono::time_point<std::chrono::system_clock> m_time;
     
     std::atomic<ClientStatus> m_cs;

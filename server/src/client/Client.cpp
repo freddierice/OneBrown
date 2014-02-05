@@ -25,7 +25,6 @@ void Client::start()
         m_network->start();
         m_time = std::chrono::system_clock::now();
         m_thread = std::thread(&Client::run,this);
-        m_thread.detach();
     }
 }
 
@@ -43,6 +42,7 @@ void Client::run()
     Json::Value val;
     
     std::cout << "Client connected." << std::endl;
+    
     while(m_isRunning){
         authorize();
         if(m_hashed)
@@ -286,6 +286,8 @@ bool Client::close()
 {
     if(m_isRunning){
         m_isRunning = false;
+        m_network->close();
+        m_thread.join();
         return true;
     }else
         return false;
