@@ -120,6 +120,7 @@ static NSString *TableViewCellIdentifier = @"SNCells";
         
         cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
         
+        
         /*
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
         [button setImage:[UIImage imageNamed:@"IconProfile"] forState:UIControlStateNormal];
@@ -137,6 +138,16 @@ static NSString *TableViewCellIdentifier = @"SNCells";
     }
     return cell;
 }
+
+/*
+ * This is just to hide the separators of the empty cells.
+ */
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    UIView *view = [[UIView alloc] init];
+    return view;
+}
+
 -(void) tappedButton
 {
     NSLog(@"sacagawea");

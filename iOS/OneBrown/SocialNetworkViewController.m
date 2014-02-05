@@ -137,6 +137,15 @@ static NSString *TableViewCellIdentifier = @"SNCells";
 
 }
 
+/*
+ * This is just to hide the separators of the empty cells.
+ */
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    UIView *view = [[UIView alloc] init];
+    return view;
+}
+
 // Returns a UILabel with the given NSString.
 - (UILabel *) newLabelWithTitle:( NSString *) paramTitle
 {

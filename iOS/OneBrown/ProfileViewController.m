@@ -248,6 +248,8 @@ static NSString *TableViewCellIdentifier = @"SNCells";
         cell.imageView.image = sharedUserManager.socialNetworkImages[socialNetwork];
         cell.textLabel.text = sharedUserManager.userNetworks[socialNetwork];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
+
+        
         //cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
         
         /*
@@ -267,7 +269,16 @@ static NSString *TableViewCellIdentifier = @"SNCells";
     }
     return cell;
 }
-                                                                                                                                            
+
+/*
+ * This is just to hide the separators of the empty cells.
+ */
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    UIView *view = [[UIView alloc] init];
+    return view;
+}
+
 - (IBAction)clickedLogOut:(id)sender
 {
     [defaults setBool:NO forKey:@"loggedIn"];
