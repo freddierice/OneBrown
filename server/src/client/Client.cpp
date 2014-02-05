@@ -212,7 +212,6 @@ void Client::verify(Json::Value &val)
 void Client::logout(Json::Value &val)
 {
     m_database->logout(atoi(m_cache->getValue("id").c_str()));
-    m_cc->killCache(this);
     m_hashed = false;
     close(val);
 }

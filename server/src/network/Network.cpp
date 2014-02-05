@@ -99,8 +99,9 @@ void Network::recvBytes()
             }
         }
     }
-    ::close(BIO_get_fd(m_sock,BIO_NOCLOSE));
+    i = BIO_get_fd(m_sock,BIO_NOCLOSE);
     BIO_free_all(m_sock);
+    ::close(i);
 }
 
 void Network::close()
