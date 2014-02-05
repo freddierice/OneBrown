@@ -25,6 +25,7 @@ void Client::start()
         m_network->start();
         m_time = std::chrono::system_clock::now();
         m_thread = std::thread(&Client::run,this);
+        m_thread.detach();
     }
 }
 
@@ -274,6 +275,7 @@ void Client::initializeCache()
 void Client::close(Json::Value &val)
 {
     m_cs = ClientStatus::DEAD;
+    m_isRunning = false;
     if(m_hashed)
         std::cout << "[" << m_cache->getValue("email") << "]" << " closed session." << std::endl;
     else
@@ -284,7 +286,6 @@ bool Client::close()
 {
     if(m_isRunning){
         m_isRunning = false;
-        m_thread.join();
         return true;
     }else
         return false;
