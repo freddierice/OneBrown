@@ -38,6 +38,7 @@ static NSString *TableViewCellIdentifier = @"SNCells";
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
 
+    NSLog(@"didLoad");
     defaults = [NSUserDefaults standardUserDefaults];
     sharedUserManager = [UserManager sharedUserManager];
     

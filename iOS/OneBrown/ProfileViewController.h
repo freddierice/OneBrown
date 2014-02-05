@@ -18,8 +18,6 @@
 @property (strong, nonatomic) IBOutlet UILabel *profileNameLabel;
 @property (strong, nonatomic) IBOutlet UITableView *networksTableView;
 @property (strong, nonatomic) IBOutlet UIButton *addButton;
-
-
-- (IBAction)clickedLogOut:(id)sender;
+@property (strong, nonatomic) IBOutlet UIButton *settingsButton;
 
 @end

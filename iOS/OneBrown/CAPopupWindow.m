@@ -27,7 +27,6 @@
         //self.layer.cornerRadius = 4.0f;
         //self.layer.borderWidth = 1.0f;
         
-        
         UILabel* label = [[UILabel alloc] initWithFrame:CGRectMake(0, 62, 88, 20)];
         [self.contentView addSubview:label];
         [label setTextAlignment:NSTextAlignmentCenter];
@@ -63,6 +62,8 @@
         _target = target;
         _action = action;
     }
+    
+    
     return self;
 }
 
@@ -206,7 +207,7 @@
     [self dismissFromView];
 }
 
--(void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
+- (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
     [collectionView cellForItemAtIndexPath:indexPath].contentView.layer.opacity = 1.0f;
 
 }
