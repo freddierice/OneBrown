@@ -14,6 +14,7 @@ void ClientCollector::run()
 {
     std::chrono::time_point<std::chrono::system_clock> now;
     std::string user;
+    Cache *c;
     
     std::cout << "Entered ClientCollector::run" << std::endl;
     while(true)
@@ -25,7 +26,11 @@ void ClientCollector::run()
         now = std::chrono::system_clock::now();
         for(auto it = m_unauthed_clients.begin(); it != m_unauthed_clients.end();)
             if(std::chrono::duration_cast<std::chrono::minutes>( now - (*it)->getTime()).count() >= 1){ //wait for 5 minutes
-                user = (*it)->getCache()->getValue("email");
+                c = (*it)->getCache();
+                if(c)
+                    user = c->getValue("email");
+                else
+                    user = "";
                 (*it)->close();
                 delete *it;
                 it = m_unauthed_clients.erase(it);
