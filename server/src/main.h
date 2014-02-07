@@ -22,7 +22,8 @@ int sock;
 
 void connect();
 void initializeSocket();
-void initializeOpenSSL();
+SSL_CTX* initializeOpenSSL();
+void initializeCerts(SSL_CTX* ctx, std::string certf, std::string keyf);
 
 
 #endif /* _MAIN_H_ */

@@ -212,6 +212,7 @@ void Client::verify(Json::Value &val)
 void Client::logout(Json::Value &val)
 {
     m_database->logout(atoi(m_cache->getValue("id").c_str()));
+    m_cc->killCache(this);
     m_hashed = false;
     close(val);
 }
@@ -290,6 +291,21 @@ bool Client::close()
         return true;
     }else
         return false;
+}
+
+std::string Client::getCacheVal(std::string key)
+{
+    if(m_cache)
+        return m_cache->getValue(key);
+    else{
+        Json::Value val;
+        std::string msg;
+        
+        m_cs = ClientStatus::NOT_AUTHORIZED;
+        val["message"] = "deauthed";
+        msg = m_writer.write(val);
+        m_network->sendBytes(msg.c_str(),msg.length());
+    }
 }
 
 ClientStatus Client::getStatus(){ return m_cs; }

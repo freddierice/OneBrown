@@ -53,6 +53,8 @@ private:
     
     void initializeCache();
     
+    std::string getCacheVal(std::string key);
+    
     Json::FastWriter m_writer;
     bool m_hashed;
     

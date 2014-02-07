@@ -80,6 +80,7 @@ void ClientCollector::killCache(Client *c)
         m_hashM.lock();
         m_hashmap.erase(c->getSession());
         m_hashM.unlock();
+        std::this_thread::sleep_for(std::chrono::minutes(5));
         delete cache;
     }
 }
