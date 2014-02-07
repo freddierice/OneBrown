@@ -622,11 +622,11 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Valentin Perez" id="hbg-9q-c7m">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="hbg-9q-c7m">
                                 <rect key="frame" x="78" y="73" width="165" height="165"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Valentin Perez" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Z0y-F8-Y1F">
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="User's Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Z0y-F8-Y1F">
                                 <rect key="frame" x="49" y="25" width="223" height="38"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="21"/>
@@ -653,12 +653,26 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="apU-8e-SCv">
+                                <rect key="frame" x="179" y="245" width="127" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Get Facebook info">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                            <view contentMode="scaleToFill" id="aak-4K-Uo1" customClass="FBLoginView">
+                                <rect key="frame" x="20" y="246" width="104" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Profile" image="IconProfile" id="Y2W-mO-x6S"/>
                     <connections>
                         <outlet property="addButton" destination="mu5-bW-rVm" id="rcI-Af-hfh"/>
+                        <outlet property="facebookLogInView" destination="aak-4K-Uo1" id="NKv-F0-SBG"/>
+                        <outlet property="getFacebookInfoButton" destination="apU-8e-SCv" id="OJo-u6-rjK"/>
                         <outlet property="networksTableView" destination="V9S-qW-Mlp" id="AgF-gn-qxt"/>
                         <outlet property="profileImageView" destination="hbg-9q-c7m" id="iCq-Qp-cYi"/>
                         <outlet property="profileNameLabel" destination="Z0y-F8-Y1F" id="ehg-JN-emJ"/>

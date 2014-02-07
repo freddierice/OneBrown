@@ -34,6 +34,7 @@
 		59C2B275187DC7D5009A70D4 /* UserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 59C2B274187DC7D5009A70D4 /* UserManager.m */; };
 		59C2B278187DEC68009A70D4 /* AddSocialNetworksViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 59C2B277187DEC68009A70D4 /* AddSocialNetworksViewController.m */; };
 		59C2B27B1881F28A009A70D4 /* CAPopupWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 59C2B27A1881F28A009A70D4 /* CAPopupWindow.m */; };
+		59E464FA18A4783C00EB4310 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 59E464F918A4783C00EB4310 /* FacebookSDK.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -92,6 +93,7 @@
 		59C2B277187DEC68009A70D4 /* AddSocialNetworksViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddSocialNetworksViewController.m; sourceTree = "<group>"; };
 		59C2B2791881F28A009A70D4 /* CAPopupWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAPopupWindow.h; sourceTree = "<group>"; };
 		59C2B27A1881F28A009A70D4 /* CAPopupWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CAPopupWindow.m; sourceTree = "<group>"; };
+		59E464F918A4783C00EB4310 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = ../../Documents/CodingProgramming/FacebookSDK/FacebookSDK.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +102,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4EBA21FC1875F9A3000A9BE6 /* CoreGraphics.framework in Frameworks */,
+				59E464FA18A4783C00EB4310 /* FacebookSDK.framework in Frameworks */,
 				4EBA21FE1875F9A3000A9BE6 /* UIKit.framework in Frameworks */,
 				4EBA21FA1875F9A3000A9BE6 /* Foundation.framework in Frameworks */,
 			);
@@ -171,6 +174,7 @@
 		4EBA21F81875F9A3000A9BE6 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				59E464F918A4783C00EB4310 /* FacebookSDK.framework */,
 				4EBA21F91875F9A3000A9BE6 /* Foundation.framework */,
 				4EBA21FB1875F9A3000A9BE6 /* CoreGraphics.framework */,
 				4EBA21FD1875F9A3000A9BE6 /* UIKit.framework */,
@@ -488,9 +492,16 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/lcadmin/OneBrown/iOS,
+					/Users/lcadmin/Documents/FacebookSDK,
+					/Users/lcadmin/Documents/CodingProgramming/FacebookSDK,
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "OneBrown/OneBrown-Prefix.pch";
 				INFOPLIST_FILE = "OneBrown/OneBrown-Info.plist";
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -501,9 +512,17 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/lcadmin/OneBrown/iOS,
+					/Users/lcadmin/Documents/FacebookSDK,
+					/Users/lcadmin/Documents/CodingProgramming/FacebookSDK,
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "OneBrown/OneBrown-Prefix.pch";
 				INFOPLIST_FILE = "OneBrown/OneBrown-Info.plist";
+				OTHER_LDFLAGS = "-ObjC";
+				"OTHER_LDFLAGS[arch=*]" = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
