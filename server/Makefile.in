@@ -94,11 +94,16 @@ CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
 am__dirstamp = $(am__leading_dot)dirstamp
-am_out_OBJECTS = src/main.$(OBJEXT) src/client/Cache.$(OBJEXT) \
-	src/client/ClientCollector.$(OBJEXT) \
-	src/client/Client.$(OBJEXT) src/network/Network.$(OBJEXT) \
-	src/database/Database.$(OBJEXT) \
-	src/utilities/Utility.$(OBJEXT) src/email/Email.$(OBJEXT)
+am_out_OBJECTS = src/network/Network.$(OBJEXT) \
+	src/database/Database.$(OBJEXT) src/utility/Utility.$(OBJEXT) \
+	src/network/Email.$(OBJEXT) src/client/Client.$(OBJEXT) \
+	src/runner/Runner.$(OBJEXT) \
+	src/client/ClientWatchdog.$(OBJEXT) \
+	src/client/ClientConnector.$(OBJEXT) \
+	src/client/ClientAuth.$(OBJEXT) \
+	src/client/ClientRunner.$(OBJEXT) \
+	src/client/ClientResponder.$(OBJEXT) \
+	src/client/Server.$(OBJEXT) src/main.$(OBJEXT)
 out_OBJECTS = $(am_out_OBJECTS)
 out_LDADD = $(LDADD)
 AM_V_P = $(am__v_P_@AM_V@)
@@ -277,7 +282,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AUTOMAKE_OPTIONS = subdir-objects
 ACLOCAL_AMFLAGS = ${ACLOCAL_FLAGS}
-out_SOURCES = src/main.h src/main.cpp src/client/Cache.h src/client/Cache.cpp src/client/ClientCollector.h src/client/ClientCollector.cpp src/client/Client.h src/client/Client.cpp src/network/Network.cpp src/network/Network.h src/database/Database.h src/database/Database.cpp src/utilities/Utility.h src/utilities/Utility.cpp src/email/Email.h src/email/Email.cpp
+out_SOURCES = src/network/Network.cpp src/network/Network.h src/database/Database.h src/database/Database.cpp src/utility/Utility.h src/utility/Utility.cpp src/network/Email.h src/network/Email.cpp src/client/Client.h src/client/Client.cpp src/runner/Runner.h src/runner/Runner.cpp src/client/ClientWatchdog.h src/client/ClientWatchdog.cpp src/client/ClientConnector.h src/client/ClientConnector.cpp src/client/ClientAuth.h src/client/ClientAuth.cpp  src/client/ClientRunner.h src/client/ClientRunner.cpp src/client/ClientResponder.h src/client/ClientResponder.cpp src/client/Server.h src/client/Server.cpp src/main.h src/main.cpp
 all: all-am
 
 .SUFFIXES:
@@ -358,25 +363,6 @@ uninstall-binPROGRAMS:
 
 clean-binPROGRAMS:
 	-test -z "$(bin_PROGRAMS)" || rm -f $(bin_PROGRAMS)
-src/$(am__dirstamp):
-	@$(MKDIR_P) src
-	@: > src/$(am__dirstamp)
-src/$(DEPDIR)/$(am__dirstamp):
-	@$(MKDIR_P) src/$(DEPDIR)
-	@: > src/$(DEPDIR)/$(am__dirstamp)
-src/main.$(OBJEXT): src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
-src/client/$(am__dirstamp):
-	@$(MKDIR_P) src/client
-	@: > src/client/$(am__dirstamp)
-src/client/$(DEPDIR)/$(am__dirstamp):
-	@$(MKDIR_P) src/client/$(DEPDIR)
-	@: > src/client/$(DEPDIR)/$(am__dirstamp)
-src/client/Cache.$(OBJEXT): src/client/$(am__dirstamp) \
-	src/client/$(DEPDIR)/$(am__dirstamp)
-src/client/ClientCollector.$(OBJEXT): src/client/$(am__dirstamp) \
-	src/client/$(DEPDIR)/$(am__dirstamp)
-src/client/Client.$(OBJEXT): src/client/$(am__dirstamp) \
-	src/client/$(DEPDIR)/$(am__dirstamp)
 src/network/$(am__dirstamp):
 	@$(MKDIR_P) src/network
 	@: > src/network/$(am__dirstamp)
@@ -393,22 +379,51 @@ src/database/$(DEPDIR)/$(am__dirstamp):
 	@: > src/database/$(DEPDIR)/$(am__dirstamp)
 src/database/Database.$(OBJEXT): src/database/$(am__dirstamp) \
 	src/database/$(DEPDIR)/$(am__dirstamp)
-src/utilities/$(am__dirstamp):
-	@$(MKDIR_P) src/utilities
-	@: > src/utilities/$(am__dirstamp)
-src/utilities/$(DEPDIR)/$(am__dirstamp):
-	@$(MKDIR_P) src/utilities/$(DEPDIR)
-	@: > src/utilities/$(DEPDIR)/$(am__dirstamp)
-src/utilities/Utility.$(OBJEXT): src/utilities/$(am__dirstamp) \
-	src/utilities/$(DEPDIR)/$(am__dirstamp)
-src/email/$(am__dirstamp):
-	@$(MKDIR_P) src/email
-	@: > src/email/$(am__dirstamp)
-src/email/$(DEPDIR)/$(am__dirstamp):
-	@$(MKDIR_P) src/email/$(DEPDIR)
-	@: > src/email/$(DEPDIR)/$(am__dirstamp)
-src/email/Email.$(OBJEXT): src/email/$(am__dirstamp) \
-	src/email/$(DEPDIR)/$(am__dirstamp)
+src/utility/$(am__dirstamp):
+	@$(MKDIR_P) src/utility
+	@: > src/utility/$(am__dirstamp)
+src/utility/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) src/utility/$(DEPDIR)
+	@: > src/utility/$(DEPDIR)/$(am__dirstamp)
+src/utility/Utility.$(OBJEXT): src/utility/$(am__dirstamp) \
+	src/utility/$(DEPDIR)/$(am__dirstamp)
+src/network/Email.$(OBJEXT): src/network/$(am__dirstamp) \
+	src/network/$(DEPDIR)/$(am__dirstamp)
+src/client/$(am__dirstamp):
+	@$(MKDIR_P) src/client
+	@: > src/client/$(am__dirstamp)
+src/client/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) src/client/$(DEPDIR)
+	@: > src/client/$(DEPDIR)/$(am__dirstamp)
+src/client/Client.$(OBJEXT): src/client/$(am__dirstamp) \
+	src/client/$(DEPDIR)/$(am__dirstamp)
+src/runner/$(am__dirstamp):
+	@$(MKDIR_P) src/runner
+	@: > src/runner/$(am__dirstamp)
+src/runner/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) src/runner/$(DEPDIR)
+	@: > src/runner/$(DEPDIR)/$(am__dirstamp)
+src/runner/Runner.$(OBJEXT): src/runner/$(am__dirstamp) \
+	src/runner/$(DEPDIR)/$(am__dirstamp)
+src/client/ClientWatchdog.$(OBJEXT): src/client/$(am__dirstamp) \
+	src/client/$(DEPDIR)/$(am__dirstamp)
+src/client/ClientConnector.$(OBJEXT): src/client/$(am__dirstamp) \
+	src/client/$(DEPDIR)/$(am__dirstamp)
+src/client/ClientAuth.$(OBJEXT): src/client/$(am__dirstamp) \
+	src/client/$(DEPDIR)/$(am__dirstamp)
+src/client/ClientRunner.$(OBJEXT): src/client/$(am__dirstamp) \
+	src/client/$(DEPDIR)/$(am__dirstamp)
+src/client/ClientResponder.$(OBJEXT): src/client/$(am__dirstamp) \
+	src/client/$(DEPDIR)/$(am__dirstamp)
+src/client/Server.$(OBJEXT): src/client/$(am__dirstamp) \
+	src/client/$(DEPDIR)/$(am__dirstamp)
+src/$(am__dirstamp):
+	@$(MKDIR_P) src
+	@: > src/$(am__dirstamp)
+src/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) src/$(DEPDIR)
+	@: > src/$(DEPDIR)/$(am__dirstamp)
+src/main.$(OBJEXT): src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
 
 out$(EXEEXT): $(out_OBJECTS) $(out_DEPENDENCIES) $(EXTRA_out_DEPENDENCIES) 
 	@rm -f out$(EXEEXT)
@@ -419,21 +434,26 @@ mostlyclean-compile:
 	-rm -f src/*.$(OBJEXT)
 	-rm -f src/client/*.$(OBJEXT)
 	-rm -f src/database/*.$(OBJEXT)
-	-rm -f src/email/*.$(OBJEXT)
 	-rm -f src/network/*.$(OBJEXT)
-	-rm -f src/utilities/*.$(OBJEXT)
+	-rm -f src/runner/*.$(OBJEXT)
+	-rm -f src/utility/*.$(OBJEXT)
 
 distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/main.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@src/client/$(DEPDIR)/Cache.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/client/$(DEPDIR)/Client.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@src/client/$(DEPDIR)/ClientCollector.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/client/$(DEPDIR)/ClientAuth.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/client/$(DEPDIR)/ClientConnector.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/client/$(DEPDIR)/ClientResponder.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/client/$(DEPDIR)/ClientRunner.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/client/$(DEPDIR)/ClientWatchdog.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/client/$(DEPDIR)/Server.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/database/$(DEPDIR)/Database.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@src/email/$(DEPDIR)/Email.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/network/$(DEPDIR)/Email.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/network/$(DEPDIR)/Network.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@src/utilities/$(DEPDIR)/Utility.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/runner/$(DEPDIR)/Runner.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/utility/$(DEPDIR)/Utility.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
@@ -712,12 +732,12 @@ distclean-generic:
 	-rm -f src/client/$(am__dirstamp)
 	-rm -f src/database/$(DEPDIR)/$(am__dirstamp)
 	-rm -f src/database/$(am__dirstamp)
-	-rm -f src/email/$(DEPDIR)/$(am__dirstamp)
-	-rm -f src/email/$(am__dirstamp)
 	-rm -f src/network/$(DEPDIR)/$(am__dirstamp)
 	-rm -f src/network/$(am__dirstamp)
-	-rm -f src/utilities/$(DEPDIR)/$(am__dirstamp)
-	-rm -f src/utilities/$(am__dirstamp)
+	-rm -f src/runner/$(DEPDIR)/$(am__dirstamp)
+	-rm -f src/runner/$(am__dirstamp)
+	-rm -f src/utility/$(DEPDIR)/$(am__dirstamp)
+	-rm -f src/utility/$(am__dirstamp)
 
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
@@ -728,7 +748,7 @@ clean-am: clean-binPROGRAMS clean-generic mostlyclean-am
 
 distclean: distclean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
-	-rm -rf src/$(DEPDIR) src/client/$(DEPDIR) src/database/$(DEPDIR) src/email/$(DEPDIR) src/network/$(DEPDIR) src/utilities/$(DEPDIR)
+	-rm -rf src/$(DEPDIR) src/client/$(DEPDIR) src/database/$(DEPDIR) src/network/$(DEPDIR) src/runner/$(DEPDIR) src/utility/$(DEPDIR)
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -776,7 +796,7 @@ installcheck-am:
 maintainer-clean: maintainer-clean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 	-rm -rf $(top_srcdir)/autom4te.cache
-	-rm -rf src/$(DEPDIR) src/client/$(DEPDIR) src/database/$(DEPDIR) src/email/$(DEPDIR) src/network/$(DEPDIR) src/utilities/$(DEPDIR)
+	-rm -rf src/$(DEPDIR) src/client/$(DEPDIR) src/database/$(DEPDIR) src/network/$(DEPDIR) src/runner/$(DEPDIR) src/utility/$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 

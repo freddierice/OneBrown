@@ -5,7 +5,6 @@ Network::Network(){}
 Network::Network(BIO *sock)
 {
     m_sock = sock;
-    m_isRunning = false;
 }
 
 Network::~Network()
@@ -13,44 +12,23 @@ Network::~Network()
     
 }
 
-void Network::start()
+void Network::sendJSON(Json::Value &val)
 {
-    if(!m_isRunning){
-        m_isRunning = true;
-        std::thread t(&Network::recvBytes, this);
-        t.detach();
-    }
+    std::string msg = m_writer.write(val);
+    sendBytes(msg.c_str(),msg.length());
 }
 
-void Network::sendJSON(Json::Value val)
+bool Network::recvJSON(Json::Value &val)
 {
-    
-}
-
-Json::Value Network::recvJSON()
-{
-    Json::Value val;
-    int s;
-    
     m_jsonValuesM.lock();
-    s = m_jsonValues.size();
-    m_jsonValuesM.unlock();
-    while( s == 0 && m_isRunning){
-        std::this_thread::sleep_for(std::chrono::microseconds(1000));
-        m_jsonValuesM.lock();
-        s = m_jsonValues.size();
-        if(s == 0)
-            m_jsonValuesM.unlock();
+    if( m_jsonValues.empty() ){
+        m_jsonValuesM.unlock();
+        return false;
     }
-    
-    if(!m_isRunning){
-        return val;
-    }
-    
-    val = m_jsonValues.at(0);
-    m_jsonValues.erase(m_jsonValues.begin());
+    val = m_jsonValues.front();
+    m_jsonValues.pop();
     m_jsonValuesM.unlock();
-    return val;
+    return true;
 }
 
 void Network::sendBytes(const char *buf, size_t len)
@@ -58,54 +36,48 @@ void Network::sendBytes(const char *buf, size_t len)
     BIO_write(m_sock,buf,len);
 }
 
-void Network::recvBytes()
+void Network::starter()
 {
-    Json::Reader reader;
-    std::string str;
-    char *buf;
-    int len, par, i;
-    
-    buf = new char[BUF_SIZE];
-    par = 0;
-    while(m_isRunning){
-        if(par == 0){
-            str = "";
-        }
-        len = BIO_read(m_sock, (void *)buf, BUF_SIZE);
-        if(len <= 0){
-            std::this_thread::sleep_for(std::chrono::microseconds(1000));
-            continue;
-        }
-        i = 0;
-        if(par == 0){
-            while(buf[i] != '{' && i < len )
-                ++i;
-        }
-        for(; i < len; ++i){
-            if(buf[i] == '{')
-                ++par;
-            if(buf[i] == '}')
-                --par;
-            str.append(&buf[i], 1);
-            if(par == 0){
-                Json::Value val;
-                ;
-                if(reader.parse(str,val,false) && !val.isNull()){
-                    m_jsonValuesM.lock();
-                    m_jsonValues.push_back(val);
-                    m_jsonValuesM.unlock();
-                }
-                str = "";
+    r_buf = new char[BUF_SIZE];
+    r_par = 0;
+}
+
+void Network::runner()
+{
+    if(r_par == 0){
+        r_str = "";
+    }
+    r_len = BIO_read(m_sock, (void *)r_buf, BUF_SIZE);
+    if(r_len <= 0){
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        return;
+    }
+    r_i = 0;
+    if(r_par == 0){
+        while(r_buf[r_i] != '{' && r_i < r_len )
+            ++r_i;
+    }
+    for(; r_i < r_len; ++r_i){
+        if(r_buf[r_i] == '{')
+            ++r_par;
+        if(r_buf[r_i] == '}')
+            --r_par;
+        r_str.append(&r_buf[r_i], 1);
+        if(r_par == 0){
+            Json::Value val;
+            if(r_reader.parse(r_str,val,false) && !val.isNull()){
+                m_jsonValuesM.lock();
+                m_jsonValues.push(val);
+                m_jsonValuesM.unlock();
             }
+            r_str = "";
         }
     }
+}
+
+void Network::ender()
+{
     ::close(BIO_get_fd(m_sock,BIO_NOCLOSE));
     BIO_free_all(m_sock);
 }
 
-void Network::close()
-{
-    if(m_isRunning){
-        m_isRunning = false;
-    }
-}

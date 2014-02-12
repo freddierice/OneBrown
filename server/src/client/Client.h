@@ -1,72 +1,45 @@
-
 #ifndef _CLIENT_H_
 #define _CLIENT_H_
 
-#include <iostream>
-#include <thread>
 #include <atomic>
-#include <vector>
+#include <thread>
 #include <chrono>
-#include <mutex>
-#include <future>
 
 #include <json/json.h>
 
-#include "ClientCollector.h"
-#include "Cache.h"
 #include "../network/Network.h"
-#include "../utilities/Utility.h"
-#include "../database/Database.h"
+#include "../runner/Runner.h"
 
-enum class ClientStatus : int {DEAD=0,NOT_AUTHORIZED,AUTHORIZED};
+class ClientResponder;
+class ClientAuth;
+class ClientRunner;
+class ClientConnector;
 
-class ClientCollector;
-class Client{
+class Client : public Runner {
 public:
-    Client(BIO *sock, ClientCollector *cc);
+    Client(Network *network);
     ~Client();
     
-    void start();
-    void reinit(BIO *sock);
-    bool close();
-    
-    ClientStatus getStatus();
-    bool isRunning();
-    
-    Cache* getCache();
-    void setCache(Cache *c);
-    std::string getSession();
+    void detach();
     std::chrono::time_point<std::chrono::system_clock> getTime();
+protected:
+    void setResponder(ClientResponder *responder);
+    void setResponder(ClientResponder *responder,Json::Value &val);
+    friend ClientResponder;
+    friend ClientAuth;
+    friend ClientConnector;
+    friend ClientRunner;
     
 private:
     Client();
-    void run();
+    virtual void runner();
+    virtual void ender();
     
-    void authorize();
-    void login(Json::Value &val);
-    void logout(Json::Value &val);
-    void reg(Json::Value &val);
-    void verify(Json::Value &val);
-    void renew(Json::Value &val);
-    void remove(Json::Value &val);
-    void close(Json::Value &val);
+    Json::Value r_val;
     
-    void initializeCache();
-    
-    Json::FastWriter m_writer;
-    bool m_hashed;
-    
-    ClientCollector *m_cc;
-    Cache *m_cache;
+    ClientResponder *m_responder;
     Network *m_network;
-    Database *m_database;
-    std::thread m_thread;
-    std::string m_session;
     std::chrono::time_point<std::chrono::system_clock> m_time;
-    
-    std::atomic<ClientStatus> m_cs;
-    std::atomic<bool> m_isRunning;
 };
 
-#endif /* _CLIENT_H_ */
- 
+#endif /*_CLIENT_H_*/
