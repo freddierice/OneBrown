@@ -9,6 +9,7 @@
 
 #include "../network/Network.h"
 #include "../runner/Runner.h"
+#include "../database/Database.h"
 
 class ClientResponder;
 class ClientAuth;
@@ -25,6 +26,8 @@ public:
 protected:
     void setResponder(ClientResponder *responder);
     void setResponder(ClientResponder *responder,Json::Value &val);
+    Database *m_database;
+    
     friend ClientResponder;
     friend ClientAuth;
     friend ClientConnector;

@@ -6,5 +6,6 @@
 #include <thread>
 
 #include "client/Server.h"
+#include "database/Database.h"
 
 #endif /*_MAIN_H_*/

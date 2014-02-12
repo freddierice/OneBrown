@@ -6,6 +6,7 @@ Client::Client(){}
 Client::Client(Network *network)
 {
     m_network = network;
+    m_database = new Database();
 }
 
 Client::~Client()
