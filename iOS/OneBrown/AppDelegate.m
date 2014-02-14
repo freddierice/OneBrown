@@ -21,9 +21,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
-    //[FBLoginView class];
-    //[FBProfilePictureView class];
-
+    
     sharedUserManager = [UserManager sharedUserManager];
     defaults = [NSUserDefaults standardUserDefaults];
     // Create an NSDictionary with the default settings (for the first time the user enters the app)
@@ -42,7 +40,7 @@
         self.window.rootViewController = signInViewController;
     }
     
-    /*
+    
     // Whenever a person opens the app, check for a cached session
     if (FBSession.activeSession.state == FBSessionStateCreatedTokenLoaded)
     {
@@ -56,7 +54,7 @@
                                           // also for intermediate states and NOT just when the session open
                                           [self sessionStateChanged:session state:state error:error];
                                       }];
-    }*/
+    }
     
     
     return YES;
@@ -94,7 +92,7 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
-/*
+
 // During the Facebook login flow, your app passes control to the Facebook iOS app or Facebook in a mobile browser.
 // After authentication, your app will be called back with the session information.
 - (BOOL)application:(UIApplication *)application
@@ -102,39 +100,19 @@
   sourceApplication:(NSString *)sourceApplication
          annotation:(id)annotation
 {
+    // Note this handler block should be the exact same as the handler passed to any open calls.
+    [FBSession.activeSession setStateChangeHandler:
+     ^(FBSession *session, FBSessionState state, NSError *error) {
+         
+         // Retrieve the app delegate
+         AppDelegate* appDelegate = [UIApplication sharedApplication].delegate;
+         // Call the app delegate's sessionStateChanged:state:error method to handle session state changes
+         [appDelegate sessionStateChanged:session state:state error:error];
+     }];
     return [FBAppCall handleOpenURL:url sourceApplication:sourceApplication];
 }
-*/
 
-/*
-- (BOOL)application:(UIApplication *)application
-            openURL:(NSURL *)url
-  sourceApplication:(NSString *)sourceApplication
-         annotation:(id)annotation {
-    
-    // Call FBAppCall's handleOpenURL:sourceApplication to handle Facebook app responses
-    BOOL wasHandled = [FBAppCall handleOpenURL:url sourceApplication:sourceApplication];
-    
-    // You can add your app-specific url handling code here if needed
-    
-    return wasHandled;
-}*/
 
-// If we have a valid session at the time of openURL call, we handle Facebook transitions
-// by passing the url argument to handleOpenURL; see the "Just Login" sample application for
-// a more detailed discussion of handleOpenURL
-- (BOOL)application:(UIApplication *)application
-            openURL:(NSURL *)url
-  sourceApplication:(NSString *)sourceApplication
-         annotation:(id)annotation {
-    // attempt to extract a token from the url
-    return [FBAppCall handleOpenURL:url
-                  sourceApplication:sourceApplication
-                    fallbackHandler:^(FBAppCall *call) {
-                        NSLog(@"In fallback handler");
-                    }];
-}
-/*
 // This method will handle ALL the session state changes in the app
 - (void)sessionStateChanged:(FBSession *)session state:(FBSessionState) state error:(NSError *)error
 {
@@ -195,7 +173,7 @@
 }
 - (void) userLoggedIn
 {
-    [self showMessage:@"You're now logged in" withTitle:@""];
+    //[self showMessage:@"You're now logged in" withTitle:@""];
     [self connectToFacebook];
 }
 
@@ -205,7 +183,7 @@
         if (!error) {
             // Success! Include your code to handle the results here
             NSLog(@"user info: %@", result);
-            [self handleFacebookResults:result];
+            [self handleFacebookResults: result];
             //sharedUserManager.userName = [NSString stringWithFormat:@"%@ %@", [result data], result['last_name']];
             
         } else {
@@ -224,7 +202,7 @@
     
     facebookResults = result;
 }
-*/
+
 - (id) facebookInfo
 {
     return facebookResults;
@@ -232,8 +210,7 @@
 
 - (void) userLoggedOut
 {
-    [self showMessage:@"You're now logged out bitch" withTitle:@""];
-
+    [self showMessage:@"You've deleted your Facebook info in this app. Just tap the Facebook button again to get it back." withTitle:@""];
     
 }
 
