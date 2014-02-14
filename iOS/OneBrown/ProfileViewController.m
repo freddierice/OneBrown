@@ -10,6 +10,8 @@
 #import "LogInViewController.h"
 #import "CAPopupWindow.h"
 #import "UserManager.h"
+#import <FacebookSDK/FacebookSDK.h>
+#import "AppDelegate.h"
 
 static NSString *TableViewCellIdentifier = @"SNCells";
 
@@ -18,7 +20,10 @@ static NSString *TableViewCellIdentifier = @"SNCells";
     NSUserDefaults *defaults;
     UserManager *sharedUserManager;
     NSMutableArray *addedSocialNetworks;
+    AppDelegate* appDelegate;
     int socNetIndex;
+    FBProfilePictureView *profilePictureView;
+    
 }
 @end
 
@@ -44,6 +49,17 @@ static NSString *TableViewCellIdentifier = @"SNCells";
     
     sharedUserManager = [UserManager sharedUserManager];
     
+    profileImageView = [[FBProfilePictureView alloc] initWithFrame:CGRectMake(self.view.center.x - (profileImageView.frame.size.width / 2),156-profileImageView.frame.size.height/2, 165, 165)];
+    
+    [self.view addSubview:profileImageView];
+    
+    _facebookLogInView = [[FBLoginView alloc] init];
+    _facebookLogInView.readPermissions = @[@"basic_info"];
+    _facebookLogInView.delegate = self;
+    
+    /* So we don't really want to add the facebook log in view; we just want to access its easy and quick delegate methods to get the user's name and picture. */
+    //[self.view addSubview:_facebookLogInView];
+    
     profileImageView.layer.cornerRadius = 80;
     profileImageView.clipsToBounds = YES;
     profileImageView.layer.borderWidth = 2;
@@ -63,11 +79,13 @@ static NSString *TableViewCellIdentifier = @"SNCells";
     [self.networksTableView registerClass:[ UITableViewCell class] forCellReuseIdentifier:TableViewCellIdentifier];
     
     
-    /* Make sure our table view resizes correctly */
+    // Make sure our table view resizes correctly
     self.networksTableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
     addedSocialNetworks = [[NSMutableArray alloc]init];
+    
 }
+
 
 - (void)didReceiveMemoryWarning
 {
@@ -87,6 +105,8 @@ static NSString *TableViewCellIdentifier = @"SNCells";
                                                                          [CAWindowObject windowObject:sharedUserManager.socialNetworks[1] image:sharedUserManager.socialNetworkImages[sharedUserManager.socialNetworks[1]] target:self action:@selector(addTwitter)],
                                                                          [CAWindowObject windowObject:sharedUserManager.socialNetworks[2] image:sharedUserManager.socialNetworkImages[sharedUserManager.socialNetworks[2]] target:self action:@selector(addInstagram)],
                                                                          [CAWindowObject windowObject:sharedUserManager.socialNetworks[3] image:sharedUserManager.socialNetworkImages[sharedUserManager.socialNetworks[3]] target:self action:@selector(addSnapchat)]]];
+    
+    
     [popView presentInView:self.view];
     
 }
@@ -107,10 +127,11 @@ static NSString *TableViewCellIdentifier = @"SNCells";
     [self presentViewController:signIn animated:YES completion:nil];
 }
 
-// I'm guessing there will be different, specific methods for adding each social network.
+
 - (void) addFacebook
 {
     NSLog(@"adding facebook");
+   [self getFacebookSession];
 }
 
 - (void) addTwitter
@@ -248,6 +269,8 @@ static NSString *TableViewCellIdentifier = @"SNCells";
         cell.imageView.image = sharedUserManager.socialNetworkImages[socialNetwork];
         cell.textLabel.text = sharedUserManager.userNetworks[socialNetwork];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
+
+        
         //cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
         
         /*
@@ -259,7 +282,7 @@ static NSString *TableViewCellIdentifier = @"SNCells";
          */
         [cell.textLabel setFont: [UIFont fontWithName:@"Helvetica" size:12]];
         [cell.textLabel setTextColor: [UIColor whiteColor]];
-        [cell setBackgroundColor:[UIColor clearColor]];
+        [cell setBackgroundColor: [UIColor clearColor]];
         
         
         
@@ -267,7 +290,16 @@ static NSString *TableViewCellIdentifier = @"SNCells";
     }
     return cell;
 }
-                                                                                                                                            
+
+/*
+ * This is just to hide the separators of the empty cells.
+ */
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    UIView *view = [[UIView alloc] init];
+    return view;
+}
+
 - (IBAction)clickedLogOut:(id)sender
 {
     [defaults setBool:NO forKey:@"loggedIn"];
@@ -278,10 +310,133 @@ static NSString *TableViewCellIdentifier = @"SNCells";
     [self presentViewController:signIn animated:YES completion:nil];
     
 }
-                                                                                                                                                              
-                                                                                                                                            
-                                                                                                                                                        
-                                                                                                                                                              
+
+
+- (void)getFacebookSession
+{
+    // If the session state is any of the two "open" states when the button is clicked
+    if (FBSession.activeSession.state == FBSessionStateOpen
+        || FBSession.activeSession.state == FBSessionStateOpenTokenExtended) {
+        
+        // Close the session and remove the access token from the cache
+        // The session state handler (in the app delegate) will be called automatically
+        [FBSession.activeSession closeAndClearTokenInformation];
+        
+        // If the session state is not any of the two "open" states when the button is clicked
+    } else {
+        // Open a session showing the user the login UI
+        // You must ALWAYS ask for basic_info permissions when opening a session
+        [FBSession openActiveSessionWithReadPermissions:@[@"basic_info"]
+                                           allowLoginUI:YES
+                                      completionHandler:
+         ^(FBSession *session, FBSessionState state, NSError *error) {
+             
+             
+             // Call the app delegate's sessionStateChanged:state:error method to handle session state changes
+             [appDelegate sessionStateChanged:session state:state error:error];
+         }];
+        NSLog(@"facebook results de guan: %@", [appDelegate facebookInfo]);
+
+        
+    }
+}
+
+/*
+ * We don't really need this, but it was to "customize" facebook's log in view.
+ */
+- (void) customizeFbLogInView
+{
+    _facebookLogInView.frame = CGRectMake(self.view.center.x-150, 300, 300, 37);
+    
+    for (id obj in _facebookLogInView.subviews)
+    {
+        if ([obj isKindOfClass:[UIButton class]])
+        {
+            UIButton *loginButton =  obj;
+          UIImage *loginImage = [UIImage imageNamed:@"clearImage"];
+            [loginButton setBackgroundImage: loginImage forState:UIControlStateNormal];
+            [loginButton setBackgroundImage:nil forState:UIControlStateSelected];
+            [loginButton setBackgroundImage:nil forState:UIControlStateHighlighted];
+            [loginButton sizeToFit];
+        }
+        if ([obj isKindOfClass:[UILabel class]])
+        {
+            UILabel * loginLabel =  obj;
+            loginLabel.text = @"Get Facebook info";
+            loginLabel.textAlignment = NSTextAlignmentCenter;
+            loginLabel.frame = CGRectMake(0, 0, 271, 37);
+        }
+    }
+    
+}
+
+#pragma mark facebookLogInView Delegate Methods
+
+// This method will be called when the user information has been fetched
+- (void)loginViewFetchedUserInfo:(FBLoginView *)loginView
+                            user:(id<FBGraphUser>)user {
+    NSLog(@"user : %@", user);
+    NSLog(@"user id: %@", [user objectForKey:@"id"]);
+   profileImageView.profileID = user.id;
+   profileNameLabel.text = user.name;
+}
+
+// Logged-in user experience
+- (void)loginViewShowingLoggedInUser:(FBLoginView *)loginView
+{
+    //NSLog (@"You're logged in as ");
+}
+// Logged-out user experience
+- (void)loginViewShowingLoggedOutUser:(FBLoginView *)loginView
+{
+    self.profileImageView.profileID = nil;
+    self.profileNameLabel.text = @"";
+    NSLog(@"You're not logged in!");
+}
+
+// Handle possible errors that can occur during login
+- (void)loginView:(FBLoginView *)loginView handleError:(NSError *)error {
+    NSString *alertMessage, *alertTitle;
+    
+    // If the user should perform an action outside of you app to recover,
+    // the SDK will provide a message for the user, you just need to surface it.
+    // This conveniently handles cases like Facebook password change or unverified Facebook accounts.
+    if ([FBErrorUtility shouldNotifyUserForError:error]) {
+        alertTitle = @"Facebook error";
+        alertMessage = [FBErrorUtility userMessageForError:error];
+        
+        // This code will handle session closures that happen outside of the app
+        // You can take a look at our error handling guide to know more about it
+        // https://developers.facebook.com/docs/ios/errors
+    } else if ([FBErrorUtility errorCategoryForError:error] == FBErrorCategoryAuthenticationReopenSession) {
+        alertTitle = @"Session Error";
+        alertMessage = @"Your current session is no longer valid. Please log in again.";
+        
+        // If the user has cancelled a login, we will do nothing.
+        // You can also choose to show the user a message if cancelling login will result in
+        // the user not being able to complete a task they had initiated in your app
+        // (like accessing FB-stored information or posting to Facebook)
+    } else if ([FBErrorUtility errorCategoryForError:error] == FBErrorCategoryUserCancelled) {
+        NSLog(@"user cancelled login");
+        
+        // For simplicity, this sample handles other errors with a generic message
+        // You can checkout our error handling guide for more detailed information
+        // https://developers.facebook.com/docs/ios/errors
+    } else {
+        alertTitle  = @"Something went wrong";
+        alertMessage = @"Please try again later.";
+        NSLog(@"Unexpected error:%@", error);
+    }
+    
+    if (alertMessage) {
+        [[[UIAlertView alloc] initWithTitle:alertTitle
+                                    message:alertMessage
+                                   delegate:nil
+                          cancelButtonTitle:@"OK"
+                          otherButtonTitles:nil] show];
+    }
+}
+
                                                                                                                                                               
 @end
 

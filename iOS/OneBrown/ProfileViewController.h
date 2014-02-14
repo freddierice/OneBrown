@@ -7,17 +7,20 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AppDelegate.h"
 
-@interface ProfileViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+@interface ProfileViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, FBLoginViewDelegate>
 {
     UILabel *profileNameLabel;
-    UIImageView *profileImageView;
+    FBProfilePictureView *profileImageView;
 }
 
-@property (strong, nonatomic) IBOutlet UIImageView *profileImageView;
+@property (strong, nonatomic) IBOutlet FBProfilePictureView *profileImageView;
 @property (strong, nonatomic) IBOutlet UILabel *profileNameLabel;
 @property (strong, nonatomic) IBOutlet UITableView *networksTableView;
 @property (strong, nonatomic) IBOutlet UIButton *addButton;
 @property (strong, nonatomic) IBOutlet UIButton *settingsButton;
+@property (strong, nonatomic) IBOutlet UIButton *getFacebookInfoButton;
+@property (strong, nonatomic) IBOutlet FBLoginView *facebookLogInView;
 
 @end
