@@ -53,6 +53,11 @@ static NSString *TableViewCellIdentifier = @"SNCells";
     self.usersInNetworkTableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 }
 
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -114,14 +119,23 @@ static NSString *TableViewCellIdentifier = @"SNCells";
          */
         [cell.textLabel setFont: [UIFont fontWithName:@"Helvetica" size:12]];
         
-        [cell.textLabel setTextColor: [UIColor darkGrayColor]];
-        
+        [cell.textLabel setTextColor: [UIColor whiteColor]];
         
         [cell setBackgroundColor:[UIColor clearColor]];
         
     }
     return cell;
 }
+
+/*
+ * This is just to hide the separators of the empty cells.
+ */
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    UIView *view = [[UIView alloc] init];
+    return view;
+}
+
 -(void) tappedButton
 {
 }
@@ -137,14 +151,6 @@ static NSString *TableViewCellIdentifier = @"SNCells";
 
 }
 
-/*
- * This is just to hide the separators of the empty cells.
- */
-- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
-{
-    UIView *view = [[UIView alloc] init];
-    return view;
-}
 
 // Returns a UILabel with the given NSString.
 - (UILabel *) newLabelWithTitle:( NSString *) paramTitle
