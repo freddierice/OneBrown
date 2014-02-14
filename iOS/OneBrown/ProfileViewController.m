@@ -51,15 +51,15 @@ static NSString *TableViewCellIdentifier = @"SNCells";
     
     profileImageView = [[FBProfilePictureView alloc] initWithFrame:CGRectMake(self.view.center.x - (profileImageView.frame.size.width / 2),156-profileImageView.frame.size.height/2, 165, 165)];
     
-    //profileImageView.frame = CGRectOffset(profileImageView.frame, (self.view.center.x - (profileImageView.frame.size.width / 2)), 5);
-    
     [self.view addSubview:profileImageView];
     
-    
-    _facebookLogInView.delegate = self;
+    _facebookLogInView = [[FBLoginView alloc] init];
     _facebookLogInView.readPermissions = @[@"basic_info"];
+    _facebookLogInView.delegate = self;
     
-    //_getFacebookInfoButton
+    /* So we don't really want to add the facebook log in view; we just want to access its easy and quick delegate methods to get the user's name and picture. */
+    //[self.view addSubview:_facebookLogInView];
+    
     profileImageView.layer.cornerRadius = 80;
     profileImageView.clipsToBounds = YES;
     profileImageView.layer.borderWidth = 2;
@@ -79,24 +79,14 @@ static NSString *TableViewCellIdentifier = @"SNCells";
     [self.networksTableView registerClass:[ UITableViewCell class] forCellReuseIdentifier:TableViewCellIdentifier];
     
     
-    /* Make sure our table view resizes correctly */
+    // Make sure our table view resizes correctly
     self.networksTableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
     addedSocialNetworks = [[NSMutableArray alloc]init];
     
-    
-   // AppDelegate* appDelegate = [UIApplication sharedApplication].delegate;
-    NSLog(@"facebook results 1: %@", [appDelegate facebookInfo]);
 }
 
-- (void) viewWillAppear:(BOOL)animated
-{
-    //sharedUserManager.
-    //profileImageView.profileID = user.id;
-    
-    NSLog(@"facebook results 2: %@", [appDelegate facebookInfo]);
 
-}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -141,7 +131,7 @@ static NSString *TableViewCellIdentifier = @"SNCells";
 - (void) addFacebook
 {
     NSLog(@"adding facebook");
- //   [self getFacebookSession];
+   [self getFacebookSession];
 }
 
 - (void) addTwitter
@@ -292,7 +282,7 @@ static NSString *TableViewCellIdentifier = @"SNCells";
          */
         [cell.textLabel setFont: [UIFont fontWithName:@"Helvetica" size:12]];
         [cell.textLabel setTextColor: [UIColor whiteColor]];
-        [cell setBackgroundColor:[UIColor clearColor]];
+        [cell setBackgroundColor: [UIColor clearColor]];
         
         
         
@@ -321,7 +311,7 @@ static NSString *TableViewCellIdentifier = @"SNCells";
     
 }
 
-/*
+
 - (void)getFacebookSession
 {
     // If the session state is any of the two "open" states when the button is clicked
@@ -341,24 +331,52 @@ static NSString *TableViewCellIdentifier = @"SNCells";
                                       completionHandler:
          ^(FBSession *session, FBSessionState state, NSError *error) {
              
-             // Retrieve the app delegate
-            // AppDelegate* appDelegate = [UIApplication sharedApplication].delegate;
+             
              // Call the app delegate's sessionStateChanged:state:error method to handle session state changes
              [appDelegate sessionStateChanged:session state:state error:error];
          }];
-        NSLog(@"got into Facebook bitch");
-        NSLog(@"facebook results 3: %@", [appDelegate facebookInfo]);
+        NSLog(@"facebook results de guan: %@", [appDelegate facebookInfo]);
 
         
     }
-}*/
+}
+
+/*
+ * We don't really need this, but it was to "customize" facebook's log in view.
+ */
+- (void) customizeFbLogInView
+{
+    _facebookLogInView.frame = CGRectMake(self.view.center.x-150, 300, 300, 37);
+    
+    for (id obj in _facebookLogInView.subviews)
+    {
+        if ([obj isKindOfClass:[UIButton class]])
+        {
+            UIButton *loginButton =  obj;
+          UIImage *loginImage = [UIImage imageNamed:@"clearImage"];
+            [loginButton setBackgroundImage: loginImage forState:UIControlStateNormal];
+            [loginButton setBackgroundImage:nil forState:UIControlStateSelected];
+            [loginButton setBackgroundImage:nil forState:UIControlStateHighlighted];
+            [loginButton sizeToFit];
+        }
+        if ([obj isKindOfClass:[UILabel class]])
+        {
+            UILabel * loginLabel =  obj;
+            loginLabel.text = @"Get Facebook info";
+            loginLabel.textAlignment = NSTextAlignmentCenter;
+            loginLabel.frame = CGRectMake(0, 0, 271, 37);
+        }
+    }
+    
+}
 
 #pragma mark facebookLogInView Delegate Methods
+
 // This method will be called when the user information has been fetched
 - (void)loginViewFetchedUserInfo:(FBLoginView *)loginView
                             user:(id<FBGraphUser>)user {
-    NSLog(@"user day quon: %@", user);
-    NSLog(@"user id %@", [user objectForKey:@"id"]);
+    NSLog(@"user : %@", user);
+    NSLog(@"user id: %@", [user objectForKey:@"id"]);
    profileImageView.profileID = user.id;
    profileNameLabel.text = user.name;
 }
@@ -366,13 +384,13 @@ static NSString *TableViewCellIdentifier = @"SNCells";
 // Logged-in user experience
 - (void)loginViewShowingLoggedInUser:(FBLoginView *)loginView
 {
-    NSLog (@"You're logged in as shit");
+    //NSLog (@"You're logged in as ");
 }
 // Logged-out user experience
 - (void)loginViewShowingLoggedOutUser:(FBLoginView *)loginView
 {
-    //self.profileImageView.profileID = nil;
-    //self.profileNameLabel.text = @"";
+    self.profileImageView.profileID = nil;
+    self.profileNameLabel.text = @"";
     NSLog(@"You're not logged in!");
 }
 
