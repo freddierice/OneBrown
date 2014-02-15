@@ -9,10 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "NetworkManager.h"
 
-#define CHOICE ((NSInteger) 0)
-#define LOGIN ((NSInteger) 1)
-#define REGISTER ((NSInteger) 2)
-
 
 @interface UserManager : NSObject <NetworkManagerDelegate>
 {

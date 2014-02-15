@@ -8,6 +8,7 @@
 
 #import "SocialNetworkViewController.h"
 #import "UserManager.h"
+#import "UserProfileViewController.h"
 
 static NSString *TableViewCellIdentifier = @"SNCells";
 
@@ -15,6 +16,8 @@ static NSString *TableViewCellIdentifier = @"SNCells";
 {
     UserManager *sharedUserManager;
     NSUserDefaults *defaults;
+    NSMutableArray *userPictures;
+    NSMutableArray *userPictureNames;
 }
 @end
 
@@ -51,6 +54,15 @@ static NSString *TableViewCellIdentifier = @"SNCells";
     
     /* Make sure our table view resizes correctly */
     self.usersInNetworkTableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    
+    userPictureNames = [[NSMutableArray alloc]init];
+    userPictures = [[NSMutableArray alloc]init];
+    
+    userPictureNames = [NSMutableArray arrayWithObjects: @"Valentin Perez", @"Ben Murphy", @"sara", nil];
+    
+    for (NSString *name in userPictureNames)
+        [userPictures addObject:[UIImage imageNamed: name]];
+    
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle
@@ -117,7 +129,7 @@ static NSString *TableViewCellIdentifier = @"SNCells";
          button.tag = indexPath.row;
          cell.accessoryView = button;
          */
-        [cell.textLabel setFont: [UIFont fontWithName:@"Helvetica" size:12]];
+        [cell.textLabel setFont: [UIFont fontWithName:@"Helvetica" size:14]];
         
         [cell.textLabel setTextColor: [UIColor whiteColor]];
         
@@ -142,6 +154,13 @@ static NSString *TableViewCellIdentifier = @"SNCells";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    sharedUserManager.stalkedUserName = userPictureNames[indexPath.row];
+    sharedUserManager.stalkedUserImage  = userPictures[indexPath.row];
+    sharedUserManager.stalkedUserNetworks = [NSMutableArray arrayWithObjects:@"Facebook", @"Twitter", @"Instagram", @"Snapchat", nil];
+    
+    UserProfileViewController *uPViewController = (UserProfileViewController *) [self.storyboard instantiateViewControllerWithIdentifier:@"UserProfileController"];
+    [self presentViewController:uPViewController animated:YES completion:nil];
+    
     NSLog(@"selected ");
 }
 
