@@ -76,6 +76,50 @@ static NSString *TableViewCellIdentifier = @"SNCells";
     // Dispose of any resources that can be recreated.
 }
 
+- (UIImage *)cropImage:(UIImage *)imageToCrop toRect:(CGRect)rect
+{
+    //CGRect CropRect = CGRectMake(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height+15);
+    
+    CGImageRef imageRef = CGImageCreateWithImageInRect([imageToCrop CGImage], rect);
+    UIImage *cropped = [UIImage imageWithCGImage:imageRef];
+    CGImageRelease(imageRef);
+    
+    return cropped;
+}
+
+- (UIImage *)imageWithImage:(UIImage *)image scaledToSize:(CGSize)newSize
+{
+    UIGraphicsBeginImageContext(newSize);
+    [image drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newImage;
+}
+
+- (UIImage *)resizeImage:(UIImage*)image newSize:(CGSize)newSize {
+    CGRect newRect = CGRectIntegral(CGRectMake(0, 0, newSize.width, newSize.height));
+    CGImageRef imageRef = image.CGImage;
+    
+    UIGraphicsBeginImageContextWithOptions(newSize, NO, 0);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    // Set the quality level to use when rescaling
+    CGContextSetInterpolationQuality(context, kCGInterpolationHigh);
+    CGAffineTransform flipVertical = CGAffineTransformMake(1, 0, 0, -1, 0, newSize.height);
+    
+    CGContextConcatCTM(context, flipVertical);
+    // Draw into the context; this scales the image
+    CGContextDrawImage(context, newRect, imageRef);
+    
+    // Get the resized image from the context and a UIImage
+    CGImageRef newImageRef = CGBitmapContextCreateImage(context);
+    UIImage *newImage = [UIImage imageWithCGImage:newImageRef];
+    
+    CGImageRelease(newImageRef);
+    UIGraphicsEndImageContext();
+    
+    return newImage;
+}
 # pragma mark TableView Delegate Methods
 - (NSInteger) numberOfSectionsInTableView:( UITableView *) tableView
 {
@@ -113,11 +157,22 @@ static NSString *TableViewCellIdentifier = @"SNCells";
         
         //cell.imageView.image = sharedUserManager.socialNetworkImages[socialNetwork];
         
+        UIImage *scaledUserImage = [self resizeImage:userPictures[indexPath.row] newSize:CGSizeMake(40, 40)];
+        
+        //[cell.imageView setFrame:CGRectMake(0, 0, 20, 20)];
         [cell.imageView setContentMode:UIViewContentModeScaleAspectFit];
         
         cell.textLabel.text = [sharedUserManager.stalkedNetworkUsers objectAtIndex: indexPath.row];
         
-        //cell.imageView.image = sharedUserManager.stalkedUserImage;
+        
+        cell.imageView.layer.cornerRadius = 20;
+        cell.imageView.clipsToBounds = YES;
+        cell.imageView.layer.borderWidth = 1;
+        [cell.imageView setContentMode:UIViewContentModeScaleAspectFit];
+        //UIColor *brownColor = [UIColor colorWithRed:89 green:38 blue:11 alpha:1];
+        cell.imageView.layer.borderColor = [UIColor whiteColor].CGColor;
+        cell.imageView.image = scaledUserImage;
+
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
         cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
