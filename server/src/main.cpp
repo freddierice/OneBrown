@@ -5,7 +5,7 @@ int main(int argc, const char **argv)
     
     Server *s = Server::getInstance();
     s->getConnector()->start();
-    std::this_thread::sleep_for(std::chrono::minutes(10));
+    std::this_thread::sleep_for(std::chrono::hours(365*24));
     
     return 0;
 }

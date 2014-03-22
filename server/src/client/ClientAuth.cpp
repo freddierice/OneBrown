@@ -71,7 +71,7 @@ void ClientAuth::login(Client *c, Json::Value &val)
     switch(ls){
         case LoginStatus::SUCCESS:
             Server::getInstance()->getRunner()->add(c);
-            val.clear();
+            val = MESSAGE_AUTH_TRUE;
             break;
         case LoginStatus::FAILURE:
             val = MESSAGE_AUTH_FALSE;

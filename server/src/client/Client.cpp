@@ -45,7 +45,7 @@ void Client::runner()
     
     if(m_network->recvJSON(r_val)){
         m_responder->run(this, r_val);
-        m_network->sendJSON(r_val);
+        //m_network->sendJSON(r_val); I want to keep this structure, might not be able to
     }else
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
 }
