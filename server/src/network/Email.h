@@ -4,16 +4,19 @@
 #include <iostream>
 #include <string>
 
-#include <stdio.h>
+/* Extra C Headers */
 #include <unistd.h>
-
-#include <openssl/bio.h>
-#include <openssl/ssl.h>
-#include <openssl/err.h>
-
 #include <netdb.h>
 #include <netinet/in.h>
 
+/* OpenSSL Library */
+#include <openssl/bio.h>
+#include <openssl/ssl.h>
+#include <openssl/sha.h>
+#include <openssl/evp.h>
+#include <openssl/buffer.h>
+#include <openssl/err.h>
+#include <openssl/rand.h>
 
 #define BUF_LEN 1024
 

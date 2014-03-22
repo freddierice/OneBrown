@@ -1,6 +1,10 @@
 #include "Client.h"
 
+#include "../database/Database.h"
+#include "../network/Network.h"
+
 #include "ClientResponder.h"
+
 
 Client::Client(){}
 Client::Client(Network *network)
@@ -12,6 +16,7 @@ Client::Client(Network *network)
 Client::~Client()
 {
     delete m_network;
+    delete m_database;
 }
 
 void Client::setResponder(ClientResponder *responder)
@@ -43,6 +48,11 @@ void Client::runner()
         m_network->sendJSON(r_val);
     }else
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
+}
+
+void Client::sendJSON(Json::Value &val)
+{
+    m_network->sendJSON(val);
 }
 
 void Client::ender()

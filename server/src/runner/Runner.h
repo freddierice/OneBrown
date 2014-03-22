@@ -1,9 +1,9 @@
 #ifndef _RUNNER_H_
 #define _RUNNER_H_
 
-#include <iostream>
 #include <thread>
 #include <atomic>
+#include <chrono>
 
 class Runner {
 public:

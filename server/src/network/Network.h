@@ -2,16 +2,25 @@
 #define _NETWORK_H_
 
 #include <iostream>
-#include <thread>
+#include <queue>
+#include <string>
 #include <mutex>
 #include <atomic>
-#include <chrono>
-#include <queue>
+#include <thread>
 
-#include <string.h>
+/* Extra C Headers */
 #include <unistd.h>
+#include <netdb.h>
+#include <netinet/in.h>
 
+/* OpenSSL Library */
 #include <openssl/bio.h>
+#include <openssl/ssl.h>
+#include <openssl/sha.h>
+#include <openssl/evp.h>
+#include <openssl/buffer.h>
+#include <openssl/err.h>
+#include <openssl/rand.h>
 
 #include <json/json.h>
 

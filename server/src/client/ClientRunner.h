@@ -1,8 +1,9 @@
 #ifndef _CLIENT_RUNNER_H_
 #define _CLIENT_RUNNER_H_
 
-#include <iostream>
+class Client;
 
+#include <json/json.h>
 #include "ClientResponder.h"
 
 class ClientRunner : public ClientResponder {

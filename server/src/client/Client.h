@@ -1,20 +1,19 @@
 #ifndef _CLIENT_H_
 #define _CLIENT_H_
 
-#include <atomic>
-#include <thread>
-#include <chrono>
-
-#include <json/json.h>
-
-#include "../network/Network.h"
-#include "../runner/Runner.h"
-#include "../database/Database.h"
+class Network;
+class Database;
 
 class ClientResponder;
-class ClientAuth;
 class ClientRunner;
 class ClientConnector;
+class ClientAuth;
+
+#include <chrono> 
+#include <thread>
+
+#include <json/json.h>
+#include "../runner/Runner.h"
 
 class Client : public Runner {
 public:
@@ -26,6 +25,7 @@ public:
 protected:
     void setResponder(ClientResponder *responder);
     void setResponder(ClientResponder *responder,Json::Value &val);
+    void sendJSON(Json::Value &val);
     Database *m_database;
     
     friend ClientResponder;

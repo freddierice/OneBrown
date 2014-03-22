@@ -1,10 +1,12 @@
 #ifndef _SERVER_H_
 #define _SERVER_H_
 
-#include "ClientAuth.h"
-#include "ClientConnector.h"
-#include "ClientRunner.h"
-#include "ClientWatchdog.h"
+class ClientAuth;
+class ClientConnector;
+class ClientRunner;
+class ClientWatchdog;
+
+#include "../common.h"
 
 class Server {
 public:

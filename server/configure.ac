@@ -2,7 +2,7 @@ AC_INIT([OneBrown Server], [1.0], [OneBrownNetwork@gmail.com],
              [onebrown], [http://www.OneBrownNetwork.com/])
 AC_PREREQ([2.59])
 AM_INIT_AUTOMAKE([1.10 -Wall no-define])
-#CXXFLAGS="$CXXFLAGS -g"
+CXXFLAGS="$CXXFLAGS -g -Og"
 AC_PROG_CXX
 CXXFLAGS="$CXXFLAGS -std=c++11"
 

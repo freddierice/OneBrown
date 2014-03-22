@@ -1,11 +1,9 @@
 #ifndef _CLIENT_RESPONDER_H_
 #define _CLIENT_RESPONDER_H_
 
-#include <iostream>
+class Client;
 
 #include <json/json.h>
-
-#include "Client.h"
 
 class ClientResponder {
 public:

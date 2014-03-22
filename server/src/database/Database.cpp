@@ -1,5 +1,8 @@
 #include "Database.h"
 
+#include "../utility/Utility.h"
+#include "../network/Email.h"
+
 Database::Database()
 {
     try{
@@ -12,7 +15,7 @@ Database::Database()
         std::cout << "# ERR: " << e.what();
         std::cout << " (MySQL error code: " << e.getErrorCode();
         std::cout << ", SQLState: " << e.getSQLState() << " )" << std::endl;
-        throw "Database could not construct due to database connection error.";
+        //throw "Database could not construct due to database connection error.";
     }
     
     m_salt = new char[16];

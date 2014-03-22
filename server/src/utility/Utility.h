@@ -1,19 +1,17 @@
 #ifndef _UTILITY_H_
 #define _UTILITY_H_
 
-#include <iostream>
 #include <istream>
-#include <streambuf>
 #include <string>
-#include <algorithm>
 
-#include <cmath>
-
-#include <openssl/sha.h>
+/* OpenSSL Library */
 #include <openssl/bio.h>
+#include <openssl/ssl.h>
+#include <openssl/sha.h>
 #include <openssl/evp.h>
 #include <openssl/buffer.h>
-
+#include <openssl/err.h>
+#include <openssl/rand.h>
 
 /* for istream creation */
 class DataBuf : public std::streambuf

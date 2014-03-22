@@ -1,6 +1,9 @@
 #include "ClientWatchdog.h"
 
 #include "Server.h"
+#include "Client.h"
+
+#include "ClientAuth.h"
 
 ClientWatchdog::ClientWatchdog(){}
 ClientWatchdog::~ClientWatchdog(){}

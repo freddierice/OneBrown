@@ -1,17 +1,16 @@
 #ifndef _CLIENT_WATCHDOG_H_
 #define _CLIENT_WATCHDOG_H_
 
-#include <iostream>
 #include <mutex>
-#include <thread>
-#include <vector>
 #include <future>
+#include <thread>
+#include <chrono>
+#include <vector>
 
-#include "Client.h"
+class Client;
 
 #include "../runner/Runner.h"
 
-class Server;
 class ClientWatchdog : public Runner {
 public:
     ClientWatchdog();

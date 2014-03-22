@@ -2,24 +2,18 @@
 #define _DATABASE_H_
 
 #include <iostream>
-#include <string>
-#include <chrono>
 #include <thread>
-#include <cstring>
+#include <chrono>
 
-#include "../utility/Utility.h"
-#include "../network/Email.h"
-
-#include "mysql_connection.h"
-
+#include <mysql_connection.h>
 #include <cppconn/driver.h>
 #include <cppconn/exception.h>
 #include <cppconn/resultset.h>
 #include <cppconn/statement.h>
 #include <cppconn/prepared_statement.h>
 
-#include <openssl/rand.h>
-
+class Utility;
+class Email;
 
 enum class RegistrationStatus : int {SUCCESS=0,FAILURE,EXISTS,VERIFY,NOT_BROWN,DB_FAILURE};
 enum class LoginStatus : int {SUCCESS=0,FAILURE,DB_FAILURE};

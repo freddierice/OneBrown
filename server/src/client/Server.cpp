@@ -1,5 +1,10 @@
 #include "Server.h"
 
+#include "ClientAuth.h"
+#include "ClientConnector.h"
+#include "ClientRunner.h"
+#include "ClientWatchdog.h"
+
 Server* Server::m_instance = NULL;
 
 Server::Server()

@@ -1,6 +1,10 @@
 #include "ClientConnector.h"
 
 #include "Server.h"
+#include "Client.h"
+#include "../network/Network.h"
+#include "ClientWatchdog.h"
+#include "ClientAuth.h"
 
 ClientConnector::ClientConnector(){}
 ClientConnector::~ClientConnector(){}
@@ -35,9 +39,12 @@ void ClientConnector::runner()
         starter();
         return;
     }
-    r_c = new Client(new Network(BIO_new_socket(r_newsock,BIO_NOCLOSE)));
+    r_n = new Network(BIO_new_socket(r_newsock,BIO_NOCLOSE));
+    r_n->start();
+    r_c = new Client(r_n);
     std::async(std::launch::async,&ClientWatchdog::addClient,Server::getInstance()->getWatchdog(),r_c);
     std::async(std::launch::async,&ClientAuth::add,Server::getInstance()->getAuth(),r_c);
+    r_c->start();
 }
 
 void ClientConnector::ender()
