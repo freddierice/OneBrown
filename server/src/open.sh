@@ -1,2 +1,2 @@
 #!/bin/bash
-open common.h main.h main.cpp `ls */*.h */*.cpp | xargs`
+open main.h main.cpp `ls */*.h */*.cpp | xargs`

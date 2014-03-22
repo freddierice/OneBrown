@@ -6,8 +6,6 @@ class ClientConnector;
 class ClientRunner;
 class ClientWatchdog;
 
-#include "../common.h"
-
 class Server {
 public:
     static Server* getInstance();
