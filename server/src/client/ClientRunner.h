@@ -3,6 +3,8 @@
 
 class Client;
 
+#include <future>
+
 #include <json/json.h>
 #include "ClientResponder.h"
 
@@ -14,6 +16,12 @@ public:
     virtual void add(Client *c);
     virtual void remove(Client *c);
     virtual void run(Client *c, Json::Value &val);
+
+private:
+    void logoff( Client *c, Json::Value &val );
+    void close( Client *c, Json::Value &val );
+    
+    Json::Value MESSAGE_CMD;
 };
 
 #endif /*_CLIENT_RUNNER_H_*/

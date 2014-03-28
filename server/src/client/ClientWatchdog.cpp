@@ -10,12 +10,10 @@ ClientWatchdog::~ClientWatchdog(){}
 
 void ClientWatchdog::runner()
 {
-    std::chrono::time_point<std::chrono::system_clock> now;
-    
-    now = std::chrono::system_clock::now();
+    r_now = std::chrono::system_clock::now();
     m_clientsM.lock();
     for(auto iter = m_clients.begin(); iter != m_clients.end(); ++iter)
-        if(std::chrono::duration_cast<std::chrono::minutes>( now - (*iter)->getTime()).count() >= 120){
+        if(std::chrono::duration_cast<std::chrono::minutes>( r_now - (*iter)->getTime()).count() >= 120){
             std::async(std::launch::async,&ClientWatchdog::killClient,this,*iter);
             iter = m_clients.erase(iter);
         }

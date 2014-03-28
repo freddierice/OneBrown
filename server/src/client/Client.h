@@ -39,6 +39,7 @@ private:
     virtual void ender();
     
     Json::Value r_val;
+    ClientResponder *r_responder;
     
     ClientResponder *m_responder;
     Network *m_network;

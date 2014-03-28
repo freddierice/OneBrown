@@ -15,6 +15,7 @@ Client::Client(Network *network)
 
 Client::~Client()
 {
+    m_network->stop(true);
     delete m_network;
     delete m_database;
 }
@@ -34,18 +35,21 @@ void Client::detach()
 {
     if(m_responder)
         m_responder->remove(this);
+    m_responder = NULL;
 }
 
 void Client::runner()
 {
-    if(!m_responder){
+    r_responder = m_responder;
+    if(!r_responder){
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
         return;
     }
     
     if(m_network->recvJSON(r_val)){
-        m_responder->run(this, r_val);
-        //m_network->sendJSON(r_val); I want to keep this structure, might not be able to
+        r_responder->run(this, r_val);
+        if(!r_val.empty())
+            m_network->sendJSON(r_val); 
     }else
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
 }

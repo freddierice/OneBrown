@@ -23,6 +23,8 @@ public:
 private:
     virtual void runner();
     
+    std::chrono::time_point<std::chrono::system_clock> r_now;
+    
     std::mutex m_clientsM;
     std::vector<Client*> m_clients;
 };

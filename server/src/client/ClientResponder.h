@@ -15,7 +15,7 @@ public:
     virtual void run(Client *c, Json::Value &val) = 0;
 
 protected:
-    Json::Value MESSAGE_INVALID;
+    Json::Value MESSAGE_INVALID, MESSAGE_EMPTY;
 };
 
 #endif
