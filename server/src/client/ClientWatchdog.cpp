@@ -13,7 +13,7 @@ void ClientWatchdog::runner()
     r_now = std::chrono::system_clock::now();
     m_clientsM.lock();
     for(auto iter = m_clients.begin(); iter != m_clients.end(); ++iter)
-        if(std::chrono::duration_cast<std::chrono::minutes>( r_now - (*iter)->getTime()).count() >= 120){
+        if(std::chrono::duration_cast<std::chrono::minutes>( r_now - (*iter)->getTime()).count() >= 2){ //should last longer
             std::async(std::launch::async,&ClientWatchdog::killClient,this,*iter);
             iter = m_clients.erase(iter);
         }
@@ -29,6 +29,14 @@ void ClientWatchdog::addClient(Client *c)
 
 void ClientWatchdog::killClient(Client *c)
 {
+    m_clientsM.lock();
+    for(auto iter = m_clients.begin(); iter != m_clients.end(); ++iter){
+        if( *iter == c){
+            m_clients.erase(iter);
+            break;
+        }
+    }
+    m_clientsM.unlock();
     c->stop(true);
     delete c;
 }
