@@ -40,6 +40,7 @@ void Client::detach()
 
 void Client::runner()
 {
+    m_time = std::chrono::system_clock::now();
     r_responder = m_responder;
     if(!r_responder){
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
