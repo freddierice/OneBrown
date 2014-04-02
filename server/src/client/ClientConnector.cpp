@@ -12,6 +12,7 @@ ClientConnector::~ClientConnector(){}
 void ClientConnector::starter()
 {
     struct sockaddr_in serv_addr;
+    int iSetOption = 1;
     
     r_sock = socket(AF_INET, SOCK_STREAM, 0);
     
@@ -24,8 +25,10 @@ void ClientConnector::starter()
     {
         std::cout << "ERROR could not bind to port 20000" << std::endl;
         exit(1);
+    }else{
+        ::setsockopt(r_sock, SOL_SOCKET, SO_REUSEADDR, (char*)&opt, sizeof(opt));
     }
-    
+        
     ::listen(r_sock,500);
 }
 
