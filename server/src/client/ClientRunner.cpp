@@ -7,7 +7,7 @@
 
 ClientRunner::ClientRunner()
 {
-    
+    MESSAGE_CMD["message"] = "cmd";
 }
 
 ClientRunner::~ClientRunner(){}

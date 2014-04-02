@@ -49,7 +49,7 @@ void Client::runner()
     
     if(m_network->recvJSON(r_val)){
         r_responder->run(this, r_val);
-        if(!r_val.isNull())
+        if(r_val.size())
             m_network->sendJSON(r_val); 
     }else
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
