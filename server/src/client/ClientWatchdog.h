@@ -12,7 +12,7 @@ class Client;
 #include "../runner/Runner.h"
 
 class ClientWatchdog : public Runner {
-public:
+public:  
     ClientWatchdog();
     ~ClientWatchdog();
     

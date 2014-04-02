@@ -47,8 +47,6 @@ void ClientAuth::run(Client *c, Json::Value &val)
         close(c,val);
     else
         val = MESSAGE_INVALID;
-    
-    std::async(std::launch::async,&ClientAuth::add,Server::getInstance()->getAuth(),c);
 }
 
 void ClientAuth::reg(Client *c, Json::Value &val)
@@ -98,6 +96,7 @@ void ClientAuth::login(Client *c, Json::Value &val)
         case LoginStatus::SUCCESS:
             Server::getInstance()->getRunner()->add(c);
             val = MESSAGE_AUTH_TRUE;
+            std::async(std::launch::async,&ClientRunner::add,Server::getInstance()->getRunner(),c);
             break;
         case LoginStatus::FAILURE:
             val = MESSAGE_AUTH_FALSE;
