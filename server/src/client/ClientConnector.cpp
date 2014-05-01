@@ -35,7 +35,9 @@ void ClientConnector::starter()
 void ClientConnector::runner()
 {
     int r_newsock;
+    std::cout << "Start accepting" << std::endl;
     r_newsock = ::accept(r_sock, NULL, 0);
+    std::cout << "Accepted!" << std::endl;
     if (r_newsock < 0){
         std::cout << "ERROR on accept" << std::endl;
         close(r_sock);
